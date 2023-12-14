@@ -1,0 +1,17 @@
+<?php
+
+namespace $NAMESPACE$;
+
+/**
+* @var $CLASS_NAME$Repo
+* @author Shaarif <shaarifsabah5299@gmail.com>
+*/
+class $CLASS_NAME$Repo extends BaseRepo
+{
+
+     public function __construct()
+     {
+           parent::__construct();
+     }
+
+}

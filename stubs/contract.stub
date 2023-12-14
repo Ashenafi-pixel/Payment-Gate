@@ -1,0 +1,12 @@
+<?php
+
+namespace $NAMESPACE$;
+
+/**
+* @var $CLASS_NAME$ServiceContract
+* @author Shaarif <shaarifsabah5299@gmail.com>
+*/
+interface $CLASS_NAME$ServiceContract
+{
+
+}

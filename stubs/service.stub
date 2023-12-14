@@ -1,0 +1,16 @@
+<?php
+
+namespace $NAMESPACE$;
+
+/**
+* @var $CLASS_NAME$Service
+* @author Shaarif <shaarifsabah5299@gmail.com>
+*/
+class $CLASS_NAME$Service implements I$CLASS_NAME$ServiceContract
+{
+
+    public function __construct(){
+
+    }
+
+}
