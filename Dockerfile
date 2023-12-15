@@ -1,4 +1,4 @@
-FROM php:8.0
+FROM php:latest
 
 WORKDIR /app
 RUN apt-get update && \
