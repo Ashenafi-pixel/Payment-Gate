@@ -1,9 +1,4 @@
 FROM php:latest
-# RUN php artisan cache:clear
-# RUN php artisan route:clear
-# RUN php artisan view:clear
-# RUN php artisan config:clear
-# RUN php artisan optimize
 
 WORKDIR /app
 RUN apt-get update && \
@@ -21,6 +16,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs npm
 COPY . .
 RUN composer install --ignore-platform-reqs
+RUN chmod -R +r /app/public
 RUN npm install && npm run build
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
