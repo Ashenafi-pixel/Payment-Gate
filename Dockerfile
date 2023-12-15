@@ -1,6 +1,6 @@
 FROM php:latest
 
-WORKDIR /app
+WORKDIR /
 RUN apt-get update && \
     apt-get install -y \
         libzip-dev \
@@ -16,7 +16,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs npm
 COPY . .
 RUN composer install --ignore-platform-reqs
-RUN chmod -R +r /app/public
+RUN chmod -R +r /public
 RUN npm install && npm run build
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
