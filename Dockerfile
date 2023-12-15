@@ -22,8 +22,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs npm
 COPY . .
 RUN composer install --ignore-platform-reqs
 RUN npm install && npm run build
-RUN sudo chown -R www-data:www-data /var/www/public
-RUN sudo chmod -R 755 /var/www/public
-
+RUN chown -R www-data:www-data /app
+RUN chmod -R 755 /app
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
