@@ -9,18 +9,15 @@ RUN apt-get update && \
         git \
         curl
 
-RUN docker-php-ext-install pdo pdo_mysql mbstring zip sodium
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip
 RUN apt-get install -y git
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs
 COPY . .
-
 RUN composer install --no-scripts --no-interaction --ignore-platform-req=ext-gd
 
 RUN npm install && npm run production
-
-# Expose port 8000 and start the Laravel development server
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
