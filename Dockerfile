@@ -1,4 +1,9 @@
 FROM php:latest
+# RUN php artisan cache:clear
+# RUN php artisan route:clear
+# RUN php artisan view:clear
+# RUN php artisan config:clear
+# RUN php artisan optimize
 
 WORKDIR /app
 RUN apt-get update && \
@@ -17,5 +22,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs npm
 COPY . .
 RUN composer install --ignore-platform-reqs
 RUN npm install && npm run build
+RUN sudo chown -R www-data:www-data /var/www/public
+RUN sudo chmod -R 755 /var/www/public
+
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
