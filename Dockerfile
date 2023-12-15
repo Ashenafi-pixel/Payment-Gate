@@ -19,7 +19,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY . .
 RUN composer install --ignore-platform-reqs
 RUN npm install
-
+RUN chown -R www-data:www-data storage bootstrap
 RUN npm run build
 
 EXPOSE 8000
