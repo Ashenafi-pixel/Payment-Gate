@@ -12,8 +12,22 @@
             <a class="nav-link {{ \Illuminate\Support\Facades\Request::is('/') ? 'active' : '' }}" aria-current="page" href="{{ route('home') }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
+    <a class="nav-link" href="#" id="services-link">Services</a>
+</li>
+
+<script>
+    document.getElementById('services-link').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevents the default behavior of the link
+
+        // Scroll to the target section
+        const targetSection = document.getElementById('services-section');
+        if (targetSection) {
+            targetSection.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    });
+</script>
           <li class="nav-item">
             <a class="nav-link" href="#">News</a>
           </li>
@@ -25,9 +39,9 @@
                 Business Support
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Link 1</a></li>
-              <li><a class="dropdown-item" href="#">Link 2</a></li>
-              <li><a class="dropdown-item" href="#">Link 3</a></li>
+              <li><a class="dropdown-item" href="#">For Businesses</a></li>
+              <li><a class="dropdown-item" href="#">For Developers</a></li>
+              <li><a class="dropdown-item" href="#">Documentation</a></li>
             </ul>
           </li>
         </ul>

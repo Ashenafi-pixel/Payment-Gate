@@ -14,11 +14,39 @@
                 </h3>
                 <ul class="footer-links">
                     <li>
-                        <a href=""> About us </a>
+                        <a href="#about" id="about-link">About us</a>
                     </li>
+
+                    <script>
+                        document.getElementById('about-link').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevents the default behavior of the link
+
+                            // Scroll to the target section
+                            const targetSection = document.getElementById('about');
+                            if (targetSection) {
+                                targetSection.scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                            }
+                        });
+                    </script>
                     <li>
-                        <a href=""> Our services </a>
+                        <a href="#" id="services-link">Our services</a>
                     </li>
+
+                    <script>
+                        document.getElementById('services-link').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevents the default behavior of the link
+
+                            // Scroll to the target section
+                            const targetSection = document.getElementById('services-section');
+                            if (targetSection) {
+                                targetSection.scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                            }
+                        });
+                    </script>
                     <li>
                         <a href=""> Latest news </a>
                     </li>
@@ -36,7 +64,7 @@
                 </h3>
                 <ul class="footer-links">
                     <li>
-                        <a href=""> Sign in </a>
+                        <a href="{{ route('login') }}"> Sign in </a>
                     </li>
                     <li>
                         <a href=""> Privacy Policy </a>
@@ -46,6 +74,26 @@
                     </li>
                     <li>
                         <a href=""> Integration guide </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-auto">
+                <h3 class="footer-heading mt-3">
+                    Contact us
+                </h3>
+                <ul class="footer-links">
+                    <li>
+                        <a href=""> <i class="fa fa-phone" aria-hidden="true"></i>&nbsp; +251116684243 </a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;info@addispay.co </a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa fa-globe" aria-hidden="true"></i>&nbsp;www.addispay.co</a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;Near Lem Hotel Efrata
+                            Building 4th Floor</a>
                     </li>
                 </ul>
             </div>
@@ -63,25 +111,27 @@
         <div class="row">
             <div class="col-md-6 my-auto">
                 <p class="text-copyright">
-                    Copyright - 2023. www.addispay.com, - All Rights Reserved.
+                    Copyright - 2023. www.addispay.co - All Rights Reserved.
                 </p>
             </div>
             <div class="col-md-6 my-auto">
                 <div class="social-icons">
                     <a href=""> <i class="fa-brands fa-facebook"></i> </a>
                     <a href=""> <i class="fa-brands fa-instagram"></i></a>
-                    <a href=""> <i class="fa-brands fa-twitter"></i></a>
-                    <a href=""> <i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://twitter.com/addispay"> <i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/addispay/posts/?feedView=all"> <i
+                            class="fa-brands fa-linkedin"></i></a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 {{-- On Board Modal --}}
-<div class="onboard-modal modal fade animated show-on-load" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="onboard-modal modal fade animated show-on-load" data-bs-backdrop="static" data-bs-keyboard="true">
     <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content text-center">
-            <button aria-label="Close" class="btn close pe-0 d-flex align-items-center" data-bs-dismiss="modal"type="button">
+            <button aria-label="Close" class="btn close pe-0 d-flex align-items-center" data-bs-dismiss="modal"
+                type="button">
                 <span class="close-label">Skip Intro</span>
                 <i class="fa fa-close" aria-hidden="true"></i>
             </button>
@@ -95,7 +145,7 @@
                             Welcome to AddisPay
                         </h4>
                         <div class="b-text text-white text-center">
-                          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita, unde?
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita, unde?
                         </div>
                     </div>
                 </div>
@@ -108,8 +158,8 @@
                             Use it
                         </h4>
                         <div class="b-text text-white text-center">
-                           Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                           Laborum quidem exercitationem doloremque!
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Laborum quidem exercitationem doloremque!
                         </div>
                     </div>
                 </div>
