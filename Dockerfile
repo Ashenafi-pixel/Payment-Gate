@@ -16,6 +16,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs npm
 COPY . .
 RUN composer install --ignore-platform-reqs
 RUN chmod -R +r public
+RUN npm cache clear --force
 RUN npm install && npm run build
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
