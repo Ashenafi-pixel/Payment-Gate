@@ -1,4 +1,6 @@
 FROM php:latest
+WORKDIR /dev_addispay
+
 RUN apt-get update && \
     apt-get install -y \
         libzip-dev \
@@ -17,9 +19,7 @@ COPY . .
 RUN composer install --ignore-platform-reqs
 RUN npm install
 
-RUN npm run dev
-
-RUN chmod -R +r public
+RUN npm run build
 
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
