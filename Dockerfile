@@ -1,4 +1,5 @@
-FROM php
+FROM php:8.0
+
 WORKDIR /app
 RUN apt-get update && \
     apt-get install -y \
@@ -8,13 +9,15 @@ RUN apt-get update && \
         git \
         curl
 
-RUN docker-php-ext-install pdo pdo_mysql mbstring zip
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip sodium
+RUN apt-get install -y git
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs
 COPY . .
 
-RUN composer install --no-scripts --no-interaction
+RUN composer install --no-scripts --no-interaction --ignore-platform-req=ext-gd
 
 RUN npm install && npm run production
 
