@@ -12,8 +12,9 @@ RUN apt-get update && \
         npm
 
 RUN docker-php-ext-install pdo pdo_mysql mbstring zip
-RUN apt-get install -y git
-
+RUN npm cache clean --force
+RUN rm -rf node_modules
+RUN rm -f package-lock.json
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 COPY . .
 RUN composer install --ignore-platform-reqs
