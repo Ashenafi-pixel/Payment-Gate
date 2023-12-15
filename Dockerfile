@@ -6,7 +6,6 @@ RUN apt-get update && \
         libonig-dev \
         unzip \
         git \
-        gz \
         curl
 
 RUN docker-php-ext-install pdo pdo_mysql mbstring zip
