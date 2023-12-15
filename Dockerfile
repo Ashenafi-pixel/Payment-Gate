@@ -17,6 +17,6 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs
 COPY . .
 RUN composer install --ignore-platform-reqs
-
+RUN npm install && npm run production
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
