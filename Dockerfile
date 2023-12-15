@@ -16,6 +16,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs npm
 COPY . .
 RUN composer install --ignore-platform-reqs
-RUN npm install && npm run dev
+RUN npm install && npm run build
 EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]
