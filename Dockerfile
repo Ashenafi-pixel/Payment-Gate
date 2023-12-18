@@ -33,7 +33,7 @@ RUN npm run build
 
 # Clear cache and optimize Laravel
 RUN php artisan cache:clear && \
-    php artisan optimize:
+    php artisan optimize
 
 # Clear Composer cache
 RUN composer clear-cache
