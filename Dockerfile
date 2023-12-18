@@ -1,4 +1,3 @@
-Copy
 FROM php:8.2-apache
 
 USER root
