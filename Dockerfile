@@ -31,6 +31,16 @@ RUN chown -R www-data:www-data storage bootstrap
 RUN chmod -R 777 public
 RUN npm run build
 
+# Clear cache and optimize Laravel
+RUN php artisan cache:clear
+RUN  php artisan optimize --force
+
+# Clear cache and cleanup
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    npm cache clean --force && \
+    composer clear-cache
+
 EXPOSE 8000
 
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
