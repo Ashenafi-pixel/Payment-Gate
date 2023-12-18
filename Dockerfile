@@ -36,10 +36,10 @@ RUN php artisan cache:clear
 RUN  php artisan optimize
 
 # Clear cache and cleanup
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    npm cache clean && \
-    composer clear-cache
+RUN apt-get clean
+RUN apt-get clean rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN npm cache clean
+RUN composer clear-cache
 
 EXPOSE 8000
 
