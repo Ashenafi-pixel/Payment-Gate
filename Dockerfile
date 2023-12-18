@@ -32,18 +32,16 @@ RUN chmod -R 777 public
 RUN npm run build
 
 # Clear cache and optimize Laravel
-RUN php artisan cache:clear
-RUN  php artisan optimize
+RUN php artisan cache:clear && \
+    php artisan optimize:
 
-# Clear cache and cleanup
-RUN apt-get clean
+# Clear Composer cache
+RUN composer clear-cache
+
+# Cleanup
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/* /var/tmp/* && \
-    npm cache clean --force && \
-    composer clear-cache
-RUN npm cache clean
-RUN composer clear-cache
+    rm -rf /tmp/* /var/tmp/*
 
 EXPOSE 8000
 
