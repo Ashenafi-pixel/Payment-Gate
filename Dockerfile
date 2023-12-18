@@ -1,10 +1,7 @@
-# Use the latest PHP base image
 FROM php:latest
-
-# Set the working directory
+USER root
 WORKDIR /var/www/html
 
-# Install dependencies
 RUN apt-get update && \
     apt-get install -y \
         libzip-dev \
@@ -15,28 +12,16 @@ RUN apt-get update && \
         nodejs \
         npm
 
-# Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mbstring zip
-
-# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Copy project files to the working directory
 COPY . .
-
-# Install project dependencies
 RUN composer install --ignore-platform-reqs
-
-# Install npm packages
 RUN npm install
 
-# Set the correct file permissions
 RUN chown -R www-data:www-data storage bootstrap
-
-# Build the assets
+RUN chmod -R 755 /var/www/html/public *
 RUN npm run build
 
-# Expose the application port
 EXPOSE 8000
 
 # Start the PHP server
