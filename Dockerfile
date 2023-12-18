@@ -31,8 +31,11 @@ RUN chmod -R 775 storage bootstrap public
 RUN php artisan cache:clear && \
     php artisan optimize
 
-# Clear Composer cache
-RUN composer clear-cache
+# Generate application key
+RUN php artisan key:generate
+
+# Publish storage link
+RUN php artisan storage:link
 
 # Cleanup
 RUN apt-get clean && \
@@ -41,4 +44,4 @@ RUN apt-get clean && \
 
 EXPOSE 8000
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+CMD php artisan serve --host=0.0.0.0 --port=8000
