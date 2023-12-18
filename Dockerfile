@@ -22,7 +22,7 @@ RUN docker-php-ext-enable mysqli
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN composer install --ignore-platform-reqs
-RUN npm install && npm run production
+RUN npm install && npm audit fix && npm run production
 
 RUN chown -R www-data:www-data storage bootstrap public
 RUN chmod -R 775 storage bootstrap public
