@@ -4,8 +4,7 @@ USER root
 
 WORKDIR /var/www/html
 
-COPY public/index.php index.php
-COPY public/ src
+COPY . .
 
 RUN apt-get update && \
     apt-get install -y \
@@ -22,14 +21,11 @@ RUN docker-php-ext-enable mysqli
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY . .
-
 RUN composer install --ignore-platform-reqs
-RUN npm install
+RUN npm install && npm run production
 
-RUN chown -R www-data:www-data storage bootstrap
-RUN chmod -R 777 public
-RUN npm run build
+RUN chown -R www-data:www-data storage bootstrap public
+RUN chmod -R 775 storage bootstrap public
 
 # Clear cache and optimize Laravel
 RUN php artisan cache:clear && \
