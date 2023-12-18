@@ -19,7 +19,7 @@ RUN composer install --ignore-platform-reqs
 RUN npm install
 
 RUN chown -R www-data:www-data storage bootstrap
-RUN chmod -R 777 /public*
+RUN chmod -R 777 /var/www/html/public
 RUN npm run build
 
 EXPOSE 8000
