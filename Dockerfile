@@ -33,12 +33,12 @@ RUN npm run build
 
 # Clear cache and optimize Laravel
 RUN php artisan cache:clear
-RUN  php artisan optimize --force
+RUN  php artisan optimize
 
 # Clear cache and cleanup
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    npm cache clean --force && \
+    npm cache clean && \
     composer clear-cache
 
 EXPOSE 8000
