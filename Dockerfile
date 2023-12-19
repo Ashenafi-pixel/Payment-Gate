@@ -1,4 +1,3 @@
-Copy code
 # Use an official PHP base image with Apache
 FROM php:8.2-apache
 
@@ -52,5 +51,5 @@ RUN php artisan key:generate
 RUN php artisan storage:link
 
 # Expose port and start Apache
-EXPOSE 80
+EXPOSE 8000
 CMD ["apache2-foreground"]
