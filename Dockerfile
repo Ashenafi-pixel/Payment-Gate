@@ -11,8 +11,8 @@ RUN apt-get update && \
         libzip-dev \
         libonig-dev \
         unzip \
-        curl \
         nodejs \
+        curl \
         npm \
         software-properties-common
 
