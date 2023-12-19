@@ -6,8 +6,12 @@ WORKDIR /var/www/html
 
 COPY . .
 
-RUN apt-get update && \
-    apt-get install -y \
+RUN echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" >> /etc/apt/sources.list \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24
+
+RUN apt-get update
+
+RUN apt-get install -y && \
         libzip-dev \
         libonig-dev \
         unzip \
