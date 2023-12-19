@@ -1,3 +1,4 @@
+Copy code
 # Use an official PHP base image with Apache
 FROM php:8.2-apache
 
@@ -25,13 +26,8 @@ RUN apt-get update && apt-get install -y git
 # Enable Apache modules
 RUN a2enmod rewrite
 
-# Copy Apache configuration files
-COPY apache2.conf /etc/apache2/apache2.conf
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-
 # Copy the rest of your application
 COPY . .
-
 
 # Install additional PHP extensions
 RUN docker-php-ext-install pdo_mysql \
