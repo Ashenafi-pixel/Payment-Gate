@@ -3,7 +3,6 @@ FROM php:8.2-apache
 USER root
 
 WORKDIR /var/www/html
-FROM addispay/addispay-dev-v1:latest
 
 RUN apt-get update && apt-get install -y \
     libzip-dev \
