@@ -11,10 +11,15 @@ RUN apt-get update && \
         libzip-dev \
         libonig-dev \
         unzip \
-        git \
         curl \
         nodejs \
         npm
+
+# Install git from another package repository
+RUN apt-get install -y software-properties-common && \
+    apt-add-repository ppa:git-core/ppa -y && \
+    apt-get update && \
+    apt-get install -y git
 
 RUN docker-php-ext-install mysqli
 RUN docker-php-ext-enable mysqli
