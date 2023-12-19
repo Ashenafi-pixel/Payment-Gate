@@ -13,11 +13,11 @@ RUN apt-get update && \
         unzip \
         curl \
         nodejs \
-        npm
+        npm \
+        software-properties-common
 
-# Install git from another package repository
-RUN apt-get install -y software-properties-common && \
-    apt-add-repository ppa:git-core/ppa -y && \
+# Add the PPA repository and install git
+RUN apt-add-repository ppa:git-core/ppa -y && \
     apt-get update && \
     apt-get install -y git
 
