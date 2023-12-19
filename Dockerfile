@@ -22,15 +22,16 @@ RUN echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" >> /etc/a
 # Update packages and install Git
 RUN apt-get update && apt-get install -y git
 
-# Copy the contents of the current directory to the working directory
-COPY . .
-
 # Enable Apache modules
 RUN a2enmod rewrite
 
 # Copy Apache configuration files
 COPY apache2.conf /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+
+# Copy the rest of your application
+COPY . .
+
 
 # Install additional PHP extensions
 RUN docker-php-ext-install pdo_mysql \
