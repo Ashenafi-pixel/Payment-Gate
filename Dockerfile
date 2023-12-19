@@ -28,8 +28,8 @@ RUN chown -R www-data:www-data storage bootstrap public
 RUN chmod -R 775 storage bootstrap public
 
 # Clear cache and optimize Laravel
-RUN php artisan cache:clear && \
-    php artisan optimize
+RUN php artisan cache:clear
+    
 
 # Generate application key
 RUN php artisan key:generate
@@ -41,7 +41,7 @@ RUN php artisan storage:link
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/* /var/tmp/*
-
+RUN php artisan optimize
 EXPOSE 8000
 
 CMD php artisan serve --host=0.0.0.0 --port=8000
