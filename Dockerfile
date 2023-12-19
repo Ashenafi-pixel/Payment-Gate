@@ -5,7 +5,7 @@ USER root
 WORKDIR /var/www/html
 
 COPY . .
-FROM addispay/addispay-dev-v1:latest
+
 RUN apt-get update && apt-get install -y gnupg
 RUN apt-get update && apt-get install -y git
 
