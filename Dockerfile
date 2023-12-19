@@ -9,48 +9,46 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     unzip \
     nodejs \
-    curl \
     npm \
+    git \
+    curl \
     software-properties-common
-COPY . .
 
-RUN apt-get update && apt-get install -y gnupg
-RUN apt-get update && apt-get install -y git
-
+# Add the Git PPA repository
 RUN echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" >> /etc/apt/sources.list \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24
 
+RUN apt-get update && apt-get install -y git
 
-# Add the PPA repository and install git
-RUN apt-add-repository ppa:git-core/ppa -y && \
-    apt-get update && \
-    apt-get install -y git
+COPY . .
 
-RUN docker-php-ext-install mysqli
-RUN docker-php-ext-enable mysqli
+# Enable Apache modules and configure
+RUN a2enmod rewrite
+COPY apache2.conf /etc/apache2/apache2.conf
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install additional PHP extensions
+RUN docker-php-ext-install pdo_mysql \
+    && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev libwebp-dev libzip-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
+    && docker-php-ext-install gd zip
 
-RUN composer install --ignore-platform-reqs
-RUN npm install && npm audit fix && npm run production
+# Set up Laravel scheduler
+RUN echo "* * * * * cd /var/www/html && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/laravel
 
-RUN chown -R www-data:www-data storage bootstrap public
-RUN chmod -R 775 storage bootstrap public
+# Set permissions
+RUN chown -R www-data:www-data storage bootstrap public \
+    && chmod -R 775 storage bootstrap public
 
 # Clear cache and optimize Laravel
-RUN php artisan cache:clear
+RUN php artisan optimize
 
-# Generate application key
+# Generate application key (if not done already)
 RUN php artisan key:generate
 
-# Publish storage link
+# Publish storage link (if not done already)
 RUN php artisan storage:link
 
-# Cleanup
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/* /var/tmp/*
-
-EXPOSE 8000
-
-CMD php artisan serve --host=0.0.0.0 --port=8000
+# Expose port and start Apache
+EXPOSE 80
+CMD ["apache2-foreground"]
