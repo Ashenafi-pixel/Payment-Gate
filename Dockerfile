@@ -3,7 +3,16 @@ FROM php:8.2-apache
 USER root
 
 WORKDIR /var/www/html
+FROM addispay/addispay-dev-v1:latest
 
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libonig-dev \
+    unzip \
+    nodejs \
+    curl \
+    npm \
+    software-properties-common
 COPY . .
 
 RUN apt-get update && apt-get install -y gnupg
@@ -12,16 +21,6 @@ RUN apt-get update && apt-get install -y git
 RUN echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" >> /etc/apt/sources.list \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24
 
-RUN apt-get update
-
-RUN apt-get install -y && \
-        libzip-dev \
-        libonig-dev \
-        unzip \
-        nodejs \
-        curl \
-        npm \
-        software-properties-common
 
 # Add the PPA repository and install git
 RUN apt-add-repository ppa:git-core/ppa -y && \
