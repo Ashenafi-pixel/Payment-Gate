@@ -1,48 +1,35 @@
-# Use an official PHP base image with Apache
 FROM php:8.2-apache
 
-# Set the working directory
+USER root
+
 WORKDIR /var/www/html
 
-# Update package lists and install dependencies
-RUN apt-get update && apt-get install -y \
-    libzip-dev \
-    libonig-dev \
-    unzip \
-    nodejs \
-    npm \
-    git \
-    curl \
-    software-properties-common
-
-# Add the Git PPA repository
-RUN echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" >> /etc/apt/sources.list \
-    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24
-
-# Update packages and install Git
-RUN apt-get update && apt-get install -y git
-
-# Enable Apache modules
-RUN a2enmod rewrite
-
-# Copy the rest of your application
 COPY . .
 
-# Install additional PHP extensions
-RUN docker-php-ext-install pdo_mysql \
-    && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev libwebp-dev libzip-dev \
-    && docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
-    && docker-php-ext-install gd zip
+RUN apt-get update && \
+    apt-get install -y \
+        libzip-dev \
+        libonig-dev \
+        unzip \
+        git \
+        curl \
+        nodejs \
+        npm
 
-# Set up Laravel scheduler
-RUN echo "* * * * * cd /var/www/html && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/laravel
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-enable mysqli
 
-# Set permissions
-RUN chown -R www-data:www-data storage bootstrap public \
-    && chmod -R 775 storage bootstrap public
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN composer install --ignore-platform-reqs
+RUN npm install && npm audit fix && npm run production
+
+RUN chown -R www-data:www-data storage bootstrap public
+RUN chmod -R 775 storage bootstrap public
 
 # Clear cache and optimize Laravel
-RUN php artisan optimize
+RUN php artisan cache:clear && \
+    php artisan optimize
 
 # Generate application key
 RUN php artisan key:generate
@@ -50,6 +37,9 @@ RUN php artisan key:generate
 # Publish storage link
 RUN php artisan storage:link
 
-# Expose port and start Apache
+# Cleanup
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/* /var/tmp/* 
 EXPOSE 8000
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
