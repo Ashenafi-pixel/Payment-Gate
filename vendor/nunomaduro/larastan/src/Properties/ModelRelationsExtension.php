@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Properties;
+namespace Larastan\Larastan\Properties;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
-use NunoMaduro\Larastan\Concerns;
-use NunoMaduro\Larastan\Reflection\ReflectionHelper;
-use NunoMaduro\Larastan\Support\CollectionHelper;
-use NunoMaduro\Larastan\Types\RelationParserHelper;
+use Larastan\Larastan\Concerns;
+use Larastan\Larastan\Reflection\ReflectionHelper;
+use Larastan\Larastan\Support\CollectionHelper;
+use Larastan\Larastan\Types\RelationParserHelper;
 use PHPStan\Analyser\OutOfClassScope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -26,6 +27,8 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+
+use function str_ends_with;
 
 /**
  * @internal
@@ -48,23 +51,33 @@ final class ModelRelationsExtension implements PropertiesClassReflectionExtensio
             return false;
         }
 
-        $hasNativeMethod = $classReflection->hasNativeMethod($propertyName);
-
-        if (! $hasNativeMethod) {
-            return false;
+        if (str_ends_with($propertyName, '_count')) {
+            $propertyName = Str::before($propertyName, '_count');
         }
 
-        $returnType = ParametersAcceptorSelector::selectSingle($classReflection->getNativeMethod($propertyName)->getVariants())->getReturnType();
+        foreach ([Str::camel($propertyName), $propertyName] as $methodName) {
+            $hasNativeMethod = $classReflection->hasNativeMethod($methodName);
 
-        if (! (new ObjectType(Relation::class))->isSuperTypeOf($returnType)->yes()) {
-            return false;
+            if (! $hasNativeMethod) {
+                continue;
+            }
+
+            $returnType = ParametersAcceptorSelector::selectSingle($classReflection->getNativeMethod($methodName)->getVariants())->getReturnType();
+
+            if ((new ObjectType(Relation::class))->isSuperTypeOf($returnType)->yes()) {
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
 
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
+        if (str_ends_with($propertyName, '_count')) {
+            return new ModelProperty($classReflection, IntegerRangeType::createAllGreaterThanOrEqualTo(0), new NeverType(), false);
+        }
+
         $method = $classReflection->getMethod($propertyName, new OutOfClassScope());
 
         $returnType = ParametersAcceptorSelector::selectSingle($method->getVariants())->getReturnType();

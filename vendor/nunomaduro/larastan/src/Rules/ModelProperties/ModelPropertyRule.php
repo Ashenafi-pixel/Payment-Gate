@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules\ModelProperties;
+namespace Larastan\Larastan\Rules\ModelProperties;
 
-use NunoMaduro\Larastan\Rules\ModelRuleHelper;
+use Larastan\Larastan\Rules\ModelRuleHelper;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
@@ -12,6 +12,8 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleLevelHelper;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\Type;
+
+use function count;
 
 /**
  * @implements \PHPStan\Rules\Rule<\PhpParser\Node\Expr\MethodCall>

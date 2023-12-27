@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules;
+namespace Larastan\Larastan\Rules;
 
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Events\Dispatchable as EventDispatchable;
@@ -16,6 +16,13 @@ use PHPStan\Rules\FunctionCallParametersCheck;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\BooleanType;
+
+use function array_shift;
+use function count;
+use function in_array;
+use function sprintf;
+use function str_replace;
+use function ucfirst;
 
 /** @implements Rule<StaticCall> */
 class CheckDispatchArgumentTypesCompatibleWithClassConstructorRule implements Rule

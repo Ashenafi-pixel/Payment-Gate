@@ -15,6 +15,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use  App\Models\User;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class MerchantController extends Controller
 {
@@ -69,6 +71,31 @@ class MerchantController extends Controller
     {
         $merchant = $this->_userService->merchantStore($request->all());
         return GeneralHelper::SEND_RESPONSE($request,$merchant,self::MERCHANT_INDEX_ROUTE,self::CREATE_MERCHANT_MESSAGE);
+    }
+    public function  editMerchant($merchant_id){
+        $merchant = User::findOrFail($merchant_id);
+        //dd($merchant);
+    return view('backend.admin.merchant.all-merchant._form', compact('merchant'));
+    }
+
+    public function updateMerchant(Request $request, $merchant_id)
+    {
+        $merchant = User::findOrFail($merchant_id);
+
+        // Update the fields
+        $merchant->status = $request->input('status');
+        $merchant->name = $request->input('name');
+        $merchant->email = $request->input('email');
+        $merchant->mobile_number = $request->input('mobile_number');
+
+        // Save the changes to the database
+        $merchant->save();
+
+        // Display a success flash message
+        Alert::success('Success', 'Merchant updated successfully')->persistent(true);
+
+        // Redirect back to the form page
+        return view('backend.admin.merchant.all-merchant._form');
     }
 
 }

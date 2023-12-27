@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\ReturnTypes\Helpers;
+namespace Larastan\Larastan\ReturnTypes\Helpers;
 
 use Illuminate\Foundation\Application;
-use NunoMaduro\Larastan\ReturnTypes\AppMakeHelper;
+use Larastan\Larastan\ReturnTypes\AppMakeHelper;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Type\DynamicFunctionReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+
+use function count;
 
 class AppExtension implements DynamicFunctionReturnTypeExtension
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\ReturnTypes;
+namespace Larastan\Larastan\ReturnTypes;
 
 use Illuminate\Support\Enumerable;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -16,6 +16,9 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+
+use function count;
+use function is_string;
 
 class CollectionFilterDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

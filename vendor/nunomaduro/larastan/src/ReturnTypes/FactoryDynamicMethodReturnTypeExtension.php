@@ -1,11 +1,11 @@
 <?php
 
-namespace NunoMaduro\Larastan\ReturnTypes;
+namespace Larastan\Larastan\ReturnTypes;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use NunoMaduro\Larastan\Types\Factory\ModelFactoryType;
+use Larastan\Larastan\Types\Factory\ModelFactoryType;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -18,6 +18,8 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+
+use function in_array;
 
 class FactoryDynamicMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

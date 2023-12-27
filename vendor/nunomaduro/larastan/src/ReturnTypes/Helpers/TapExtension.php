@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\ReturnTypes\Helpers;
+namespace Larastan\Larastan\ReturnTypes\Helpers;
 
 use Illuminate\Support\HigherOrderTapProxy;
 use PhpParser\Node\Expr\FuncCall;
@@ -13,6 +13,8 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+
+use function count;
 
 class TapExtension implements DynamicFunctionReturnTypeExtension
 {

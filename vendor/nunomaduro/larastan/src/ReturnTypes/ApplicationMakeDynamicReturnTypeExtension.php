@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\ReturnTypes;
+namespace Larastan\Larastan\ReturnTypes;
 
 use Illuminate\Contracts\Foundation\Application;
 use PhpParser\Node\Expr\MethodCall;
@@ -10,6 +10,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
+
+use function in_array;
 
 final class ApplicationMakeDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

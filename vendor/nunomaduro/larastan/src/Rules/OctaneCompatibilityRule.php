@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules;
+namespace Larastan\Larastan\Rules;
 
 use Illuminate\Contracts\Foundation\Application;
 use PhpParser\Node;
@@ -13,6 +13,10 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
+
+use function array_map;
+use function count;
+use function in_array;
 
 /**
  * @implements Rule<MethodCall>

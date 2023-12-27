@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules\ModelProperties;
+namespace Larastan\Larastan\Rules\ModelProperties;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use NunoMaduro\Larastan\Types\ModelProperty\GenericModelPropertyType;
-use NunoMaduro\Larastan\Types\ModelProperty\ModelPropertyType;
+use Larastan\Larastan\Types\ModelProperty\GenericModelPropertyType;
+use Larastan\Larastan\Types\ModelProperty\ModelPropertyType;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -19,6 +19,12 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
+
+use function array_key_exists;
+use function array_merge;
+use function count;
+use function mb_strpos;
+use function sprintf;
 
 class ModelPropertiesRuleHelper
 {

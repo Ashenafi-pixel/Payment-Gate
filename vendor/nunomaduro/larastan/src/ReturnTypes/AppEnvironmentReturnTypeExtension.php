@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\ReturnTypes;
+namespace Larastan\Larastan\ReturnTypes;
 
 use Illuminate\Foundation\Application;
 use PhpParser\Node\Expr\MethodCall;
@@ -12,6 +12,8 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+
+use function count;
 
 class AppEnvironmentReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

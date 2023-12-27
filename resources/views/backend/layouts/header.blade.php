@@ -8,15 +8,16 @@
                 <div class="flex-mode justify-content-center justify-content-lg-end">
                     <div>
                         <div class="switchScreen" onclick="switchScreen();">
-                            <img width="24" id="screen" src="{{asset('images/icons/fullscreen.svg')}}" alt="">
+                            <img width="24" id="screen" src="{{ asset('images/icons/fullscreen.svg') }}"
+                                alt="">
                         </div>
                     </div>
                     <!--Notification icon---->
                     <div class="position-relative">
-                        <button class="btn p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#notifications"
-                                aria-controls="notifications">
+                        <button class="btn p-0" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#notifications" aria-controls="notifications">
                             <div class="notify bell-animate">
-                                <img src="{{asset('images/icons/notification-bell.svg')}}" alt="">
+                                <img src="{{ asset('images/icons/notification-bell.svg') }}" alt="">
                             </div>
                             <span class="notify-dot pulse-button"></span>
                         </button>
@@ -24,19 +25,15 @@
                     <!--User profile dropdown--->
                     <div>
                         <div class="dropdown profile-dd">
-                            <button class="btn p-0 dropdown-toggle" type="button" id="profile" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                <img
-
-                                    src="{{ isset(auth()->user()->image)  ? asset(auth()->user()->image->url) : asset('images/user-img.png') }}"
+                            <button class="btn p-0 dropdown-toggle" type="button" id="profile"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="{{ isset(auth()->user()->image) ? asset(auth()->user()->image->url) : asset('images/user-img.png') }}"
                                     alt="user" class="user-img">
                             </button>
                             <div class="dropdown-menu dropdown-menu-end user-dd animated zoomIn py-0"
-                                 aria-labelledby="user-dropdown"
-                                 data-bs-popper="static">
+                                aria-labelledby="user-dropdown" data-bs-popper="static">
                                 <div class="d-flex no-block align-items-center profile-dd-bg  ">
-                                    <img
-                                        src="{{ isset(auth()->user()->image) ? asset(auth()->user()->image->url) : asset('images/user-img.png') }}"
+                                    <img src="{{ isset(auth()->user()->image) ? asset(auth()->user()->image->url) : asset('images/user-img.png') }}"
                                         alt="user" class="user-img">
                                     <div>
                                         <h4 class="sub-title">{{ __(Auth::user()->username) }}</h4>
@@ -45,28 +42,32 @@
                                 </div>
 
                                 <a class="dropdown-item"
-                                   href="{{ route(\App\Helpers\GeneralHelper::WHO_AM_I().'.profile.view') }}">
-                                    <img class="filter" src="{{ asset('images/icons/my-profile.svg')}}" alt="">
+                                    href="{{ route(\App\Helpers\GeneralHelper::WHO_AM_I() . '.profile.view') }}">
+                                    <img class="filter" src="{{ asset('images/icons/my-profile.svg') }}" alt="">
                                     <span>{{ __('My Profile') }}</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">
-                                    <img class="filter" src="{{asset('images/icons/account-setting.svg')}}" alt="">
+                                    <img class="filter" src="{{ asset('images/icons/account-setting.svg') }}"
+                                        alt="">
                                     <span>{{ __('Account Setting') }}</span>
                                 </a>
-                                {{--Lock Screen--}}
+                                {{-- Lock Screen --}}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item mb-2" href="{{ route('user.lock.screen') }}">
-                                    <img class="filter" src="{{asset('images/icons/lock-screen.svg')}}" alt="">
+                                    <img class="filter" src="{{ asset('images/icons/lock-screen.svg') }}"
+                                        alt="">
                                     <span>{{ __('Lock Screen') }}</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                {{--Logout--}}
-                                <a class="dropdown-item mb-2" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                {{-- Logout --}}
+                                <a class="dropdown-item mb-2" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                    <img class="filter" src="{{asset('images/icons/log-out.svg')}}" alt="">
+                                    <img class="filter" src="{{ asset('images/icons/log-out.svg') }}" alt="">
                                     <span>{{ __('Logout') }}</span>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
                                         @csrf
                                     </form>
                                 </a>
@@ -80,7 +81,7 @@
 </header>
 <!---Notification Sidebar------>
 <div class="offcanvas offcanvas-end" data-bs-backdrop="true" tabindex="-1" id="notifications"
-     aria-labelledby="notificationsLabel">
+    aria-labelledby="notificationsLabel">
     <div class="offcanvas-header">
         <h5 class="page-title"> {{ __('Notifications') }} <span class="sub-heading">(4)</span></h5>
         <button type="button" class="btn-close btn text-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -109,12 +110,12 @@
             </div>
         </a> --}}
         <div class="flex-mode flex-column h-100 p-3 content-center">
-            <img height="120" class='filter-img' src="{{asset('images/icons/bell.svg')}}" alt="">
+            <img height="120" class='filter-img' src="{{ asset('images/icons/bell.svg') }}" alt="">
             <h4 class="page-title"> {{ __('Hey! You have no any notifications') }} </h4>
         </div>
     </div>
     <div class="offcanvas-footer">
         <a class="page-title" href="#"> {{ __('See All') }}
-            <img width='24' src="{{asset('images/arrow-left-d.svg')}}"   alt=""> </a>
+            <img width='24' src="{{ asset('images/arrow-left-d.svg') }}" alt=""> </a>
     </div>
 </div>

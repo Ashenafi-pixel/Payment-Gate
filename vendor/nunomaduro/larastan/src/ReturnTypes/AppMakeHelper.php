@@ -1,8 +1,8 @@
 <?php
 
-namespace NunoMaduro\Larastan\ReturnTypes;
+namespace Larastan\Larastan\ReturnTypes;
 
-use NunoMaduro\Larastan\Concerns\HasContainer;
+use Larastan\Larastan\Concerns\HasContainer;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -13,6 +13,9 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Throwable;
+
+use function count;
+use function get_class;
 
 final class AppMakeHelper
 {

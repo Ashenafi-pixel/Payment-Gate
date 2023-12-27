@@ -1,6 +1,6 @@
 <?php
 
-namespace NunoMaduro\Larastan\Properties;
+namespace Larastan\Larastan\Properties;
 
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -22,6 +22,9 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+
+use function class_exists;
+use function explode;
 
 class ModelCastHelper
 {

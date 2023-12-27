@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Methods;
+namespace Larastan\Larastan\Methods;
 
 use Illuminate\Database\Eloquent\Model;
 use PHPStan\Reflection\ClassReflection;
@@ -10,6 +10,8 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
 use PHPStan\Reflection\Php\PhpMethodReflectionFactory;
 use PHPStan\Reflection\ReflectionProvider;
+
+use function array_key_exists;
 
 /**
  * @internal

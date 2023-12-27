@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules;
+namespace Larastan\Larastan\Rules;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use PhpParser\Node;
@@ -14,6 +14,13 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+
+use function array_map;
+use function array_merge;
+use function count;
+use function explode;
+use function in_array;
+use function sprintf;
 
 /** @implements Rule<Node\Expr\CallLike> */
 class RelationExistenceRule implements Rule

@@ -1,6 +1,6 @@
 <?php
 
-namespace NunoMaduro\Larastan\ReturnTypes;
+namespace Larastan\Larastan\ReturnTypes;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +18,10 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+
+use function array_map;
+use function in_array;
+use function version_compare;
 
 class CollectionGenericStaticMethodDynamicMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -75,14 +79,14 @@ class CollectionGenericStaticMethodDynamicMethodReturnTypeExtension implements D
         $classReflection = $calledOnType->getObjectClassReflections()[0];
 
         // Special cases for methods returning single models
-        if ($classReflection->getName() === EloquentCollection::class && (new ObjectType(Model::class))->isSuperTypeOf($returnType)->yes()) {
+        if (($classReflection->getName() === EloquentCollection::class || $classReflection->getName() === Collection::class) && (new ObjectType(Model::class))->isSuperTypeOf($returnType)->yes()) {
             return $returnType;
         }
 
         // If it's a UnionType, traverse the types and try to find a collection object type
         if ($returnType instanceof UnionType) {
             return $returnType->traverse(function (Type $type) use ($classReflection) {
-                if ($type instanceof GenericObjectType && (($innerReflection = $type->getClassReflection())) !== null) { // @phpstan-ignore-line
+                if ($type instanceof GenericObjectType && ($innerReflection = $type->getClassReflection()) !== null) { // @phpstan-ignore-line
                     return $this->handleGenericObjectType($classReflection, $innerReflection);
                 }
 

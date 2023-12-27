@@ -2,22 +2,26 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules;
+namespace Larastan\Larastan\Rules;
 
-use function collect;
 use Illuminate\View\Factory;
-use NunoMaduro\Larastan\Collectors\UsedEmailViewCollector;
-use NunoMaduro\Larastan\Collectors\UsedRouteFacadeViewCollector;
-use NunoMaduro\Larastan\Collectors\UsedViewFacadeMakeCollector;
-use NunoMaduro\Larastan\Collectors\UsedViewFunctionCollector;
-use NunoMaduro\Larastan\Collectors\UsedViewInAnotherViewCollector;
-use NunoMaduro\Larastan\Collectors\UsedViewMakeCollector;
-use NunoMaduro\Larastan\Support\ViewFileHelper;
+use Larastan\Larastan\Collectors\UsedEmailViewCollector;
+use Larastan\Larastan\Collectors\UsedRouteFacadeViewCollector;
+use Larastan\Larastan\Collectors\UsedViewFacadeMakeCollector;
+use Larastan\Larastan\Collectors\UsedViewFunctionCollector;
+use Larastan\Larastan\Collectors\UsedViewInAnotherViewCollector;
+use Larastan\Larastan\Collectors\UsedViewMakeCollector;
+use Larastan\Larastan\Support\ViewFileHelper;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+
+use function array_diff;
+use function array_filter;
+use function collect;
+use function iterator_to_array;
 
 /** @implements Rule<CollectedDataNode> */
 final class UnusedViewsRule implements Rule

@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules\UselessConstructs;
+namespace Larastan\Larastan\Rules\UselessConstructs;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+
+use function count;
+use function strtolower;
 
 /**
  * @implements Rule<FuncCall>

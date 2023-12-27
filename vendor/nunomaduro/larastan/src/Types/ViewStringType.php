@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Types;
+namespace Larastan\Larastan\Types;
 
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\CompoundType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+
+use function count;
 
 /**
  * The custom 'view-string' type class. It's a subset of the string type. Every string that passes the

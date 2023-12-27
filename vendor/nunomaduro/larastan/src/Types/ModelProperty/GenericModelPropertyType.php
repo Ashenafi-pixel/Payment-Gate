@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Types\ModelProperty;
+namespace Larastan\Larastan\Types\ModelProperty;
 
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\CompoundType;
@@ -15,6 +15,8 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
+
+use function count;
 
 class GenericModelPropertyType extends ModelPropertyType
 {

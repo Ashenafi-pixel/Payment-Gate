@@ -1,11 +1,14 @@
 <?php
 
-namespace NunoMaduro\Larastan\Methods;
+namespace Larastan\Larastan\Methods;
 
-use NunoMaduro\Larastan\Reflection\DynamicWhereMethodReflection;
+use Larastan\Larastan\Reflection\DynamicWhereMethodReflection;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
+
+use function in_array;
+use function str_starts_with;
 
 class ViewWithMethodsClassReflectionExtension implements MethodsClassReflectionExtension
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace NunoMaduro\Larastan\Properties;
+namespace Larastan\Larastan\Properties;
 
-use NunoMaduro\Larastan\Properties\Schema\PhpMyAdminDataTypeToPhpTypeConverter;
+use Larastan\Larastan\Properties\Schema\PhpMyAdminDataTypeToPhpTypeConverter;
 use PhpMyAdmin\SqlParser\Components\CreateDefinition;
 use PhpMyAdmin\SqlParser\Exceptions\ParserException;
 use PhpMyAdmin\SqlParser\Parser;
@@ -14,6 +14,14 @@ use RecursiveIteratorIterator;
 use RegexIterator;
 use SplFileInfo;
 
+use function array_filter;
+use function array_key_exists;
+use function file_get_contents;
+use function is_array;
+use function is_dir;
+use function iterator_to_array;
+use function ksort;
+
 final class SquashedMigrationHelper
 {
     /**
@@ -23,12 +31,17 @@ final class SquashedMigrationHelper
         private array $schemaPaths,
         private FileHelper $fileHelper,
         private PhpMyAdminDataTypeToPhpTypeConverter $converter,
+        private bool $disableSchemaScan,
     ) {
     }
 
     /** @return SchemaTable[] */
     public function initializeTables(): array
     {
+        if ($this->disableSchemaScan) {
+            return [];
+        }
+
         if (empty($this->schemaPaths)) {
             $this->schemaPaths = [database_path('schema')];
         }
@@ -51,9 +64,8 @@ final class SquashedMigrationHelper
                 continue;
             }
 
-            $parser = new Parser($fileContents);
             try {
-                $parser->parse();
+                $parser = new Parser($fileContents);
             } catch (ParserException $exception) {
                 // TODO: re-throw the exception with a clear message?
                 continue;

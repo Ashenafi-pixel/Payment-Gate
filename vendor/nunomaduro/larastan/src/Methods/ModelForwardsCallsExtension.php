@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Methods;
+namespace Larastan\Larastan\Methods;
 
-use function array_map;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use NunoMaduro\Larastan\Reflection\EloquentBuilderMethodReflection;
+use Larastan\Larastan\Reflection\EloquentBuilderMethodReflection;
 use PHPStan\Reflection\ClassMemberReflection;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariant;
@@ -27,6 +26,10 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeWithClassName;
+
+use function array_key_exists;
+use function array_map;
+use function in_array;
 
 final class ModelForwardsCallsExtension implements MethodsClassReflectionExtension
 {
@@ -203,7 +206,6 @@ final class ModelForwardsCallsExtension implements MethodsClassReflectionExtensi
 
             return new EloquentBuilderMethodReflection(
                 $methodName, $builderReflection,
-                $reflection,
                 $parametersAcceptor->getParameters(),
                 $returnType,
                 $parametersAcceptor->isVariadic()

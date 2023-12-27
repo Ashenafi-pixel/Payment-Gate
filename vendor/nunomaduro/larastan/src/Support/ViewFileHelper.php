@@ -2,13 +2,19 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Support;
+namespace Larastan\Larastan\Support;
 
 use Generator;
 use PHPStan\File\FileHelper;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
+
+use function count;
+use function explode;
+use function is_dir;
+use function iterator_to_array;
+use function str_replace;
 
 final class ViewFileHelper
 {

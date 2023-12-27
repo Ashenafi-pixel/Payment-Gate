@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\ReturnTypes\Helpers;
+namespace Larastan\Larastan\ReturnTypes\Helpers;
 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use NunoMaduro\Larastan\Concerns;
+use Larastan\Larastan\Concerns;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
@@ -14,6 +14,9 @@ use PHPStan\Type\DynamicFunctionReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+
+use function count;
+use function get_class;
 
 /**
  * @internal

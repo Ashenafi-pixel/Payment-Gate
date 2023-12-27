@@ -14,12 +14,12 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\MerchantController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Customer\LedgerController;
 use Symfony\Component\VarDumper\VarDumper;
 
 
 # Admin Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
-
 # Profile Route's
 Route::get('profile', [ProfileController::class, 'index'])->name('profile.view');
 Route::post('update-profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
@@ -31,8 +31,8 @@ Route::post('reset-pin',[ProfileController::class,'resetPin'])->name('profile.re
 Route::get('merchants', [MerchantController::class, 'index'])->name('merchants.index');
 Route::get('merchants/create-merchant', [MerchantController::class, 'create'])->name('merchants.create');
 Route::post('store-merchant', [MerchantController::class, 'store'])->name('merchants.store');
-
-
+Route::get('merchant-edit/{merchant_id}', [MerchantController::class, 'editMerchant'])->name('merchant.edit');
+Route::post('merchant-edit/{merchant_id}', [MerchantController::class, 'updateMerchant'])->name('merchant.update');
 # Customer Module
 Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::get('customers/create-customer', [CustomerController::class, 'create'])->name('customers.create');

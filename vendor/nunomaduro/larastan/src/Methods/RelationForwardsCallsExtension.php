@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Methods;
+namespace Larastan\Larastan\Methods;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use NunoMaduro\Larastan\Reflection\EloquentBuilderMethodReflection;
+use Larastan\Larastan\Reflection\EloquentBuilderMethodReflection;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
@@ -18,7 +18,8 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
+
+use function array_key_exists;
 
 final class RelationForwardsCallsExtension implements MethodsClassReflectionExtension
 {
@@ -116,7 +117,7 @@ final class RelationForwardsCallsExtension implements MethodsClassReflectionExte
         if ((new ObjectType(Builder::class))->isSuperTypeOf($returnType)->yes()) {
             return new EloquentBuilderMethodReflection(
                 $methodName, $classReflection,
-                $reflection, $parametersAcceptor->getParameters(),
+                $parametersAcceptor->getParameters(),
                 new GenericObjectType($classReflection->getName(), $types),
                 $parametersAcceptor->isVariadic()
             );
@@ -124,7 +125,7 @@ final class RelationForwardsCallsExtension implements MethodsClassReflectionExte
 
         return new EloquentBuilderMethodReflection(
             $methodName, $classReflection,
-            $reflection, $parametersAcceptor->getParameters(),
+            $parametersAcceptor->getParameters(),
             $returnType,
             $parametersAcceptor->isVariadic()
         );

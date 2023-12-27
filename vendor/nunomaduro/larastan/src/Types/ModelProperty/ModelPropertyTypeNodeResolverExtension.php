@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Types\ModelProperty;
+namespace Larastan\Larastan\Types\ModelProperty;
 
 use Illuminate\Database\Eloquent\Model;
 use PHPStan\Analyser\NameScope;
@@ -16,6 +16,8 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+
+use function count;
 
 /**
  * Ensures a 'model-property' type in PHPDoc is recognised to be of type ModelPropertyType.

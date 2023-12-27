@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Collectors;
+namespace Larastan\Larastan\Collectors;
 
 use Illuminate\View\ViewName;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
+
+use function count;
 
 /** @implements Collector<Node\Expr\FuncCall, string> */
 final class UsedViewFunctionCollector implements Collector

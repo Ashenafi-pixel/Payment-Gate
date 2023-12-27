@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Collectors;
+namespace Larastan\Larastan\Collectors;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\View\ViewName;
@@ -10,6 +10,8 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Type\ObjectType;
+
+use function count;
 
 /** @implements Collector<Node\Expr\StaticCall, string> */
 final class UsedViewFacadeMakeCollector implements Collector

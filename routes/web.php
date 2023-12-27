@@ -91,3 +91,8 @@ Route::get('add-invoices',function(){
 Route::get('invoice',function(){
     return view('frontend.invoice.index');
 });
+
+Route::get('/app', function () {
+    return view('backend.layouts.app');
+
+});

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Methods;
+namespace Larastan\Larastan\Methods;
 
 use Illuminate\Database\Eloquent\Collection;
-use NunoMaduro\Larastan\Support\HigherOrderCollectionProxyHelper;
+use Larastan\Larastan\Support\HigherOrderCollectionProxyHelper;
 use PHPStan\Analyser\OutOfClassScope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariant;
@@ -15,11 +15,17 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type;
 
+use function count;
+
 final class HigherOrderCollectionProxyExtension implements MethodsClassReflectionExtension
 {
+    public function __construct(private HigherOrderCollectionProxyHelper $higherOrderCollectionProxyHelper)
+    {
+    }
+
     public function hasMethod(ClassReflection $classReflection, string $methodName): bool
     {
-        return HigherOrderCollectionProxyHelper::hasPropertyOrMethod($classReflection, $methodName, 'method');
+        return $this->higherOrderCollectionProxyHelper->hasPropertyOrMethod($classReflection, $methodName, 'method');
     }
 
     public function getMethod(
@@ -37,17 +43,15 @@ final class HigherOrderCollectionProxyExtension implements MethodsClassReflectio
         /** @var Type\Type $collectionType */
         $collectionType = $activeTemplateTypeMap->getType('TCollection');
 
-        if ($collectionType->getObjectClassNames() !== []) {
-            $collectionClassName = $collectionType->getObjectClassNames()[0];
-        } else {
-            $collectionClassName = Collection::class;
-        }
+        $collectionClassName = count($collectionType->getObjectClassNames()) === 0
+            ? Collection::class
+            : $collectionType->getObjectClassNames()[0];
 
         $modelMethodReflection = $valueType->getMethod($methodName, new OutOfClassScope());
 
         $modelMethodReturnType = ParametersAcceptorSelector::selectSingle($modelMethodReflection->getVariants())->getReturnType();
 
-        $returnType = HigherOrderCollectionProxyHelper::determineReturnType($methodType->getValue(), $valueType, $modelMethodReturnType, $collectionClassName);
+        $returnType = $this->higherOrderCollectionProxyHelper->determineReturnType($methodType->getValue(), $valueType, $modelMethodReturnType, $collectionClassName);
 
         return new class($classReflection, $methodName, $modelMethodReflection, $returnType) implements MethodReflection
         {

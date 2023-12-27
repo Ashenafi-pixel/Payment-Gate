@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Types;
+namespace Larastan\Larastan\Types;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,6 +13,9 @@ use PHPStan\Parser\Parser;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateTypeMap;
+
+use function count;
+use function method_exists;
 
 class RelationParserHelper
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Rules;
+namespace Larastan\Larastan\Rules;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use NunoMaduro\Larastan\Properties\ModelPropertyExtension;
+use Larastan\Larastan\Properties\ModelPropertyExtension;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -20,6 +20,12 @@ use PHPStan\Rules\Rule;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+
+use function array_diff;
+use function array_map;
+use function array_merge;
+use function count;
+use function in_array;
 
 /**
  * This rule checks for unnecessary heavy operations on the Collection class
@@ -88,7 +94,7 @@ class NoUnnecessaryCollectionCallRule implements Rule
     protected $reflectionProvider;
 
     /**
-     * @var \NunoMaduro\Larastan\Properties\ModelPropertyExtension
+     * @var \Larastan\Larastan\Properties\ModelPropertyExtension
      */
     protected $propertyExtension;
 
@@ -156,6 +162,10 @@ class NoUnnecessaryCollectionCallRule implements Rule
         /** @var \PhpParser\Node\Identifier $name */
         $name = $node->name;
 
+        if (! in_array($name->toLowerString(), $this->shouldHandle, true)) {
+            return [];
+        }
+
         if (! $this->isCalledOnCollection($node->var, $scope)) {
             // Method was not called on a collection, so no errors.
             return [];
@@ -175,10 +185,6 @@ class NoUnnecessaryCollectionCallRule implements Rule
             return [];
         }
 
-        if (! in_array($name->toLowerString(), $this->shouldHandle, true)) {
-            return [];
-        }
-
         if ($name->toLowerString() === 'first') {
             if (count($node->args) === 0) {
                 // 'first', also accepts a closure as an argument.
@@ -188,7 +194,7 @@ class NoUnnecessaryCollectionCallRule implements Rule
             return [$this->formatError($name->toString())];
         } elseif ($this->isRiskyParamMethod($name)) {
             if (count($node->args) === 0) {
-                // Calling e.g. DB::table()->pluck($columnName)-sum()
+                // Calling e.g. DB::table()->pluck($columnName)->sum()
                 // We have to check whether $columnName is actually a database column
                 // and not an alias for some computed attribute
                 if ($previousCall->name->name === 'pluck' && $this->firstArgIsDatabaseColumn($previousCall, $scope)) {

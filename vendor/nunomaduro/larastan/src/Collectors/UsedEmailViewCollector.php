@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NunoMaduro\Larastan\Collectors;
+namespace Larastan\Larastan\Collectors;
 
 use Illuminate\Mail\Mailable;
 use Illuminate\View\ViewName;
@@ -11,6 +11,9 @@ use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Type\ObjectType;
+
+use function count;
+use function in_array;
 
 /** @implements Collector<Node\Expr\MethodCall, string> */
 final class UsedEmailViewCollector implements Collector
