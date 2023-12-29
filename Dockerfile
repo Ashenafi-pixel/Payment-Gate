@@ -16,7 +16,7 @@ COPY apache2.conf /etc/apache2/sites-available/000-default.conf
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 # Copy the Laravel application files
-COPY . /var/www/html/
+COPY . .
 
 # Install Laravel dependencies
 RUN composer install
@@ -25,7 +25,7 @@ RUN npm install
 # Build frontend assets for production
 RUN npm run production
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R _www:_www /var/www/html/storage /var/www/html/bootstrap/cache
 # Expose port 80
 EXPOSE 80
 # Start Apache
