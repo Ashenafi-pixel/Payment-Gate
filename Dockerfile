@@ -17,6 +17,7 @@ COPY apache2.conf /etc/apache2/sites-available/000-default.conf
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 # Copy the Laravel application files
 COPY . .
+COPY vite.config.js .
 # Install Laravel dependencies
 RUN composer install
 # Install Node.js dependencies
