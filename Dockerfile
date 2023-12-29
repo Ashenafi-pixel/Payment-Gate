@@ -24,8 +24,10 @@ RUN composer install
 RUN npm install
 # Build frontend assets for production
 RUN npm run production
-# Set permissions
-RUN chown -R _www:_www /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Change ownership of storage and cache directories
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
 # Expose port 80
 EXPOSE 80
 # Start Apache
