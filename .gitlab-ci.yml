@@ -21,10 +21,10 @@ deploy:
     - docker pull $CONTAINER_RELEASE_IMAGE
     - docker container rm -f addispay_dev || true
     - docker run -d -p 4050:80 --name addispay_dev --restart unless-stopped $CONTAINER_RELEASE_IMAGE
-    - docker exec -it addispay_dev sh -c "composer install --optimize-autoloader --no-dev"  
-    - docker exec -it addispay_dev sh -c "php artisan config:cache"  
-    - docker exec -it addispay_dev sh -c "php artisan route:cache"  
-    - docker exec -it addispay_dev sh -c "php artisan view:cache"  
+    - docker exec addispay_dev sh -c "composer install --optimize-autoloader --no-dev"  
+    - docker exec addispay_dev sh -c "php artisan config:cache"  
+    - docker exec addispay_dev sh -c "php artisan route:cache"  
+    - docker exec addispay_dev sh -c "php artisan view:cache"  
   environment:
     name: prod
     url: https://dev.addispay.et/api-docs 
