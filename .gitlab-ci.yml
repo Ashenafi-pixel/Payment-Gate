@@ -25,6 +25,8 @@ deploy:
     - docker exec addispay_dev sh -c "php artisan config:cache"  
     - docker exec addispay_dev sh -c "php artisan route:cache"  
     - docker exec addispay_dev sh -c "php artisan view:cache"  
+    - docker exec addispay_dev sh -c "npm install"  
+    - docker exec addispay_dev sh -c "npm run production"
   environment:
     name: prod
     url: https://dev.addispay.et/api-docs 
