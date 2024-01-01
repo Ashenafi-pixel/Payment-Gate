@@ -38,5 +38,7 @@ RUN chmod -R 755 /var/www/html/public
 
 # Expose port 80
 EXPOSE 80
+RUN sed -i 's/SESSION_SECURE_COOKIE=false/SESSION_SECURE_COOKIE=true/' /var/www/html/config/session.php
+
 # Start Apache
 CMD ["apache2-foreground"]
