@@ -20,6 +20,11 @@ COPY . .
 
 # Install Laravel dependencies
 RUN composer install
+
+# Generate application key and run migrations
+RUN php artisan key:generate && \
+    php artisan migrate
+
 # Install Node.js dependencies
 RUN npm install
 # Build frontend assets for production
