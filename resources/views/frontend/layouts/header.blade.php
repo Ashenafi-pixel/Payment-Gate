@@ -39,9 +39,9 @@
                         Business Support
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">For Businesses</a></li>
-                        <li><a class="dropdown-item" href="#">For Developers</a></li>
-                        <li><a class="dropdown-item" href="#">Documentation</a></li>
+                        <li><a class="dropdown-item btn btn-theme-effect" href="#">For Businesses</a></li>
+                        <li><a class="dropdown-item btn btn-theme-effect" href="#">For Developers</a></li>
+                        <li><a class="dropdown-item btn btn-theme-effect" href="#">Documentation</a></li>
                     </ul>
                 </li>
             </ul>
