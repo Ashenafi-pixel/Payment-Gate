@@ -111,7 +111,7 @@
         <div class="row">
             <div class="col-md-6 my-auto">
                 <p class="text-copyright">
-                    Copyright - 2023. www.addispay.co - All Rights Reserved.
+                    Copyright - 2023. www.addispay.et - All Rights Reserved.
                 </p>
             </div>
             <div class="col-md-6 my-auto">
