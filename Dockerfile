@@ -35,7 +35,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 # Set the correct permissions for the public directory
 RUN chmod -R 755 /var/www/html/public
-
+RUN php artisan config:clear
+RUN php artisan route:clear
+RUN php artisan view:clear
+RUN php artisan cache:clear
 # Expose port 80
 EXPOSE 80
 RUN sed -i 's/SESSION_SECURE_COOKIE=false/SESSION_SECURE_COOKIE=true/' /var/www/html/config/session.php
