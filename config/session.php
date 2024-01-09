@@ -35,6 +35,6 @@ return [
 
     'http_only' => true,
 
-    'same_site' => null,  // Updated to null for cross-site requests
+    'same_site' => null,
 
 ];
