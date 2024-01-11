@@ -5,14 +5,15 @@ FROM php:8.2.14-apache
 WORKDIR /var/www/html
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    libzip-dev \
-    unzip \
-    npm \
-    nodejs \
-    libpng-dev \   # Add this line to install libpng development package
-    && docker-php-ext-install zip pdo pdo_mysql gd   # Add gd extension
+RUN apt-get update
+RUN apt-get install -y libzip-dev
+RUN apt-get install -y unzip
+RUN apt-get install -y npm
+RUN apt-get install -y nodejs
+RUN apt-get install -y libpng-dev
+
+# Install additional PHP extensions
+RUN docker-php-ext-install zip pdo pdo_mysql gd
 
 # Enable Apache modules and configure the virtual host
 RUN a2enmod rewrite
@@ -28,8 +29,8 @@ COPY . .
 RUN composer install
 
 # Generate application key and run migrations
-RUN php artisan key:generate && \
-    php artisan migrate
+RUN php artisan key:generate
+RUN php artisan migrate
 RUN php artisan optimize
 
 # Install Node.js dependencies
