@@ -5,12 +5,13 @@ FROM php:8.2.14-apache
 WORKDIR /var/www/html
 
 # Install dependencies
-RUN apt-get update
-RUN apt-get install -y libzip-dev
-RUN apt-get install -y unzip
-RUN apt-get install -y npm
-RUN apt-get install -y nodejs
-RUN apt-get install -y libpng-dev
+RUN apt-get update && \
+    apt-get install -y \
+    libzip-dev \
+    unzip \
+    npm \
+    nodejs \
+    libpng-dev
 
 # Install additional PHP extensions
 RUN docker-php-ext-install zip pdo pdo_mysql gd
@@ -41,6 +42,7 @@ RUN npm run production
 
 # Change ownership of storage and cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads/qrcodes   # Add this line to modify permissions
 
 # Set the correct permissions for the public directory
 RUN chmod -R 755 /var/www/html/public
