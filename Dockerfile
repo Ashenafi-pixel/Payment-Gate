@@ -42,7 +42,7 @@ RUN npm run production
 
 # Change ownership of storage and cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads/qrcodes   # Add this line to modify permissions
+RUN chown -R www-data:www-data /var/www/html/public/uploads/qrcodes   # Add this line to modify ownership
 
 # Set the correct permissions for the public directory
 RUN chmod -R 755 /var/www/html/public
