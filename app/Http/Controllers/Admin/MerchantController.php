@@ -16,8 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use  App\Models\User;
+use  App\Models\MerchantDetail;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Illuminate\Support\Facades\Session;
 class MerchantController extends Controller
 {
     /**
@@ -27,6 +28,7 @@ class MerchantController extends Controller
 
     # Constants
     const VIEW_ADMIN_MERCHANTS  = 'backend.admin.merchant.all-merchant.index';
+    const ALL_ADMIN_MERCHANTS  = 'backend.admin.merchant.all-merchant.merchantDetail';
     CONST CREATE_ADMIN_MERCHANT = 'backend.admin.merchant.all-merchant.create';
     const MERCHANT_INDEX_ROUTE = IUserRole::ADMIN_ROLE.'.merchants.index';
     const CREATE_MERCHANT_MESSAGE = 'Merchant Created Successfully.';
@@ -62,6 +64,11 @@ class MerchantController extends Controller
     {
         return view(self::CREATE_ADMIN_MERCHANT);
     }
+    public function display(){
+        $records=MerchantDetail::all();
+        return view(self::ALL_ADMIN_MERCHANTS, compact('records'));
+
+    }
 
     /**
      * @param Request $request
@@ -69,13 +76,46 @@ class MerchantController extends Controller
      */
     public function store(Request $request)
     {
-        $merchant = $this->_userService->merchantStore($request->all());
-        return GeneralHelper::SEND_RESPONSE($request,$merchant,self::MERCHANT_INDEX_ROUTE,self::CREATE_MERCHANT_MESSAGE);
+        $merchantData = $request->except(['license', 'passport']);
+
+        if ($request->hasFile('license')) {
+            $license = $request->file('license');
+            $licenseName= date('YmdHi').$license->getClientOriginalName();
+            $license-> move(public_path('public/images'), $licenseName);
+            $merchantData['license'] = $licenseName;
+        }
+
+        if ($request->hasFile('passport')) {
+            $passport = $request->file('passport');
+            $passportName= date('YmdHi').$passport->getClientOriginalName();
+            $passport-> move(public_path('public/images'), $passportName);
+            $merchantData['passport'] = $passportName;
+        }
+
+        $merchant = $this->_userService->merchantStore($merchantData);
+
+        return GeneralHelper::SEND_RESPONSE(
+            $request,
+            $merchant,
+            self::MERCHANT_INDEX_ROUTE,
+            self::CREATE_MERCHANT_MESSAGE
+        );
     }
     public function  editMerchant($merchant_id){
         $merchant = User::findOrFail($merchant_id);
         //dd($merchant);
     return view('backend.admin.merchant.all-merchant._form', compact('merchant'));
+    }
+
+    public function  deleteMerchant($merchant_id){
+        $merchant = User::findOrFail($merchant_id);
+        if ($merchant) {
+
+            $merchant->delete();
+
+             }
+             Session::flash('success','Merchant deleted successfully!');
+             return redirect()->back();
     }
 
     public function updateMerchant(Request $request, $merchant_id)

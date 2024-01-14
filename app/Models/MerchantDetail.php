@@ -25,6 +25,8 @@ class MerchantDetail extends Model
         'document_details',
         'status',
         'deleted_at',
+        'passport',
+        'license'
     ];
 
     /**
