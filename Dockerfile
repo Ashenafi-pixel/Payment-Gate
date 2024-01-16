@@ -31,7 +31,6 @@ RUN composer install
 
 # Generate application key and run migrations
 RUN php artisan key:generate
-RUN php artisan migrate
 RUN php artisan optimize
 
 # Install Node.js dependencies
