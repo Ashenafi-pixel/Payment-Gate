@@ -67,6 +67,10 @@ Route::post('verify-user-otp', [UserVerifyController::class,'verifyCustomerOtp']
 Route::get('lock-screen', [Controllers\Auth\LockScreenController::class, 'lockScreen'])->middleware('auth')->name('user.lock.screen');
 Route::post('unlock-screen', [Controllers\Auth\LockScreenController::class, 'unLockScreen'])->name('user.unlock.screen');
 Route::get('login-unlock', [Controllers\Auth\LockScreenController::class, 'loginInsteadUnlock'])->name('user.login-instead-unlock');
+Route::get('/checkout', [Controllers\Auth\LockScreenController::class, 'showCheckout'])->name('showCheckout');
+Route::post('/process-payment', [Controllers\Auth\LockScreenController::class, 'processPayment'])->name('processPayment');
+
+
 
 # Document Approval Routes
 Route::get('merchant/document-upload', [Controllers\Merchant\DocumentController::class, 'index'])->name(IUserRole::MERCHANT_ROLE.'.approval.documents');
