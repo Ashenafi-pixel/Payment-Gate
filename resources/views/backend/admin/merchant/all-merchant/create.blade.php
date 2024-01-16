@@ -17,6 +17,7 @@
                                     'url' => route(\App\Helpers\IUserRole::ADMIN_ROLE . '.merchants.store'),
                                     'class' => 'ajax',
                                     'method' => 'POST',
+                                    'enctype' => 'multipart/form-data',
                                 ]) !!}
                                 <div class="row">
                                     <div class="col-12">
@@ -72,18 +73,6 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    {{--                                    <div class="col-12"> --}}
-                                    {{--                                        <div class="mb-3"> --}}
-                                    {{--                                            {!! Form::label('is_school',__('Is School:'), --}}
-                                    {{--                                                ['class' => 'form-label input-label']) --}}
-                                    {{--                                            !!} --}}
-                                    {{--                                            {!! Form::select('is_school', --}}
-                                    {{--                                            ['' => 'Please Select Type',true => 'YES', false => 'NO'] --}}
-                                    {{--                                                , null ,['class'=>"form-control form-control-lg", --}}
-                                    {{--                                                'id' => "is_school", null]) --}}
-                                    {{--                                            !!} --}}
-                                    {{--                                        </div> --}}
-                                    {{--                                    </div> --}}
                                     <div class="w-100"></div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
@@ -138,6 +127,32 @@
                                                 'class' => 'form-control form-control-lg',
                                                 'id' => 'company_address',
                                                 'placeholder' => 'Enter Company Address',
+                                            ]) !!}
+                                            @error('company_address')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            {!! Form::label('Passport or ID', __('Passport or ID:'), ['class' => 'form-label input-label']) !!}
+                                            {!! Form::file('passport', null, [
+                                                'class' => 'form-control form-control-lg',
+                                                'id' => 'passport',
+                                                'placeholder' => 'Enter assport or ID',
+                                            ]) !!}
+                                            @error('company_address')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            {!! Form::label('License', __('License:'), ['class' => 'form-label input-label']) !!}
+                                            {!! Form::file('license', null, [
+                                                'class' => 'form-control form-control-lg',
+                                                'id' => 'license',
+                                                'placeholder' => 'Enter your license',
                                             ]) !!}
                                             @error('company_address')
                                                 <div class="text-danger">{{ $message }}</div>

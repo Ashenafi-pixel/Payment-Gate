@@ -328,26 +328,40 @@ class UserService implements IUserServiceContract
      * @param $request
      * @return object
      */
-    public function merchantStore($request)
+    public function merchantStore($merchant)
     {
-        $this->merchantValidator($request)->validate();
-        // merchant create
-        $merchant = $this->_userRepo->create($this->_filterCreateUserRequest($request));
-        $merchant->merchantDetail()->create([
-            'company_name'    => $request['company_name'],
-            'company_phone'   => $request['company_phone'],
-            'company_email'   => $request['company_email'],
-            'company_address' => $request['company_address'],
-        ]);
-        // get merchant role and assign to merchant
+        $this->merchantValidator($merchant)->validate();
+
+        $data = $this->_filterCreateUserRequest($merchant);
+        $companyData = [
+            'company_name' => $merchant['company_name'],
+            'company_phone' => $merchant['company_phone'],
+            'company_email' => $merchant['company_email'],
+            'company_address' => $merchant['company_address'],
+        ];
+
+        if (isset($merchant['license'])) {
+            $companyData['license'] = $merchant['license'];
+        }
+
+        if (isset($merchant['passport']) ) {
+           $companyData['passport'] = $merchant['passport'];
+        }
+
+        $merchant = $this->_userRepo->create($data);
+        $merchant->merchantDetail()->create($companyData);
+
         $role = $this->_roleService->getMerchantRoleExist();
-        if(!empty($role))
+        if (!empty($role)) {
             $merchant->assignRole(IUserRole::MERCHANT_ROLE);
-        //store user image record
+        }
+
         $this->_storeImage($merchant);
+
         $merchant->remember_token = GeneralHelper::STR_RANDOM(60);
         $merchant->save();
         $merchant->sendPasswordSetLink();
+
         return $merchant;
     }
 
@@ -366,6 +380,8 @@ class UserService implements IUserServiceContract
             'company_phone'   => ['required'],
             'company_email'   => ['required', 'string', 'email', 'max:255', 'unique:merchant_details'],
             'company_address' => ['required'],
+            'license' => ['string'],
+            'passport' => ['string'],
         ]);
     }
 

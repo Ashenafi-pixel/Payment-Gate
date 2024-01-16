@@ -7,7 +7,7 @@ use App\Http\Middleware\IsVerifiedMiddleware;
 use App\Http\Middleware\RoleAuthenticator;
 use App\Http\Middleware\VerifyDocument;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 class Kernel extends HttpKernel
 {
     /**
