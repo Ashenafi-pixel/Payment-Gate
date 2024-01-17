@@ -158,6 +158,11 @@ class RegisterController extends Controller
     {
         if ($customer)
             $data['is_school'] = $customer ? true : false;
+            $keys = $this->generateKeyPair();
+            $encodedPublicKey = base64_encode($keys['public_key']);
+            $publicKeyWithoutDelimiters = str_replace(["-----BEGIN PUBLIC KEY-----", "-----END PUBLIC KEY-----", "\n", "\r"], '', $keys['public_key']);
+            $encodedPrivateKey = base64_encode($keys['private_key']);
+            $privateKeyWithoutDelimiters = str_replace(["-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----", "\n", "\r"], '', $keys['private_key']);
         return [
             'name'      => $data['name'],
             'username'  => $data['username'],
@@ -166,9 +171,27 @@ class RegisterController extends Controller
             'password'  => Hash::make($data['password']),
             'is_school' => $data['is_school'] ?? false,
             'is_first_time' => IUserStatuses::IS_FIRST_TIME,
+            'private_key'=>$privateKeyWithoutDelimiters,
+            'public_key'=>$publicKeyWithoutDelimiters
         ];
     }
+    private function generateKeyPair()
+    {
 
+        $config = [
+            'private_key_bits' => 2048,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+        ];
+
+        $res = openssl_pkey_new($config);
+        openssl_pkey_export($res, $privateKey);
+        $publicKeyDetails = openssl_pkey_get_details($res);
+        $publicKey = $publicKeyDetails['key'];
+        return [
+            'public_key' => $publicKey,
+            'private_key' => $privateKey,
+        ];
+    }
     /**
      * @return string|null
      */

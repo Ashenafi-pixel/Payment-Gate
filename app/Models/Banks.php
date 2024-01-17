@@ -14,4 +14,10 @@ class Banks extends Model
         'name',
         'swift_code',
     ];
+    public function merchants()
+    {
+        return $this->belongsToMany(merchantDetail::class, 'merchant_bank')
+            ->withPivot(['balance', 'account_number'])
+            ->withTimestamps();
+    }
 }

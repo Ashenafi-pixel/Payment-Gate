@@ -11,7 +11,9 @@ use App\Http\Controllers\Merchant\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Merchant\ProfileController;
 use App\Http\Controllers\Merchant\DashboardController;
-
+use App\Http\Controllers\Merchant\MerchantController;
+Route::get('/merchant/link-bank', [MerchantController::class, 'showLinkBankForm'])->name(IUserRole::MERCHANT_ROLE.'merchant.showLinkBankForm');
+Route::post('/merchant/link-bank', [MerchantController::class, 'linkBank'])->name(IUserRole::MERCHANT_ROLE.'merchant.linkBank');
 # Merchant Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name(IUserRole::MERCHANT_ROLE.'.index');
 

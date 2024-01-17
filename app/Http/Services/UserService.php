@@ -380,6 +380,7 @@ class UserService implements IUserServiceContract
             'company_phone'   => ['required'],
             'company_email'   => ['required', 'string', 'email', 'max:255', 'unique:merchant_details'],
             'company_address' => ['required'],
+            'password' => 'required|string|min:8|confirmed',
             'license' => ['string'],
             'passport' => ['string'],
         ]);
@@ -392,7 +393,7 @@ class UserService implements IUserServiceContract
      */
     private function _filterCreateUserRequest($data,$customer=false): array
     {
-        $rand_pass = Str::random(8);
+        $rand_pass = $data['password'];
         if ($customer)
             $data['is_school'] = $customer ? true : false;
         return [

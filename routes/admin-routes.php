@@ -17,7 +17,10 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Customer\LedgerController;
 use Symfony\Component\VarDumper\VarDumper;
 
+use App\Http\Controllers\Admin\AdminController;
 
+Route::get('/admin/form', [AdminController::class, 'showForm'])->name('admin.form');
+Route::post('/admin/generate-keys', [AdminController::class, 'generateKeys'])->name('generateKeys');
 # Admin Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
 # Profile Route's

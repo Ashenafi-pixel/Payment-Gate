@@ -37,7 +37,9 @@ class User extends Authenticatable
         'email_otp',
         'email_verified_token',
         'is_school',
-        'status'
+        'status',
+        'public_key',
+        'private_key'
     ];
 
     /**
@@ -58,6 +60,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function getPublicKeyAttribute($value)
+    {
+        return $value;
+    }
+
+    public function getPrivateKeyAttribute($value)
+    {
+        return $value;
+    }
 
     /**
      * @return HasOne

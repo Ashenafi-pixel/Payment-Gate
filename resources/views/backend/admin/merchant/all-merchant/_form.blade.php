@@ -54,10 +54,10 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     {!! Form::label('status', __('Status'), ['class' => 'form-label bold']) !!}
-                                                    {!! Form::text('status', $merchant->status ?? null, [
+                                                    {!! Form::select('status', ['ACTIVE' => 'ACTIVE', 'IN_ACTIVE' => 'IN_ACTIVE'], $merchant->status ?? null, [
                                                         'class' => 'form-control',
                                                         'id' => '',
-                                                        'placeholder' => 'in active',
+                                                        'placeholder' => 'Select status',
                                                         'autofocus' => true,
                                                     ]) !!}
                                                 </div>

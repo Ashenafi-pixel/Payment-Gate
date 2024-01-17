@@ -14,13 +14,12 @@
         <thead class="sticky-top">
             <tr>
                 <th>{{ __('ID') }}</th>
-                <th>{{ __('Name') }}</th>
-                <th>{{ __('Created Date') }}</th>
+                <th>{{ __('Merchant Name') }}</th>
+                <th>{{ __('Company Name') }}</th>
                 <th>{{ __('Email') }}</th>
                 <th>{{ __('Phone Number') }}</th>
                 <th>{{ __('Status') }}</th>
                 <th>{{ __('Passport') }}</th>
-                <th>{{ __('Deatail') }}</th>
                 <th>{{ __('License') }}</th>
                 <th>{{ __('Action') }}</th>
             </tr>
@@ -29,29 +28,22 @@
             @php
                 $i = 1;
             @endphp
-            @forelse($records  as $merchant)
+            @forelse($users   as $merchant)
                 <tr>
                     <td>{{ $i++ }}</td>
+                    <td>{{ $merchant->name }}</td>
                     <td>{{ $merchant->company_name }}</td>
-                    <td>{{ \App\Helpers\GeneralHelper::FORMAT_DATE($merchant->created_at) }}</td>
                     <td>{{ $merchant->email }}</td>
                     <td>{{ $merchant->mobile_number ?? '--------' }}</td>
                     <td>
-                        <span class="badge {{ \App\Helpers\GeneralHelper::USER_STATUS_CLASS($merchant->status) }}">
-                            {{ \App\Helpers\GeneralHelper::STATUS_CASING($merchant->status) }}</span>
+                        {{ $merchant->user_status }}
                     </td>
                     <td>
-                        <img src="{{ url('public/images/' . $merchant->passport) }}"
-                            style="height: 100px; width: 150px;">
+                        <img src="{{ url('' . $merchant->passport) }}" style="height: 100px; width: 150px;">
                     </td>
-                    <td>
-                        <img src="{{ url('public/images/' . $merchant->document_details) }}"
-                            style="height: 100px; width: 150px;">
-                    </td>
-
                     ` <td>
-                        <img src="{{ url('public/images/' . $merchant->license) }}"
-                            style="height: 100px; width: 150px;">
+
+                        <img src="{{ url('' . $merchant->license) }}" style="height: 100px; width: 150px;">
                     </td>
                     <td>
                         <div class="btn-group">
