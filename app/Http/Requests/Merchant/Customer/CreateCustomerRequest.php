@@ -23,23 +23,23 @@ class CreateCustomerRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
-        return [
-            'name'  => 'required',
-            'email' => 'required',
-            'mobile_number'     => 'required|min:11|max:11|regex:/^((0)?)(0)(3)([0-9]{9})/',
-            'recurringInvoice'  => isset($this->recurringDays) ? 'required' : '',
-            'recurringDays'     => isset($this->recurringInvoice) ? 'required' : '',
-        ];
-    }
+{
+    return [
+        'name'  => 'required',
+        'email' => 'required|email',
+        'mobile_number' => 'required|min:13|max:13|regex:/^\+2519[0-9]{8}$/',
+        'recurringInvoice' => isset($this->recurringDays) ? 'required' : '',
+        'recurringDays' => isset($this->recurringInvoice) ? 'required' : '',
+    ];
+}
 
-    /**
-     * @return string[]
-     */
-    public function messages()
-    {
-        return [
-            'mobile_number.regex' => "Please enter the phone in Pakistan's format.",
-        ];
-    }
+/**
+ * @return string[]
+ */
+public function messages()
+{
+    return [
+        'mobile_number.regex' => "Please enter the phone in Ethiopian format. Example: +251912345678",
+    ];
+}
 }

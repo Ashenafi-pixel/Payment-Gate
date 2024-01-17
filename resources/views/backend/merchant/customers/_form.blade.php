@@ -26,34 +26,36 @@
                 ]) !!}
             </div>
             <div class="col-md-6">
-                {!! Form::label('phone', __('Phone'), ['class' => 'form-label bold']) !!}
-                {!! Form::number('mobile_number', $customer->mobile_number ?? null, [
-                    'class' => 'form-control',
-                    'id' => 'phone',
-                    'maxlength' => '12',
-                    'placeholder' => '+251-YY-XXX-XXXX',
-                    'oninput' => 'javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)',
-                    'autofocus' => true,
-                ]) !!}
-            </div>
-            <div class="col-md-6">
-                {!! Form::label('status', __('Select Status'), ['class' => 'form-label bold']) !!}
-                {!! Form::select(
-                    'status',
-                    [
-                        \App\Helpers\IUserStatuses::USER_ACTIVE => \App\Helpers\IUserStatuses::USER_ACTIVE,
-                        \App\Helpers\IUserStatuses::USER_NON_ACTIVE => \App\Helpers\IUserStatuses::USER_NON_ACTIVE,
-                    ],
-                    null,
-                    [
-                        'class' => 'form-control',
-                        !empty($customer) && !empty($customer->status == \App\Helpers\IUserStatuses::USER_NON_ACTIVE)
-                            ? 'selected'
-                            : null,
-                        'required' => false,
-                    ],
-                ) !!}
-            </div>
+    {!! Form::label('phone', __('Phone'), ['class' => 'form-label bold']) !!}
+    {!! Form::tel('mobile_number', $customer->mobile_number ?? null, [
+        'class' => 'form-control',
+        'id' => 'phone',
+        'maxlength' => '13',
+        'placeholder' => '+2519XXXXXXXXX',
+        'pattern' => '^(\+2519)[0-9]{8}$',
+        'oninput' => 'javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)',
+        'autofocus' => true,
+    ]) !!}
+</div>
+<div class="col-md-6">
+    {!! Form::label('status', __('Select Status'), ['class' => 'form-label bold']) !!}
+    {!! Form::select(
+        'status',
+        [
+            \App\Helpers\IUserStatuses::USER_ACTIVE => \App\Helpers\IUserStatuses::USER_ACTIVE,
+            \App\Helpers\IUserStatuses::USER_NON_ACTIVE => \App\Helpers\IUserStatuses::USER_NON_ACTIVE,
+        ],
+        null,
+        [
+            'class' => 'form-control',
+            !empty($customer) && !empty($customer->status == \App\Helpers\IUserStatuses::USER_NON_ACTIVE)
+                ? 'selected'
+                : null,
+            'required' => false,
+        ],
+    ) !!}
+</div>
+
             @if (isset($customer->customerInvoices) && count($customer->customerInvoices) > 0)
                 @php
                     $recurringInvoices = $customer->customerInvoices->map(function ($invoice) {

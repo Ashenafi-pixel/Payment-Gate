@@ -61,6 +61,9 @@
         </div>
 
     @else
-        <div><span>Your Invoice Has Been Paid</span></div>
+        <div>
+        <img style="max-width: 400px; height: 50px;" class="img-fluid mb-4" src="{{ asset('images/success.gif') }}" alt="Logo">
+            <span>Payment Successful</span>
+        </div>
     @endif
 </div>
