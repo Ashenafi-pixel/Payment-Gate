@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 */
 
 
-Route::group(['prefix' => 'customer'],function (){
+    Route::group(['prefix' => 'customer'],function (){
     # Customer Register Route
     Route::post('register',[RegisterController::class,'register']);
     # Customer Login Route

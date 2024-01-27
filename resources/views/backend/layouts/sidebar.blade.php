@@ -54,17 +54,17 @@
                    href="#merchant" aria-expanded="true" aria-current="page"
                    data-bs-toggle="collapse" aria-controls="merchant">
                     <img width='18' src="{{asset('images/icons/merchant_icon.svg')}}" alt="">
-                    <span>{{ __('Invoices') }}</span>
+                    <span>{{ __('External Requests') }}</span>
                 </a>
                 <div class="collapse {{ Request::is('merchant/invoices*') ? 'show' : '' }}" id="merchant">
                     <ul class="nav inner-menu">
                         <li>
                             <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE.'.invoices.index') }}"
-                               class="{{ Request::is('merchant/invoices') ? 'active' : '' }}">{{ __('All Invoices') }}</a>
+                               class="{{ Request::is('merchant/invoices') ? 'active' : '' }}">{{ __('All External Reqs') }}</a>
                         </li>
                         <li>
                             <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE.'.invoices.form') }}"
-                               class="{{ Request::is('merchant/invoices-create') ? 'active' : '' }}">{{ __('Create Invoice') }}</a>
+                               class="{{ Request::is('merchant/invoices-create') ? 'active' : '' }}">{{ __('Create Requests') }}</a>
                         </li>
                         <li>
                             <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE.'.invoice.refund.request') }}"
