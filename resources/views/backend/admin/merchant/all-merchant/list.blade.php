@@ -1,3 +1,14 @@
+<style>
+    /* Remove border */
+    input[type="text"].paragraph-like {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+        outline: none;
+    }
+</style>
 <div class="table-responsive table-nowrap d-box p-0 border-radius-0 animated zoomIn">
     @if (Session::has('success'))
         <div id="successMessage" class="alert alert-success">
@@ -21,6 +32,7 @@
                 <th>{{ __('Status') }}</th>
                 <th>{{ __('Passport') }}</th>
                 <th>{{ __('License') }}</th>
+                <th>{{ __('License Number') }}</th>
                 <th>{{ __('Action') }}</th>
             </tr>
         </thead>
@@ -34,7 +46,7 @@
                     <td>{{ $merchant->name }}</td>
                     <td>{{ $merchant->company_name }}</td>
                     <td>{{ $merchant->email }}</td>
-                    <td>{{ $merchant->mobile_number ?? '--------' }}</td>
+                    <td>{{ $merchant->merchant_phone ?? '--------' }}</td>
                     <td>
                         {{ $merchant->user_status }}
                     </td>
@@ -44,6 +56,16 @@
                     ` <td>
 
                         <img src="{{ url('' . $merchant->license) }}" style="height: 100px; width: 150px;">
+                    </td>
+
+                    <td>
+                        <form action="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.checkLicense') }}"
+                            method="post">
+                            @csrf
+                            <input type="text" name="encodedData" value="{{ $merchant->license_number }}" readonly
+                                class="paragraph-like">
+                            <button type="submit">Check</button>
+                        </form>
                     </td>
                     <td>
                         <div class="btn-group">

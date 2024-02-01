@@ -338,6 +338,7 @@ class UserService implements IUserServiceContract
             'company_phone' => $merchant['company_phone'],
             'company_email' => $merchant['company_email'],
             'company_address' => $merchant['company_address'],
+            'license_number' => $merchant['license_number'],
         ];
 
         if (isset($merchant['license'])) {
@@ -380,6 +381,7 @@ class UserService implements IUserServiceContract
             'company_phone'   => ['required'],
             'company_email'   => ['required', 'string', 'email', 'max:255', 'unique:merchant_details'],
             'company_address' => ['required'],
+            'license_number' => ['required'],
             'password' => 'required|string|min:8|confirmed',
             'license' => ['string'],
             'passport' => ['string'],

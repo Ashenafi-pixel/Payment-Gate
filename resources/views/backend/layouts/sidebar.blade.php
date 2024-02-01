@@ -72,6 +72,26 @@
                     </ul>
                 </div>
             </li>
+            <li class="nav-item position-relative" id="merchant-link">
+                <a class="nav-link s-links collapsed {{ Request::is('/merchant/*') ? 'active' : '' }} " href="#merchant"
+                    aria-expanded="true" aria-current="page" data-bs-toggle="collapse" aria-controls="merchant">
+                    <img width='18' src="{{ asset('images/icons/merchant_icon.svg') }}" alt="">
+                    <span>{{ __('Banks') }}</span>
+                </a>
+                <div class="collapse {{ Request::is('/merchant/link-bank*') ? 'show' : '' }}" id="merchant">
+                    <ul class="nav inner-menu">
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . 'merchant.bank') }}"
+                                class="{{ Request::is('/merchant/show-bank') ? 'active' : '' }}">{{ __('All Your Banks') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . 'merchant.showLinkBankForm') }}"
+                                class="{{ Request::is('/merchant/link-bank') ? 'active' : '' }}">{{ __('Link Bank') }}</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
             @if (\App\Helpers\GeneralHelper::USER()->is_school == true)
                 <li class="nav-item">
                     <a class="nav-link s-links"

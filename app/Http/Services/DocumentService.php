@@ -74,6 +74,7 @@ class DocumentService implements IDocumentServiceContract
 
         // Update the 'license' column in the 'merchant_details' table
         $merchantDetai->license = 'image/' . $licenseFileName;
+        $merchantDetai->license_number=$request->input('license_no');
     }
 
     // Save the updated record

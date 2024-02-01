@@ -105,6 +105,7 @@ class RegisterController extends Controller
             'company_phone'   => ['required'],
             'company_email'   => ['required', 'string', 'email', 'max:255', 'unique:merchant_details'],
             'company_address' => ['required'],
+            'license_number' => ['required'],
         ]);
     }
 
@@ -140,6 +141,7 @@ class RegisterController extends Controller
             'company_phone'   => $data['company_phone'],
             'company_email'   => $data['company_email'],
             'company_address' => $data['company_address'],
+            'license_number' => $data['license_number'],
         ]);
         // get merchant role and assign to merchant
         $role = $this->_roleService->getMerchantRoleExist();
@@ -154,44 +156,61 @@ class RegisterController extends Controller
      * @param $data
      * @return array
      */
-    private function _filterCreateUserRequest($data,$customer=false)
-    {
-        if ($customer)
-            $data['is_school'] = $customer ? true : false;
-            $keys = $this->generateKeyPair();
-            $encodedPublicKey = base64_encode($keys['public_key']);
-            $publicKeyWithoutDelimiters = str_replace(["-----BEGIN PUBLIC KEY-----", "-----END PUBLIC KEY-----", "\n", "\r"], '', $keys['public_key']);
-            $encodedPrivateKey = base64_encode($keys['private_key']);
-            $privateKeyWithoutDelimiters = str_replace(["-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----", "\n", "\r"], '', $keys['private_key']);
-        return [
-            'name'      => $data['name'],
-            'username'  => $data['username'],
-            'email'     => $data['email'],
-            'mobile_number'     => $data['mobile_no'],
-            'password'  => Hash::make($data['password']),
-            'is_school' => $data['is_school'] ?? false,
-            'is_first_time' => IUserStatuses::IS_FIRST_TIME,
-            'private_key'=>$privateKeyWithoutDelimiters,
-            'public_key'=>$publicKeyWithoutDelimiters
-        ];
+    private function _filterCreateUserRequest($data, $customer = false)
+{
+    if ($customer) {
+        $data['is_school'] = $customer ? true : false;
     }
-    private function generateKeyPair()
-    {
 
-        $config = [
-            'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ];
+    $keys = $this->generateKeyPair();
 
-        $res = openssl_pkey_new($config);
-        openssl_pkey_export($res, $privateKey);
-        $publicKeyDetails = openssl_pkey_get_details($res);
-        $publicKey = $publicKeyDetails['key'];
-        return [
-            'public_key' => $publicKey,
-            'private_key' => $privateKey,
-        ];
-    }
+    $encodedPublicKey = base64_encode($keys['public_key']);
+    $publicKeyWithoutDelimiters = str_replace(["-----BEGIN PUBLIC KEY-----", "-----END PUBLIC KEY-----", "\n", "\r"], '', $keys['public_key']);
+
+    $encodedPrivateKey = base64_encode($keys['private_key']);
+    $privateKeyWithoutDelimiters = str_replace(["-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----", "\n", "\r"], '', $keys['private_key']);
+
+    return [
+        'name' => $data['name'],
+        'username' => $data['username'],
+        'email' => $data['email'],
+        'mobile_number' => $data['mobile_no'],
+        'password' => Hash::make($data['password']),
+        'is_school' => $data['is_school'] ?? false,
+        'is_first_time' => IUserStatuses::IS_FIRST_TIME,
+        'private_key' => $privateKeyWithoutDelimiters,
+        'public_key' => $publicKeyWithoutDelimiters
+    ];
+}
+
+private function generateKeyPair()
+{
+    $config = [
+        'private_key_bits' => 1024,
+        'private_key_type' => OPENSSL_KEYTYPE_RSA,
+    ];
+
+    // Generate the key pair
+    $res = openssl_pkey_new($config);
+
+    // Extract the private key
+    openssl_pkey_export($res, $privateKey);
+
+    // Extract the public key
+    $publicKeyDetails = openssl_pkey_get_details($res);
+    $publicKey = $publicKeyDetails['key'];
+
+    $timestamp = time(); // Get the current timestamp
+
+    // Modify the private and public keys to include the timestamp
+    $privateKey = $timestamp . '_' . $privateKey;
+    $publicKey = $timestamp . '_' . $publicKey;
+
+    return [
+        'private_key' => $privateKey,
+        'public_key' => $publicKey,
+    ];
+}
     /**
      * @return string|null
      */

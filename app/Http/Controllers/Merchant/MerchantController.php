@@ -1,10 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Merchant;
-use App\Models\MerchantBank;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use App\Models\MerchantBank;
+use App\Models\UserBankAccount;
 use Illuminate\Support\Facades\Log;
 use App\Models\Banks;
+use App\Models\User;
 use App\Models\MerchantDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +32,33 @@ class MerchantController extends Controller
     public function showLinkBankForm()
     {
         $banks = Banks::all();
-        return view('backend.merchant.link_bank', compact('banks'));
+        return view('backend.merchant.banks.banks', compact('banks'));
     }
+    public function merchantBank()
+    {
+        try {
+            $userId = Auth::id();
+
+            // Use join to retrieve bank information along with user information
+            $banks = UserBankAccount::where('user_id', $userId)
+                ->join('banks', 'user_bank_accounts.bank_id', '=', 'banks.id')
+                ->join('users', 'user_bank_accounts.user_id', '=', 'users.id')
+                ->select('user_bank_accounts.*', 'banks.name as bank_name', 'users.name as user_name')
+                ->get();
+
+            if ($banks->isEmpty()) {
+                // Handle the case where no bank accounts are found
+                return view('backend.merchant.banks.bank_list')->with('error', 'No bank accounts found.');
+            }
+
+            return view('backend.merchant.banks.bank_list', compact('banks'));
+        } catch (\Exception $e) {
+            \Log::error('Unexpected error in merchantBank method: ' . $e->getMessage());
+            dd($e); // Dump the exception details for debugging
+            return view('backend.merchant.banks.bank_list')->with('error', 'An unexpected error occurred.');
+        }
+    }
+
 
     public function linkBank(Request $request)
 {
@@ -40,23 +69,22 @@ class MerchantController extends Controller
         }
 
         $userId = Auth::id(); // Get the authenticated user's ID
-        $merchant = MerchantDetail::where('user_id', $userId)->firstOrFail();
+        //$merchant = UserBankAccount::where('user_id', $userId)->firstOrFail();
 
         $bank = Banks::findOrFail($request->input('bank_id'));
 
         $pivotData = [
-            'balance' => 0,
-            'account_number' => Str::random(10) // Generate a random account number
+            'account_number' => $request->input('account_number') // Generate a random account number
         ];
 
-        $merchantBank = new MerchantBank();
-        $merchantBank->merchant_id = $merchant->id;
+        $merchantBank = new UserBankAccount();
+        $merchantBank->user_id = $userId;
         $merchantBank->bank_id = $bank->id;
-        $merchantBank->balance = $pivotData['balance'];
-        $merchantBank->account_number = $pivotData['account_number'];
+        $merchantBank->account_no = $pivotData['account_number'];
         $merchantBank->save();
-
-        return redirect()->back()->with('success', 'Bank linked successfully!');
+        Session::flash('success','Bank linked successfully!');
+        return redirect()->back();
+        //return redirect()->back()->with('success', 'Bank linked successfully!');
     } catch (QueryException $e) {
         Log::error($e->getMessage());
         return redirect()->back()->with('error', 'Database error occurred');
