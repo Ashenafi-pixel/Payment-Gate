@@ -1,8 +1,3 @@
-include:
-  - project: 'product/Addispay/adiispay_security'
-    file: '/test-scan.yml'
-    ref: 'main'
-    
 image: docker:latest
 stages:
   - test
