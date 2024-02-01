@@ -60,27 +60,19 @@ class MerchantController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function create()
-    {
-        return view(self::CREATE_ADMIN_MERCHANT);
-    }
-    public function display(){
-<<<<<<< HEAD
-        $users =  User::join('merchant_details', 'users.id', '=', 'merchant_details.user_id')
+public function create()
+{
+    return view(self::CREATE_ADMIN_MERCHANT);
+}
+
+public function display()
+{
+    $users = User::join('merchant_details', 'users.id', '=', 'merchant_details.user_id')
         ->select('users.id', 'users.name', 'users.email', 'users.status as user_status', 'merchant_details.company_name', 'merchant_details.company_phone as merchant_phone', 'merchant_details.status as merchant_status', 'merchant_details.passport', 'merchant_details.license', 'merchant_details.license_number')
         ->get();
 
-return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
-
-
-       // $records=MerchantDetail::all();
-        //return view(self::ALL_ADMIN_MERCHANTS, compact('records'));
-=======
-        $records=MerchantDetail::all();
-        return view(self::ALL_ADMIN_MERCHANTS, compact('records'));
->>>>>>> 95beb6ec899b79ee7ea89f2f6c49ddf8758af3f1
-
-    }
+    return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
+}
 
     /**
      * @param Request $request
