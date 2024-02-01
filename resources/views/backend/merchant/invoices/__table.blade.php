@@ -3,13 +3,13 @@
         <thead class="sticky-top">
         <tr>
             <th>{{ __('ID') }}</th>
-            <th>{{ __('Invoice ID') }}</th>
+            <th>{{ __('Request ID') }}</th>
             <th>{{ \App\Helpers\GeneralHelper::IS_SCHOOL() ? __('Student Name') : __('Customer Name') }}</th>
             <th>{{ __('Created Date') }}</th>
             <th>{{ __('Amount') }}</th>
             <th>{{ __('Email') }}</th>
             <th>{{ __('Phone Number') }}</th>
-            <th>{{ __('Invoice Status') }}</th>
+            <th>{{ __('Request Status') }}</th>
             <th>{{ __('Transaction Status') }}</th>
             <th>{{ __('Refund') }}</th>
             <th>{{ __('Action') }}</th>

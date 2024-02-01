@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <title>{!! 'AddisPay | Invoice' !!} </title>
+    <title>{!! 'AddisPay | Requests' !!} </title>
     @include('frontend.layouts.head')
 </head>
 <body>

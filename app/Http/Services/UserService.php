@@ -381,8 +381,11 @@ class UserService implements IUserServiceContract
             'company_phone'   => ['required'],
             'company_email'   => ['required', 'string', 'email', 'max:255', 'unique:merchant_details'],
             'company_address' => ['required'],
+<<<<<<< HEAD
             'license_number' => ['required'],
             'password' => 'required|string|min:8|confirmed',
+=======
+>>>>>>> 95beb6ec899b79ee7ea89f2f6c49ddf8758af3f1
             'license' => ['string'],
             'passport' => ['string'],
         ]);
@@ -395,7 +398,7 @@ class UserService implements IUserServiceContract
      */
     private function _filterCreateUserRequest($data,$customer=false): array
     {
-        $rand_pass = $data['password'];
+        $rand_pass = Str::random(8);
         if ($customer)
             $data['is_school'] = $customer ? true : false;
         return [

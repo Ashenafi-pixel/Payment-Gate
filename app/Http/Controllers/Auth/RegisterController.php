@@ -156,6 +156,7 @@ class RegisterController extends Controller
      * @param $data
      * @return array
      */
+<<<<<<< HEAD
     private function _filterCreateUserRequest($data, $customer = false)
 {
     if ($customer) {
@@ -211,6 +212,23 @@ private function generateKeyPair()
         'public_key' => $publicKey,
     ];
 }
+=======
+    private function _filterCreateUserRequest($data,$customer=false)
+    {
+        if ($customer)
+            $data['is_school'] = $customer ? true : false;
+        return [
+            'name'      => $data['name'],
+            'username'  => $data['username'],
+            'email'     => $data['email'],
+            'mobile_number'     => $data['mobile_no'],
+            'password'  => Hash::make($data['password']),
+            'is_school' => $data['is_school'] ?? false,
+            'is_first_time' => IUserStatuses::IS_FIRST_TIME,
+        ];
+    }
+
+>>>>>>> 95beb6ec899b79ee7ea89f2f6c49ddf8758af3f1
     /**
      * @return string|null
      */
