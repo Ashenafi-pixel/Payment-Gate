@@ -1,6 +1,6 @@
 include:
   - project: 'product/Addispay/adiispay_security'
-    file: '.gitlab-ci.yml'
+    file: '/test-scan.yml'
     ref: 'main'
 
 image: docker:latest
