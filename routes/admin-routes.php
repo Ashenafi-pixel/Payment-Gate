@@ -17,7 +17,6 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Customer\LedgerController;
 use Symfony\Component\VarDumper\VarDumper;
 
-<<<<<<< HEAD
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Admin\LicenseController;
@@ -26,8 +25,6 @@ Route::post('/check-license', [LicenseController::class, 'checkLicense'])->name(
 Route::get('/check-license', function () {
     return view('backend.admin.li');
 });
-=======
->>>>>>> 95beb6ec899b79ee7ea89f2f6c49ddf8758af3f1
 
 # Admin Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
