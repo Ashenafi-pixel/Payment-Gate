@@ -381,11 +381,8 @@ class UserService implements IUserServiceContract
             'company_phone'   => ['required'],
             'company_email'   => ['required', 'string', 'email', 'max:255', 'unique:merchant_details'],
             'company_address' => ['required'],
-<<<<<<< HEAD
             'license_number' => ['required'],
             'password' => 'required|string|min:8|confirmed',
-=======
->>>>>>> 95beb6ec899b79ee7ea89f2f6c49ddf8758af3f1
             'license' => ['string'],
             'passport' => ['string'],
         ]);
