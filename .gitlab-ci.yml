@@ -1,5 +1,5 @@
 include:
-  - project: 'addissystem/addis_pay/adiispay_security'
+  - project: 'product/Addispay/adiispay_security'
     file: '/test-scan.yml'
     ref: 'main'
 
