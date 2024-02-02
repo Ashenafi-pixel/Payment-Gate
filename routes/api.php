@@ -28,7 +28,12 @@ use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 |
 */
 
+use App\Http\Controllers\UserController;
 
+Route::post('/mPOSUser', [UserController::class, 'registerUser'])->withoutMiddleware(['auth']);
+Route::group(['middleware' => []], function () {
+    Route::post('/your-route', [UserController::class, 'registerUser']);
+});
 Route::group(['prefix' => 'customer'],function (){
     # Customer Register Route
     Route::post('register',[RegisterController::class,'register']);

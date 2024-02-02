@@ -9,9 +9,9 @@
     </thead>
     <tbody>
         <tr>
-            <td>{{ $data['OwnerTIN'] }}</td>
-            <td>{{ $data['TradeName'] }}</td>
-            <td>{{ $data['DateRegistered'] }}</td>
+            <td>{{ $data }}</td>
+            <td>{{ $data }}</td>
+            <td>{{ $data }}</td>
 
             <!-- Access other data array elements in the same way -->
         </tr>
