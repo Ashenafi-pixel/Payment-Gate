@@ -48,10 +48,4 @@ class MerchantDetail extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
-    public function banks()
-    {
-        return $this->belongsToMany(Banks::class, 'merchant_bank')
-            ->withPivot(['balance', 'account_number'])
-            ->withTimestamps();
-    }
 }

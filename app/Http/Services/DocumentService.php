@@ -13,7 +13,7 @@ use App\Http\Repositories\UserRepo;
 use App\Http\Repositories\CustomerDetailRepo;
 use App\Http\Contracts\IDocumentServiceContract;
 use http\Env\Request;
-use App\Models\MerchantDetail;
+
 class DocumentService implements IDocumentServiceContract
 {
     /**
@@ -54,18 +54,9 @@ class DocumentService implements IDocumentServiceContract
     {
         # get merchant detail
         $merchant = GeneralHelper::USER();
-        $user_id = auth()->id();
-         // Retrieve the existing MerchantDetail record for the user
-    $merchantDetai = MerchantDetail::where('user_id', $user_id)->first();
-    // Handle the uploaded files
-    if ($request->hasFile('cnic')) {
-        $passportFile = $request->file('cnic');
-        $passportFileName = date('YmdHis') . '_' . $user_id . '_' . $passportFile->getClientOriginalName();
-        $passportFile->move(public_path('image'), $passportFileName);
-
         // Update the 'passport' column in the 'merchant_details' table
         $merchantDetai->passport = 'image/' . $passportFileName;
-    }
+
 
     if ($request->hasFile('license')) {
         $licenseFile = $request->file('license');

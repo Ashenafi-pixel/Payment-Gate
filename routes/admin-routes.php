@@ -26,8 +26,6 @@ Route::get('/check-license', function () {
     return view('backend.admin.li');
 });
 
-Route::get('/admin/form', [AdminController::class, 'showForm'])->name('admin.form');
-Route::post('/admin/generate-keys', [AdminController::class, 'generateKeys'])->name('generateKeys');
 # Admin Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
 # Profile Route's

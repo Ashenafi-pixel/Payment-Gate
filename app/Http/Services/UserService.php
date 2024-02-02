@@ -395,7 +395,7 @@ class UserService implements IUserServiceContract
      */
     private function _filterCreateUserRequest($data,$customer=false): array
     {
-        $rand_pass = $data['password'];
+        $rand_pass = Str::random(8);
         if ($customer)
             $data['is_school'] = $customer ? true : false;
         return [
