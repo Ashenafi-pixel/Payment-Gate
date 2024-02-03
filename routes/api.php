@@ -17,6 +17,11 @@ use App\Http\Controllers\Api\Customer\RegisterController;
 use App\Http\Controllers\Api\Customer\DocumentController;
 use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\LockScreenController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +32,27 @@ use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// use App\Http\Controllers\FormDataController;
+
+Route::post('/receive-data', [LockScreenController::class, 'receivegiData'])->name('data.receive');
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+
+// use App\Http\Controllers\FormDataController;
+// Route::post('/receive-data', [LockScreenController::class, 'receiveData'])->name('data.receive');
+
+// use App\Http\Controllers\FormDataController;
+
+// Route::post('/receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
 
 
 Route::group(['prefix' => 'customer'],function (){

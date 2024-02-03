@@ -1,6 +1,11 @@
-<!-- resources/views/checkout.blade.php -->
+<!DOCTYPE html>
+<html lang="en">
 
-<style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receiver - Display</title>
+    <style>
     body {
         font-family: 'Arial', sans-serif;
     }
@@ -79,7 +84,7 @@
 
     #pay_button {
         /* background-color: #FCA019; */
-        background-color: #00A26B;
+        background-color: #FCA019;
         color: white;
         padding: 10px;
         cursor: pointer;
@@ -163,7 +168,7 @@
         font-size: 20px;
     }
     .container {
-            background-color: lightgray;
+            background-color: #00A26B;
             display: flex;
             justify-content: space-between;
             padding: 20px;
@@ -180,45 +185,63 @@
         .label {
             font-weight: bold;
         }
-        .company-info {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+        .merchant-info {
+    display: flex;
+    align-items: center;
+}
+        .merchant-logo {
+    width: 60px; /* Set the desired width */
+    height: 60px; /* Set the desired height */
+    border-radius: 50%; /* Make it a circle */
+    margin-right: 10px; /* Adjust spacing between logo and name */
+}
+.merchant-info p{
+    font-size: 30px;
+}
+.amoutToPay{
+    font-size: 30px;
 
-    .company-info img {
-        display: block;
-        margin: 0 auto;
-    }
-
-    .company-info h3 {
-        margin-top: 10px;
-        font-size: 18px;
-        color: #333;
-    }
-
-
-    
+}
 
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 
+</head>
 
-<div class="checkout-container">
-    <h2>Checkout Page</h2>
-    <div class="company-info">
-            <img src="company_logo.png" alt="Company Logo" style="max-width: 100px; max-height: 100px;">
-            <h3>Addis Pay</h3>
+<body>
+    <!-- <h1>Latest Received Data:</h1> -->
+    <!-- @if ($latestReceivedData)
+        <p>Name: </p>
+        <p>Amount:</p>
+    @else
+        <p>No data received yet.</p>
+    @endif -->
+
+
+
+
+
+    <div class="checkout-container">
+        <div class="company-info">
+            <img src="{{ asset('Images/logo2.png') }}" alt="Company Logo" style="max-width: 200px;height:100px; width:200px;  max-height: 200px;">
+            <!-- <img src="{{ asset('images/company_logo.png') }}" alt="Company Logo" style="max-width: 100px; max-height: 100px;"> -->
+            
+            <!-- <h3>Addis Pay</h3> -->
         </div>
-
+        <h2>Checkout Page</h2>
     <div class="container">
-        <div class="data-row">
-            <div class="label">Merchant:</div>
-            <div class="value">{{ $merchantName }}</div>
-        </div>
+    <div class="data-row">
+    <div class="label">Merchant:</div>
+    <div class="merchant-info">
+        <img src="{{ asset('images/logo3.jpg') }}" alt="Merchant Logo" class="merchant-logo">
+        <p>{{ json_decode($latestReceivedData->data)->name }}</p>
+    </div>
+</div>
         <div class="data-row">
             <div class="label">Amount To Pay:</div>
-            <div class="value">{{ $totalAmount }} birr</div>
+            <p class="amoutToPay"> ${{ json_decode($latestReceivedData->data)->email }}</p>
         </div>
     </div>
 
@@ -236,7 +259,7 @@
                 <!-- Add Wallets list similar to Banks -->
                 <!-- Example: -->
                 <div class="bank-list">
-            @foreach($banks as $bank)
+                @foreach($banks as $bank)
                 <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="wallet">
                     <img style="height: 60px; width:60px; margin-bottom: 5px;" src="{{ $bank['icon'] }}" alt="{{ $bank['name'] }}" class="bank-icon"><br>
                     <label for="{{ $bank['type'] }}_{{ $loop->index }}">
@@ -244,6 +267,7 @@
                     </label>
                 </div>
             @endforeach
+            <!--  -->
         </div>
                 <!-- <div class="bank-item" onclick="handlePaymentSelection(this)">
                     <img style="height: 60px; width:60px; margin-bottom: 5px;" src="wallet_icon.png" alt="Wallet" class="bank-icon"><br>
@@ -267,6 +291,7 @@
                 <div class="bank-list">
                 <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="bank">
                     <img style="height: 60px; width:60px; margin-bottom: 5px;" src="bank_icon.png" alt="Bank" class="bank-icon"><br>
+                    <h2></h2>
                     <label for="bank_1">Bank 1</label>
                 </div>
                 <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="bank">
@@ -591,3 +616,17 @@ function updateValidationIcon(validationIcon, isValid) {
 
 
 </script>
+
+
+
+    
+</body>
+
+</html>
+
+
+<!-- resources/views/checkout.blade.php -->
+
+
+
+

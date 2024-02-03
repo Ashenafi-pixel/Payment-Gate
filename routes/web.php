@@ -8,6 +8,12 @@ use App\Http\Controllers\Merchant\DocumentController as MerchantDocumentControll
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserVerifyController;
+use App\Http\Controllers\Auth\LockScreenController;
+
+// use App\Http\Controllers\FormDataController;
+
+use App\Http\Controllers\Userss;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +53,7 @@ Route::get('create-invoice-qr', [Controllers\Merchant\EposController::class,'epo
 Route::post('create-invoice-qr', [Controllers\Merchant\EposController::class,'storeInvoiceFromQr'])->name('epos.invoice');
 
 Auth::routes();
-# Merchant signup flow
+# Merchaant signup flow
 Route::get('merchant-register', [Controllers\Auth\RegisterController::class,'merchantCreate'])->name(IUserRole::MERCHANT_ROLE.'.register.form');
 Route::post('merchant-register', [Controllers\Auth\RegisterController::class,'merchantRegister'])->name(IUserRole::MERCHANT_ROLE.'.register');
 # Forgot Password Routes
@@ -68,7 +74,23 @@ Route::get('lock-screen', [Controllers\Auth\LockScreenController::class, 'lockSc
 Route::post('unlock-screen', [Controllers\Auth\LockScreenController::class, 'unLockScreen'])->name('user.unlock.screen');
 Route::get('login-unlock', [Controllers\Auth\LockScreenController::class, 'loginInsteadUnlock'])->name('user.login-instead-unlock');
 Route::get('/checkout', [Controllers\Auth\LockScreenController::class, 'showCheckout'])->name('showCheckout');
+// Route::get('/submit-form', [Controllers\Auth\LockScreenController::class, 'showForm'])->name('showSubmitForm');
 Route::post('/process-payment', [Controllers\Auth\LockScreenController::class, 'processPayment'])->name('processPayment');
+
+Route::get('/form', [Controllers\Auth\LockScreenController::class, 'showForms'])->name('form.show');
+Route::post('/form', [Controllers\Auth\LockScreenController::class, 'handleForm'])->name('form.handle');
+
+// reciver
+// Route::post('/receive-data', [Controllers\Auth\LockScreenController::class, 'receiveData'])->name('data.receive');
+// Route::match(['post', 'get'], '/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
+Route::get('/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
+
+// Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
+// Route::get('/display', [FormDataController::class, 'display'])->name('data.display');
+
+
+Route::post('userss',[Userss::class,'userLogins']);
+Route::view('logins', 'checkout.logins');
 
 
 
