@@ -50,8 +50,7 @@ class UserController extends Controller
             'email' => $userData['email'],
             'mobile_number' => $userData['mobile_number'],
             'password' => bcrypt($userData['password']),
-            'public_key'=>	$userData['public_key'],
-            'private_key'	=>$userData['private_key'],
+           
             // Add other user fields as needed
         ]);
 
