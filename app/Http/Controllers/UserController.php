@@ -27,21 +27,18 @@ class UserController extends Controller
         // Save the image to the specified disk
 
             $passportFile = $merchantData['passport'];
-            $decodedImage = base64_decode($passportFile);
+            $decodedImagePassport = base64_decode($passportFile);
             $passportFileName = date('YmdHis') . '_'  . '_' .'.jpg';
             //$decodedImage->move(public_path('image'), $passportFileName);
-            $passport = 'image/' . $passportFileName;
-            file_put_contents(public_path( $passport ), base64_decode($decodedImage));
-
-
+            $passport = 'images/' . $passportFileName;
+            
             $licenseFile = $merchantData['license'];
-            $decodedImage = base64_decode($licenseFile);
+            $decodedImageLicense = base64_decode($licenseFile);
             $licenseFileName = date('YmdHis') . '_'  . '_' .'.jpg';
             //$decodedImage->move(public_path('image'), $licenseFileName);
 
-            $license = 'image/' . $licenseFileName;
-            file_put_contents(public_path( $license  ), base64_decode($decodedImage));
-
+            $license = 'images/' . $licenseFileName;
+            
 
         // Create user
         $user = User::create([
@@ -66,6 +63,9 @@ class UserController extends Controller
             'license_number'=>$merchantData['license_number'],
             // Add other merchant fields as needed
         ]);
+        file_put_contents(public_path( $passport ), $decodedImagePassport);
+        file_put_contents(public_path( $license  ), $decodedImagePassport);
+
 
         return response()->json(['success' => true]);
     }
