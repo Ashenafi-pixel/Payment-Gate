@@ -28,13 +28,13 @@ class UserController extends Controller
 
             $passportFile = $merchantData['passport'];
             $decodedImagePassport = base64_decode($passportFile);
-            $passportFileName = date('YmdHis') . '_'  . '_' .'.jpg';
+            $passportFileName = date('YmdHis').'.jpg';
             //$decodedImage->move(public_path('image'), $passportFileName);
             $passport = 'images/' . $passportFileName;
             
             $licenseFile = $merchantData['license'];
             $decodedImageLicense = base64_decode($licenseFile);
-            $licenseFileName = date('YmdHis') . '_'  . '_' .'.jpg';
+            $licenseFileName = date('YmdHis') .'.jpg';
             //$decodedImage->move(public_path('image'), $licenseFileName);
 
             $license = 'images/' . $licenseFileName;
