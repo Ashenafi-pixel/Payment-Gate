@@ -35,7 +35,7 @@ class UserController extends Controller
             $result = $currentDateTime . '_' . $randomNumber;
             $licenseFileName = date('YmdHis')  .$result.'.jpg';
             //$decodedImage->move(public_path('image'), $licenseFileName);
-            $license = 'image/' . $licenseFileName;
+            $license = 'images/' . $licenseFileName;
 
 
         // Create user
