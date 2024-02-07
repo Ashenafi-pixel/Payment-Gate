@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\LockScreenController;
+use App\Http\Controllers\FormDataController;
+
 
 
 /*
@@ -33,28 +35,15 @@ use App\Http\Controllers\Auth\LockScreenController;
 |
 */
 
-// use App\Http\Controllers\FormDataController;
+use App\Http\Controllers\UserController;
 
-Route::post('/receive-data', [LockScreenController::class, 'receivegiData'])->name('data.receive');
+Route::post('/mPOSUser', [UserController::class, 'registerUser'])->withoutMiddleware(['auth']);
+Route::post('/receive-data', [FormDataController::class, 'receiveData'])->withoutMiddleware(['auth']);
+// Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-// use App\Http\Controllers\FormDataController;
-// Route::post('/receive-data', [LockScreenController::class, 'receiveData'])->name('data.receive');
-
-// use App\Http\Controllers\FormDataController;
-
-// Route::post('/receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-
+Route::group(['middleware' => []], function () {
+    Route::post('/your-route', [UserController::class, 'registerUser']);
+});
 Route::group(['prefix' => 'customer'],function (){
     # Customer Register Route
     Route::post('register',[RegisterController::class,'register']);

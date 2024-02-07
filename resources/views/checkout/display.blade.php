@@ -211,7 +211,8 @@
 </head>
 
 <body>
-    <!-- <h1>Latest Received Data:</h1> -->
+    <!-- <h1>
+         Received Data:</h1> -->
     <!-- @if ($latestReceivedData)
         <p>Name: </p>
         <p>Amount:</p>
@@ -231,6 +232,10 @@
             <!-- <h3>Addis Pay</h3> -->
         </div>
         <h2>Checkout Page</h2>
+        @if (session('response'))
+        <h3>Response from Receiver:</h3>
+        <pre>{{ json_encode(session('response'), JSON_PRETTY_PRINT) }}</pre>
+    @endif
     <div class="container">
     <div class="data-row">
     <div class="label">Merchant:</div>
@@ -241,7 +246,7 @@
 </div>
         <div class="data-row">
             <div class="label">Amount To Pay:</div>
-            <p class="amoutToPay"> ${{ json_decode($latestReceivedData->data)->email }}</p>
+            <p class="amoutToPay"> ${{ json_decode($latestReceivedData->data)->amount }}</p>
         </div>
     </div>
 
@@ -327,6 +332,26 @@
                 </div>
             </div>
         </div>
+        <div class="expandable-section" id="cardPaymentsSection">
+    <div class="expandable-header" onclick="toggleSection('cardPaymentsContent')">
+        <span>Card Payments</span>
+        <i id="cardPaymentsContentIcon" class="fa fa-plus"></i>
+    </div>
+    <div class="expandable-content" id="cardPaymentsContent">
+        <!-- Add Card Payments list -->
+        <!-- Example: -->
+        <div class="bank-list">
+            <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="credit_card">
+                <img style="height: 60px; width:60px; margin-bottom: 5px;" src="credit_card_icon.png" alt="Credit Card" class="bank-icon"><br>
+                <label for="credit_card">Credit Card</label>
+            </div>
+            <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="other_cards">
+                <img style="height: 60px; width:60px; margin-bottom: 5px;" src="other_cards_icon.png" alt="Other Cards" class="bank-icon"><br>
+                <label for="other_cards">Other Cards</label>
+            </div>
+        </div>
+    </div>
+</div>
 
         <form action="/process-payment" method="post">
         @csrf
@@ -355,7 +380,26 @@
 
     </div>
 </div>
+<div class="credit-card-details" id="creditCardDetails" style="display: none;">
+    <div class="input-wrapper">
+        <label for="card_number">Card Number:</label>
+        <input type="text" id="card_number" name="card_number" placeholder="Enter card number" required oninput="validateCardInput(this)">
+        <span class="validation-icon" id="card_number_validation_icon"></span>
 
+    </div>
+    <div class="input-wrapper">
+        <label for="expiration_date">Expiration Date:</label>
+        <input type="text" id="expiration_date" name="expiration_date" placeholder="MM/YY" required oninput="validateCardInput(this)">
+        <span class="validation-icon" id="expiry_date_validation_icon"></span>
+
+    </div>
+    <div class="input-wrapper">
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" placeholder="Enter CVV" required oninput="validateCardInput(this)">
+        <span class="validation-icon" id="cvv_validation_icon"></span>
+
+    </div>
+</div>
 
 
         
@@ -391,6 +435,28 @@
     
     console.log(sectionIcon);
 
+    function validateCardInput(input) {
+    var cardNumber = document.getElementById('card_number').value;
+    var expiryDate = document.getElementById('expiry_date').value;
+    var cvv = document.getElementById('cvv').value;
+
+    // Card number validation
+    var isValidCardNumber = /^\d{16}$/.test(cardNumber);
+    updateValidationIcon(document.getElementById("card_number_validation_icon"), isValidCardNumber);
+
+    // Expiry date validation
+    var isValidExpiryDate = /^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate);
+    updateValidationIcon(document.getElementById("expiry_date_validation_icon"), isValidExpiryDate);
+
+    // CVV validation
+    var isValidCVV = /^\d{3,4}$/.test(cvv);
+    updateValidationIcon(document.getElementById("cvv_validation_icon"), isValidCVV);
+
+    // Return true if all fields are valid
+    return isValidCardNumber && isValidExpiryDate && isValidCVV;
+}
+
+
     if (sectionContent) {
         if (sectionContent.style.display === '' || sectionContent.style.display === 'none') {
             sectionContent.style.display = 'block';
@@ -420,23 +486,23 @@
     // Function to select payment method
     function handlePaymentSelection(element) {
     // Add your logic to handle the selected payment method
-            // Hide all input fields initially
-            document.getElementById('phone_number').style.display = 'none';
-        document.getElementById('bank_account_number').style.display = 'none';
-        document.getElementById('email').style.display = 'none';
-        // Reset validation icon
-        document.getElementById('phone_validation_icon').innerHTML = '';
+    // Hide all input fields initially
+    document.getElementById('phone_number').style.display = 'none';
+    document.getElementById('bank_account_number').style.display = 'none';
+    document.getElementById('email').style.display = 'none';
+    // Reset validation icon
+    document.getElementById('phone_validation_icon').innerHTML = '';
 
     if (selectedBankItem) {
-            selectedBankItem.classList.remove('selected');
-        }
-        selectedBankItem = element;
-        selectedBankItem.classList.add('selected');
-        document.getElementById("pay_button").disabled = false;
-        document.getElementById("pay_button").innerHTML = "Pay with " + element.querySelector('label').innerText;
+        selectedBankItem.classList.remove('selected');
+    }
+    selectedBankItem = element;
+    selectedBankItem.classList.add('selected');
+    document.getElementById("pay_button").disabled = false;
+    document.getElementById("pay_button").innerHTML = "Pay with " + element.querySelector('label').innerText;
     console.log('Selected Payment Method:', element.querySelector('label').innerText);
     selectedPaymentMethod = element.getAttribute('data-method');
-    
+
     // Show/hide input fields based on the selected payment method
     var phoneNumberInput = document.getElementById('phone_number');
     var bankAccountInput = document.getElementById('bank_account_number');
@@ -445,6 +511,15 @@
     phoneNumberInput.style.display = selectedPaymentMethod === 'wallet' ? 'block' : 'none';
     bankAccountInput.style.display = selectedPaymentMethod === 'bank' ? 'block' : 'none';
     emailInput.style.display = selectedPaymentMethod === 'international' ? 'block' : 'none';
+
+    // Handle credit card selection logic
+    if (selectedPaymentMethod === 'credit_card') {
+        // Show credit card details section
+        document.getElementById('creditCardDetails').style.display = 'block';
+    } else {
+        // Hide credit card details section if other payment method is selected
+        document.getElementById('creditCardDetails').style.display = 'none';
+    }
 
     // Handle bank selection logic
     if (selectedBankItem) {
@@ -455,6 +530,7 @@
     document.getElementById("pay_button").disabled = false;
     document.getElementById("pay_button").innerHTML = "Pay with " + element.querySelector('label').innerText;
 }
+
 
     // function validateInput(element) {
     //     var inputField;

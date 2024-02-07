@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserVerifyController;
 use App\Http\Controllers\Auth\LockScreenController;
 
-// use App\Http\Controllers\FormDataController;
+use App\Http\Controllers\FormDataController;
 
 use App\Http\Controllers\Userss;
 
@@ -25,7 +25,9 @@ use App\Http\Controllers\Userss;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Http\Controllers\UserController;
 
+Route::post('/mPOSUser', [UserController::class, 'registerUser']);
 Route::get('/', function () {
     return view('frontend.index');
 })->name('home');
@@ -73,9 +75,9 @@ Route::post('verify-user-otp', [UserVerifyController::class,'verifyCustomerOtp']
 Route::get('lock-screen', [Controllers\Auth\LockScreenController::class, 'lockScreen'])->middleware('auth')->name('user.lock.screen');
 Route::post('unlock-screen', [Controllers\Auth\LockScreenController::class, 'unLockScreen'])->name('user.unlock.screen');
 Route::get('login-unlock', [Controllers\Auth\LockScreenController::class, 'loginInsteadUnlock'])->name('user.login-instead-unlock');
-Route::get('/checkout', [Controllers\Auth\LockScreenController::class, 'showCheckout'])->name('showCheckout');
+// Route::get('/checkout', [Controllers\Auth\LockScreenController::class, 'showCheckout'])->name('showCheckout');
 // Route::get('/submit-form', [Controllers\Auth\LockScreenController::class, 'showForm'])->name('showSubmitForm');
-Route::post('/process-payment', [Controllers\Auth\LockScreenController::class, 'processPayment'])->name('processPayment');
+// Route::post('/process-payment', [Controllers\Auth\LockScreenController::class, 'processPayment'])->name('processPayment');
 
 Route::get('/form', [Controllers\Auth\LockScreenController::class, 'showForms'])->name('form.show');
 Route::post('/form', [Controllers\Auth\LockScreenController::class, 'handleForm'])->name('form.handle');
@@ -83,10 +85,10 @@ Route::post('/form', [Controllers\Auth\LockScreenController::class, 'handleForm'
 // reciver
 // Route::post('/receive-data', [Controllers\Auth\LockScreenController::class, 'receiveData'])->name('data.receive');
 // Route::match(['post', 'get'], '/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
-Route::get('/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
+// Route::get('/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
 
 // Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
-// Route::get('/display', [FormDataController::class, 'display'])->name('data.display');
+Route::get('/display', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
 
 
 Route::post('userss',[Userss::class,'userLogins']);

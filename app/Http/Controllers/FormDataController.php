@@ -57,8 +57,8 @@ class FormDataController extends Controller
 
 
 
-            return response()->json(['status' => 'Data received successfully']);
-            // return redirect()->route('data.display')->with(['status' => 'Data received successfully']);
+            // return response()->json(['status' => 'Data received successfully']);
+            return redirect()->route('data.display')->with(['status' => 'Data received successfully']);
             // return view('display', ['latestReceivedData' => $latestReceivedData]);
 
 

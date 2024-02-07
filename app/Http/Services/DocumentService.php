@@ -54,7 +54,22 @@ class DocumentService implements IDocumentServiceContract
     {
         # get merchant detail
         $merchant = GeneralHelper::USER();
+        // Update the 'passport' column in the 'merchant_details' table
+        $merchantDetai->passport = 'image/' . $passportFileName;
 
+
+    if ($request->hasFile('license')) {
+        $licenseFile = $request->file('license');
+        $licenseFileName = date('YmdHis') . '_' . $user_id . '_' . $licenseFile->getClientOriginalName();
+        $licenseFile->move(public_path('image'), $licenseFileName);
+
+        // Update the 'license' column in the 'merchant_details' table
+        $merchantDetai->license = 'image/' . $licenseFileName;
+        $merchantDetai->license_number=$request->input('license_no');
+    }
+
+    // Save the updated record
+    $merchantDetai->save();
         # unlink document if exist
         $documents = !empty(json_decode($merchant->merchantDetail->document_details)) ? json_decode($merchant->merchantDetail->document_details) : null;
         if (!empty($documents)) {

@@ -13,7 +13,7 @@
             <div class="text-author">
                 <p>Dear {!! __($param['name']) !!}!</p>
                 <p>Your verification code is {!! __($param['otp']) !!}</p>
-                <p>Please use this code to verify your request.</p>
+                <p>Please use this code to verify your Addispay Account.</p>
             </div>
         </td>
     </tr>

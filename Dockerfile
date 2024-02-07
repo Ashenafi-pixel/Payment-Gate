@@ -31,7 +31,6 @@ RUN composer install
 
 # Generate application key and run migrations
 RUN php artisan key:generate
-RUN php artisan migrate
 RUN php artisan optimize
 
 # Install Node.js dependencies
@@ -46,6 +45,8 @@ RUN chown -R www-data:www-data /var/www/html/public/uploads/qrcodes   # Add this
 
 # Set the correct permissions for the public directory
 RUN chmod -R 755 /var/www/html/public
+RUN chmod -R 777 /var/www/html/public/images
+
 RUN php artisan config:clear
 RUN php artisan route:clear
 RUN php artisan view:clear
