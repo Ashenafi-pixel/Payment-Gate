@@ -20,7 +20,7 @@
                                     'enctype' => 'multipart/form-data',
                                 ]) !!}
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12">
                                         <div class="mb-3">
                                             {!! Form::label('name', __('FullName:'), ['class' => 'form-label input-label']) !!}
                                             {!! Form::text('name', null, [
@@ -34,7 +34,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12">
                                         <div class="mb-3">
                                             {!! Form::label('username', __('Username:'), ['class' => 'form-label input-label']) !!}
                                             {!! Form::text('username', null, [
@@ -43,33 +43,6 @@
                                                 'placeholder' => 'Enter your username',
                                             ]) !!}
                                             @error('username')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            {!! Form::label('password', __('Password:'), ['class' => 'form-label input-label']) !!}
-                                            {!! Form::password('password', [
-                                                'class' => 'form-control form-control-lg',
-                                                'id' => 'password',
-                                                'placeholder' => 'Enter your password',
-                                            ]) !!}
-                                            @error('password')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            {!! Form::label('password_confirmation', __('Confirm Password:'), ['class' => 'form-label input-label']) !!}
-                                            {!! Form::password('password_confirmation', [
-                                                'class' => 'form-control form-control-lg',
-                                                'id' => 'password_confirmation',
-                                                'placeholder' => 'Confirm your password',
-                                            ]) !!}
-                                            @error('password_confirmation')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>

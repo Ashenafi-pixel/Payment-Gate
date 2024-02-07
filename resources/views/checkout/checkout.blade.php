@@ -1,543 +1,762 @@
-<!-- resources/views/checkout.blade.php -->
+@extends('layouts.frontend.app')
 
+@section('slider')
 <style>
-    body {
-        font-family: 'Arial', sans-serif;
-    }
-
-    .checkout-container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    h2, p, label {
-        font-weight: 600;
-    }
-
-    .phone-number {
-        position: relative;
-        margin-bottom: 15px;
-    }
-
-    .input-wrapper {
-        position: relative;
-        display: inline-block;
-    }
-
-    .input-wrapper input {
-        padding: 10px;
-        width: calc(100% - 30px);
-    }
-
-    .validation-icon {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 10px;
-        font-size: 16px;
-    }
-
-    .bank-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        background-color: lightgray;
-        padding: 10px;
-        border-radius: 10px;
-    }
-
-    .bank-item {
-        text-align: center;
-        background-color: white;
-        padding: 20px;
-        border: 1px solid transparent;
-        position: relative;
-        cursor: pointer;
-        height:80px;
-        width: 80px;
-        border-radius: 10px;
-    }
-
-    .bank-item.selected {
-        border: 2px solid #4CAF50;
-        border-radius: 10px;
-    }
-
-    .bank-item.selected::after {
-        content: "\2714";
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        font-size: 16px;
-        color: #4CAF50;
-        height: 20px;
-        width: 20px;
-        border:1px solid #4CAF50;
-        border-radius: 50%;
-    }
-
-    #pay_button {
-        background-color: rgb(10,255,10);
-        color: white;
-        padding: 10px;
-        cursor: pointer;
-        width: calc(100% - 22px);
-        margin-top: 20px;
-        font-weight: 600;
-    }
-
-    .cancel-transaction {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-        font-size: 20px;
-        border: 1px solid black;
-        height: 25px;
-        width: 25px;
-        border-radius: 50%;
-    }
-    .fa-times{
-        padding: 5px;
-        align-items: center;
-        justify-items: center;
-
-
-    }
-
-    .confirmation-card {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
-
-    .confirmation-card-content {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-    }
-
-    .confirmation-card-buttons {
-        margin-top: 20px;
-    }
-    .payment-method-section {
-        margin-top: 20px;
-    }
-
-    .expandable-section {
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        margin-bottom: 15px;
-    }
-
-    .expandable-header {
-        padding: 10px;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #f9f9f9;
-        border-bottom: 1px solid #ddd;
-        border-radius: 8px;
-    }
-
-    .expandable-content {
-        display: none;
-        padding: 10px;
-    }
-
-    .expandable-content.active {
-        display: block;
-    }
-
-    .expandable-header i {
-        font-size: 20px;
-    }
-
-</style>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-
-
-<div class="checkout-container">
-    <h2>Checkout Page</h2>
-    <p>Merchant: {{ $merchantName }}</p>
-    <p> Amount To Pay: {{ $totalAmount }} birr</p>
-
-    
-    <h2>Payment Method</h2>
-    <div class="payment-method-section">
-        <div class="expandable-section" id="walletsSection">
-            <div class="expandable-header" onclick="toggleSection('walletsContent')">
-                <span>Wallets</span>
-                <i id="walletsContentIcon" class="fa fa-plus"></i>
-                <!-- <i id="walletsIcon" class="fa fa-minus"></i> -->
-
-            </div>
-            <div class="expandable-content" id="walletsContent">
-                <!-- Add Wallets list similar to Banks -->
-                <!-- Example: -->
-                <div class="bank-list">
-            @foreach($banks as $bank)
-                <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="wallet">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="{{ $bank['icon'] }}" alt="{{ $bank['name'] }}" class="bank-icon"><br>
-                    <label for="{{ $bank['type'] }}_{{ $loop->index }}">
-                        {{ $bank['name'] }}
-                    </label>
-                </div>
-            @endforeach
-        </div>
-                <!-- <div class="bank-item" onclick="handlePaymentSelection(this)">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="wallet_icon.png" alt="Wallet" class="bank-icon"><br>
-                    <label for="wallet_1">Wallet 1</label>
-                </div>
-                <div class="bank-item" onclick="handlePaymentSelection(this)">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="wallet_icon.png" alt="Wallet" class="bank-icon"><br>
-                    <label for="wallet_2">Wallet 2</label>
-                </div> -->
-            </div>
-        </div>
-
-        <div class="expandable-section" id="banksSection">
-            <div class="expandable-header" onclick="toggleSection('banksContent')">
-                <span>Banks</span>
-                <i id="banksContentIcon" class="fa fa-plus"></i>
-            </div>
-            <div class="expandable-content" id="banksContent">
-                <!-- Add Banks list similar to existing Banks -->
-                <!-- Example: -->
-                <div class="bank-list">
-                <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="bank">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="bank_icon.png" alt="Bank" class="bank-icon"><br>
-                    <label for="bank_1">Bank 1</label>
-                </div>
-                <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="bank">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="bank_icon.png" alt="Bank" class="bank-icon"><br>
-                    <label for="bank_2">Bank 2</label>
-                </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="expandable-section" id="internationalPaymentsSection">
-            <div class="expandable-header" onclick="toggleSection('internationalPaymentsContent')">
-                <span>International Payments</span>
-                <i id="internationalPaymentsContentIcon" class="fa fa-plus"></i>
-            </div>
-            <div class="expandable-content" id="internationalPaymentsContent">
-                <!-- Add International Payments list -->
-                <!-- Example: -->
-                <div class="bank-list">
-
-                <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="international">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="paypal_icon.png" alt="PayPal" class="bank-icon"><br>
-                    <label for="paypal">PayPal</label>
-                </div>
-                <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="international">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="payoneer_icon.png" alt="Payoneer" class="bank-icon"><br>
-                    <label for="payoneer">Payoneer</label>
-                </div>
-                <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="international">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="wise_icon.png" alt="Wise" class="bank-icon"><br>
-                    <label for="wise">Wise</label>
-                </div>
-                </div>
-            </div>
-        </div>
-
-        <form action="/process-payment" method="post">
-        @csrf
-
-        <div class="phone-number" id="phone_number" style="display: none;">
-        <label for="phone_number">Phone Number:</label>
-            <div class="input-wrapper">
-                <input type="text" id="phone_number" name="phone_number" placeholder="Enter phone number" pattern="[0-9]{10}" required oninput="validatePhoneNumber(this)">
-                <span class="validation-icon" id="phone_validation_icon"></span>
-            </div>
-        </div>
-
-        <div class="bank-account" id="bank_account_number" style="display: none;">
-    <label for="bank_account_number">Bank Account Number:</label>
-    <div class="input-wrapper">
-        <input type="text" id="bank_account_input" name="bank_account_number" placeholder="Enter bank account number" required oninput="validateInput(this)">
-                <span class="validation-icon" id="bank_account_validation_icon"></span>
-    </div>
-</div>
-
-<div class="email" id="email" style="display: none;">
-    <label for="email">Email:</label>
-    <div class="input-wrapper">
-        <input type="email" id="email_input" name="email" placeholder="Enter email" required oninput="validateEmail(this)">
-        <span class="validation-icon" id="email_validation_icon"></span>
-
-    </div>
-</div>
-
-
-
-        
-
-        <button type="submit" id="pay_button" disabled>Pay </button>
-
-        <div class="cancel-transaction" onclick="showConfirmationCard()">
-            <i class="fa fa-times">x</i>
-        </div>
-    </form>
-
-
-        <div class="confirmation-card" id="confirmationCard">
-        <div class="confirmation-card-content">
-            <p>Are you sure you want to cancel the transaction?</p>
-            <div class="confirmation-card-buttons">
-                <button onclick="cancelTransaction()">Yes</button>
-                <button onclick="hideConfirmationCard()">No</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    var selectedBankItem = null;
-    var selectedPaymentMethod = null;
-
-    function toggleSection(sectionId) {
-        console.log(sectionId);
-    
-    var sectionContent = document.getElementById(sectionId);
-    var sectionIcon = document.getElementById(`${sectionId}Icon`);
-    
-    console.log(sectionIcon);
-
-    if (sectionContent) {
-        if (sectionContent.style.display === '' || sectionContent.style.display === 'none') {
-            sectionContent.style.display = 'block';
-            // sectionIcon.className = 'fa-minus'; // Change icon to minus when expanded
-            sectionIcon.classList.remove('fa-plus');
-                sectionIcon.classList.add('fa-minus');
-
-        } else {
-            sectionContent.style.display = 'none';
-            // sectionIcon.className = 'fa fa-plus'; // Change icon to plus when collapsed
-            sectionIcon.classList.remove('fa-minus');
-                sectionIcon.classList.add('fa-plus');
+        .marchantSec .leftSec span, .marchantSec .leftSec label {
+            display: block;
         }
-    }
-            // Close other sections
-            var allSections = document.querySelectorAll('.expandable-content');
-        for (var i = 0; i < allSections.length; i++) {
-            var otherSection = allSections[i];
-            if (otherSection.id !== sectionId) {
-                otherSection.style.display = 'none';
+
+        .marchantSec {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .marchantDetails span, .marchantDetails label {
+            display: block;
+        }
+
+        .leftSec label {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            text-transform: capitalize;
+        }
+
+        .marchantSec > div {
+            flex: 1;
+        }
+
+        .dashboard-area.pt-150.pb-150 .col-lg-8 .header-section.mb-4 {
+            position: absolute;
+            top: -42px;
+        }
+
+        .dashboard-area.pt-150.pb-150 .col-lg-8 {
+            position: relative;
+        }
+
+        .col-lg-8 .main-container.checkout-main-area {
+            padding: 0px 0px;
+            background-color: transparent;
+        }
+
+        .col-lg-8 .main-container.checkout-main-area .card-body {
+            background-color: #f5f5f5;
+            padding: 30px 30px;
+            margin-bottom: 29px;
+            /* border-radius: 16px; */
+        }
+
+        .rightSec .marchantDetails:last-child {
+            padding-top: 20px;
+        }
+
+        .container {
+            max-width: 1170px !important;
+        }
+
+        .dashboard-area {
+            background: #fff;
+        }
+
+        div#myTabContent2 {
+            background-color: #F5F5F5;
+            padding: 20px 30px;
+            /* border-radius: 16px; */
+        }
+
+        .table-responsive.payment-gateway-section table.table.table-checkout tbody tr td {
+            border-bottom: 1px solid #D8D8D8 !important;
+        }
+
+        .table-responsive.payment-gateway-section .table-checkout tr:nth-of-type(6) td, .table-responsive.payment-gateway-section .table-checkout tr:nth-of-type(6) td strong {
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .table-responsive.payment-gateway-section .table-checkout tr td strong {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .table-responsive.payment-gateway-section .table-checkout tr td {
+            padding: 14px 0;
+        }
+
+        div#myTabContent2 {
+            background-color: #F5F5F5;
+            padding: 1px 30px 33px;
+            /* border-radius: 16px; */
+        }
+
+        .col-lg-4 .main-container.checkout-main-area .header-section.mb-4 {
+            position: absolute;
+            top: -35px;
+        }
+
+        .dashboard-area.pt-150.pb-150 .col-lg-4 {
+            position: relative;
+        }
+
+        .col-lg-4 .checkout-main-area {
+            background: #fff;
+            padding: 0px 0px;
+            /* border-radius: 5px; */
+        }
+
+        .totalAmount {
+            display: flex;
+            justify-content: space-between;
+            background-color: #3BBE50;
+            color: #fff;
+            align-items: center;
+            padding: 20px;
+            /* border-radius: 16px 16px 0px 0px; */
+        }
+
+        .col-lg-4 form.form table.table.table-checkout {
+            display: none;
+        }
+
+        .login-btn button {
+            background: #023047;
+            font-size: 16px;
+        }
+
+        .totalAmount p {
+            margin: 0px;
+        }
+
+        .login-btn button:hover {
+            background: #023047;
+        }
+
+        .col-lg-4 .main-container.checkout-main-area ul.nav {
+            display: block;
+        }
+
+        .col-lg-4 .main-container.checkout-main-area ul.nav .nav-link.active, .col-lg-4 .main-container.checkout-main-area ul.nav .show > .nav-link {
+            /* border: 1px solid #B3B3B3 ; */
+            color: #000;
+            background-color: #DADADA;
+        }
+
+        ul#myTab3 li:last-child a {
+            /* border-radius: 0px 0px 12px 12px; */
+        }
+
+        ul#myTab3 {
+            background-color: #F5F5F5;
+            /* border-radius: 0px 0px 12px 12px; */
+        }
+
+        .slider-breadcrumb-area {
+            color: #fff;
+            padding: 0 0;
+            padding-top: 60px;
+        }
+
+        .breadcrumb-title h4 {
+            font-size: 36px;
+            color: #000000;
+            font-weight: 600;
+        }
+
+        footer {
+            display: none;
+        }
+
+        .checkout-footer:before {
+            content: '';
+            position: absolute;
+            display: block;
+            height: 80px;
+            width: 100%;
+            background-color: #333333;
+            top: 0px;
+            left: 0;
+            transform-origin: left;
+            transform: skew(0deg, -3deg);
+        }
+
+        .checkout-footer {
+            background-color: #333333;
+            padding: 80px 0px;
+            color: #fff;
+            position: relative;
+        }
+
+        .dashboard-area.pt-150.pb-150 {
+            padding-top: 120px;
+        }
+
+        .agent-social-links nav ul li a {
+            background-color: #fff;
+            color: #333333;
+        }
+
+        .agent-social-links svg.iconify {
+            height: 20px;
+            width: 20px;
+        }
+
+        .agent-social-links ul li a {
+            padding: 12px 13px;
+            /* border-radius: 30px; */
+        }
+
+        .copyRight {
+            background-color: #333333;
+        }
+
+        .bottomLine {
+
+            display: flex;
+            max-width: 1170px;
+            margin: 0 auto;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-area .main-container {
+            box-shadow: unset;
+        }
+
+        .header-section-area {
+            background: #F6F6F6;
+        }
+
+        .header-area .col-lg-10 {
+            display: none;
+        }
+
+        .dashboard-area.pt-150.pb-150 {
+            padding-top: 80px;
+        }
+
+        .payment_method img {
+            height: 36px;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .copyRight {
+            background-color: #1F1F1F;
+        }
+
+        .bottomLine p {
+            margin: 0;
+        }
+
+        .bottomLine {
+            padding: 14px 0px;
+        }
+
+        .login-btn button:hover, .login-btn button:focus {
+            box-shadow: 0 0.5em 0.5em -0.4em #023047;
+            transform: translateY(-0.em);
+        }
+
+        .login-btn button:hover, .login-btn button:focus {
+            border-color: #023047;
+            color: #fff;
+        }
+
+        .login-btn button {
+            transition-duration: 0.3s;
+        }
+
+        .dashboard-area.pt-150.pb-150 .col-lg-8 {
+            position: inherit;
+        }
+
+        .dashboard-area.pt-150.pb-150 .container {
+            max-width: 1170px !important;
+            position: relative;
+        }
+
+        .dashboard-area.pt-150.pb-150 .col-lg-8 form.form {
+            position: absolute;
+            right: 12px;
+            top: 60%;
+            width: 31%;
+            z-index: 9;
+        }
+
+        .col-lg-8 form.form table {
+            display: none;
+        }
+
+        .header-section h4, .header-section.mb-4 h5 {
+            color: #000;
+        }
+
+        .slider-breadcrumb-area {
+            padding-top: 50px;
+        }
+
+        .footerLogo p {
+            font-size: 15px;
+            font-weight: 400;
+            border-bottom: 1px solid #424242;
+            padding-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .agent-social-links {
+            padding-top: 20px;
+        }
+
+        .footerLogo {
+            width: 90%;
+        }
+
+        @media (max-width: 1280px) {
+            .bottomLine {
+                padding: 14px 20px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-area.pt-150.pb-150 .col-lg-8 .header-section.mb-4 {
+                position: relative;
+                top: 0px;
             }
 
-        }}
-    
+            .dashboard-area.pt-150.pb-150 .col-lg-8 form.form {
+                position: relative;
+                right: 0px;
+                top: 60%;
+                width: 100%;
+                z-index: 9;
+            }
 
+            .header-section h4 {
+                margin-bottom: 0px;
+            }
 
-    // Function to select payment method
-    function handlePaymentSelection(element) {
-    // Add your logic to handle the selected payment method
-            // Hide all input fields initially
-            document.getElementById('phone_number').style.display = 'none';
-        document.getElementById('bank_account_number').style.display = 'none';
-        document.getElementById('email').style.display = 'none';
-        // Reset validation icon
-        document.getElementById('phone_validation_icon').innerHTML = '';
+            .dashboard-area.pt-150.pb-150 .row {
+                flex-direction: column-reverse;
+            }
 
-    if (selectedBankItem) {
-            selectedBankItem.classList.remove('selected');
-        }
-        selectedBankItem = element;
-        selectedBankItem.classList.add('selected');
-        document.getElementById("pay_button").disabled = false;
-        document.getElementById("pay_button").innerHTML = "Pay with " + element.querySelector('label').innerText;
-    console.log('Selected Payment Method:', element.querySelector('label').innerText);
-    selectedPaymentMethod = element.getAttribute('data-method');
-    
-    // Show/hide input fields based on the selected payment method
-    var phoneNumberInput = document.getElementById('phone_number');
-    var bankAccountInput = document.getElementById('bank_account_number');
-    var emailInput = document.getElementById('email');
-
-    phoneNumberInput.style.display = selectedPaymentMethod === 'wallet' ? 'block' : 'none';
-    bankAccountInput.style.display = selectedPaymentMethod === 'bank' ? 'block' : 'none';
-    emailInput.style.display = selectedPaymentMethod === 'international' ? 'block' : 'none';
-
-    // Handle bank selection logic
-    if (selectedBankItem) {
-        selectedBankItem.classList.remove('selected');
-    }
-    selectedBankItem = element;
-    selectedBankItem.classList.add('selected');
-    document.getElementById("pay_button").disabled = false;
-    document.getElementById("pay_button").innerHTML = "Pay with " + element.querySelector('label').innerText;
-}
-
-    // function validateInput(element) {
-    //     var inputField;
-
-    //     if (selectedPaymentMethod === 'wallet') {
-    //         inputField = document.getElementById('phone_number');
-    //         return /^\d{10}$/.test(inputField.value);
-    //     } else if (selectedPaymentMethod === 'bank') {
-    //         inputField = document.getElementById('bank_account_number');
-    //         // Add your bank account validation logic here
-    //         return inputField.value.trim() !== '';
-    //     } else if (selectedPaymentMethod === 'international') {
-    //         inputField = document.getElementById('email');
-    //         // Add your email validation logic here
-    //         return /\S+@\S+\.\S+/.test(inputField.value);
-    //     }
-
-    //     return false; // Return false for unsupported payment method
-    // }
-
-    function validateInput(element) {
-    var inputField = null;
-    var validationIcon = null;
-
-    if (selectedPaymentMethod === 'wallet') {
-        inputField = element.value
-        validationIcon = document.getElementById("phone_validation_icon");
-        return validatePhoneNumber(inputField, validationIcon);
-    } else if (selectedPaymentMethod === 'bank') {
-        inputField = document.getElementById('bank_account_number');
-        validationIcon = document.getElementById("bank_account_validation_icon");
-        // Add your bank account validation logic here
-        var isValidBankAccount = inputField.value.length>12 && inputField.value.length < 14 ;
-        updateValidationIcon(validationIcon, isValidBankAccount);
-        return isValidBankAccount;
-    } else if (selectedPaymentMethod === 'international') {
-        inputField = document.getElementById('email');
-        validationIcon = document.getElementById("email_validation_icon");
-        // Add your email validation logic here
-        var isValidEmail = /\S+@\S+\.\S+/.test(inputField.value);
-        updateValidationIcon(validationIcon, isValidEmail);
-        return isValidEmail;
-    }
-
-    return false; // Return false for unsupported payment method
-}
-
-function validatePhoneNumber(input, validationIcon) {
-    // var phoneNumber = input.value;
-    console.log(input);
-    var isValidPhoneNumber = /^\d{10}$/.test(input);
-    updateValidationIcon(validationIcon, isValidPhoneNumber);
-    return isValidPhoneNumber;
-}
-
-function updateValidationIcon(validationIcon, isValid) {
-    if (isValid) {
-        validationIcon.innerHTML = "&#10004;"; // Checkmark
-        validationIcon.style.color = "green";
-    } else {
-        validationIcon.innerHTML = "&#10006;"; // Cross
-        validationIcon.style.color = "red";
-
-    }
-}
-
-
-    function selectBank(element) {
-        if (selectedBankItem) {
-            selectedBankItem.classList.remove('selected');
-        }
-        selectedBankItem = element;
-        selectedBankItem.classList.add('selected');
-        document.getElementById("pay_button").disabled = false;
-        document.getElementById("pay_button").innerHTML = "Pay with " + element.querySelector('label').innerText;
-    }
-
-    function validatePhoneNumber(input) {
-        var validationIcon = document.getElementById("phone_validation_icon");
-        var phoneNumber = input.value;
-
-        if (/^\d{10}$/.test(phoneNumber)) {
-            validationIcon.innerHTML = "&#10004;"; // Checkmark
-            validationIcon.style.color = "green";
-        } else {
-            validationIcon.innerHTML = "&#10006;"; // Cross
-            validationIcon.style.color = "red";
-        }
-    }
-
-    function validateEmail(input) {
-        var validationIcon = document.getElementById("email_validation_icon");
-        var email = input.value;
-
-        if (/\S+@\S+\.\S+/.test(email)) {
-            validationIcon.innerHTML = "&#10004;"; // Checkmark
-            validationIcon.style.color = "green";
-        } else {
-            validationIcon.innerHTML = "&#10006;"; // Cross
-            validationIcon.style.color = "red";
-        }
-    }
-
-
-    function showConfirmationCard() {
-        document.getElementById("confirmationCard").style.display = "flex";
-    }
-
-    function hideConfirmationCard() {
-        document.getElementById("confirmationCard").style.display = "none";
-    }
-
-    function cancelTransaction() {
-        // Implement cancellation logic or redirect as needed
-        hideConfirmationCard();
-    }
-    function fetchMerchantDetails() {
-            axios.get('https://your-api-endpoint/merchant-details')
-                .then(response => {
-                    const { totalAmount, merchantName } = response.data;
-
-                    // Update the HTML with fetched details
-                    document.getElementById('total_amount').innerText = `Total Amount: ${totalAmount}`;
-                    document.getElementById('merchant_name').innerText = `Merchant: ${merchantName}`;
-                })
-                .catch(error => {
-                    console.error('Error fetching merchant details:', error);
-                });
+            .dashboard-area.pt-150.pb-150 .col-lg-8 .header-section.mb-4 {
+                padding-top: 12px;
+            }
         }
 
-        // Function to send transaction details using a POST request
-        function sendTransactionDetails() {
-            const phoneNumber = document.getElementById('phone_number').value;
-            const selectedBankName = selectedBankItem.querySelector('label').innerText;
+        @media (max-width: 767px) {
+            .checkout-footer .col-md-4 {
+                text-align: center;
+                padding-bottom: 44px;
+            }
 
-            // Data to be sent in the POST request
-            const postData = {
-                phoneNumber,
-                selectedBankName,
-                // TIME,
+            .bottomLine {
+                flex-direction: column;
+                justify-content: center;
+                padding: 16px 30px 6px;
+                text-align: center;
+            }
 
-                // Add more data as needed
-            };
 
-            axios.post('https://your-api-endpoint/process-payment', postData)
-                .then(response => {
-                    // Handle the response as needed
-                    console.log('Transaction details sent successfully:', response.data);
-                })
-                .catch(error => {
-                    console.error('Error sending transaction details:', error);
-                });
+            .dashboard-area.pb-150 {
+                padding-top: 16px !important;
+            }
+
+            .marchantSec {
+
+                flex-direction: column;
+            }
+
+            .checkout-footer {
+                padding: 80px 0px 0px;
+            }
+
+            .col-lg-4 .checkout-main-area {
+                padding: 42px 0px;
+            }
+
+            .col-lg-4 .main-container.checkout-main-area .header-section.mb-4 {
+                top: 12px;
+            }
+
         }
 
-        // Update the fetchMerchantDetails function to be called on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchMerchantDetails();
+        @media (min-width: 1920px) {
+            .checkout-footer:before {
+                transform: skew(0deg, -2deg);
+            }
+        }
+
+
+        ul.nav.nav-pills.mx-auto.payment_method li.nav-item .card-body img {
+            width: auto !important;
+        }
+
+        ul.nav.nav-pills.mx-auto.payment_method li.nav-item .card-body span {
+            font-size: 14px;
+            font-weight: 400;
+            color: #000;
+            padding-left: 20px;
+        }
+
+        .dashboard-area.pt-150.pb-150 .col-lg-8 form.form {
+            top: 86%;
+        }
+
+        .bold {
+            font-weight: bold
+        }
+
+        ul.payment_method {
+            max-height: 460px;
+            overflow: auto;
+        }
+
+        ul.payment_method::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        ul.payment_method::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ul.payment_method::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        ul.payment_method::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+    <!-- breadcrumb area start -->
+    <div class="slider-breadcrumb-area text-center pb-5" style="background:#333333">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <div class="breadcrumb-title">
+                        @if(!empty($merchant_setting))
+                            <a href="{{ url('/') }}" target="_blank">
+                                <img src="{{asset('uploads/addispay-white.png')}}" height="64" alt="">
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('content')
+   
+@section('content')
+    <div class="dashboard-area pt-150 pb-150">
+
+        <div class="container">
+
+            <div class="row mt-5">
+                <div class="col-lg-8 mb-3">
+                    <div class="alert-warning p-3">
+                        <b>Only accepted via 3d secure ecommerce enabled card</b>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="main-container checkout-main-area">
+                        <div class="header-section mb-4" style="position: unset !important">
+                            <h4 style="font-size: 24px; font-weight:600;">Payment info</h4>
+                        </div>
+                        <div class="login-section">
+                            @if ($errors->has('g-recaptcha-response'))
+                                <span class="text-danger">
+                            <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                        </span>
+                            @endif
+                            <div class="card-body">
+                                <div class="marchantSec">
+                                    <div class="leftSec">
+                                        <span style="font-size: 12px; font-weight:400;">Pay to</span>
+                                    </div>
+                                    <div class="rightSec">
+                                        <div class="marchantDetails">
+                                            <span style="font-size: 12px; font-weight:400;">Email</span>
+                                        </div>
+                                        <div class="marchantDetails">
+                                            <span style="font-size: 12px; font-weight:400;">Company Address</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-content" id="myTabContent2">
+                            
+                                    <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}"
+                                         id="getway{{ $gateway->id }}" role="tabpanel"
+                                         aria-labelledby="getway-tab{{ $gateway->id }}">
+                                        <div class="table-responsive payment-gateway-section">
+                                            <table class="table table-checkout">
+                                                <tr>
+                                                    <td><strong>Customer Name</strong></td>
+                                                    <td class="text-right">{{($info->custome_name) ?? null}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Phone Number</strong></td>
+                                                    <td class="text-right">{{($info->custome_phone) ?? null}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>{{ __('Amount') }}</strong></td>
+                                                    <td class="text-right">{{ ($requestData->amount) ?? null }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>{{ __('Currency') }}</strong></td>
+                                                    <td class="text-right">{{ strtoupper($gateways->currency_name) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>{{ __('Total') }}</strong></td>
+                                                    <td class="text-right" id="getAmount{{ $gateway->id }}"
+                                                        data-value="{{ !empty($requestData) ? $requestData->amount : null }}">{{ !empty($requestData) ? $requestData->amount : null }}
+                                                        {{--                                                    <td class="text-right" id="getAmount{{ $gateway->id }}" data-value="{{($requestData->amount + $total_rate)}}">{{ $final_amount = ($requestData->amount + $total_rate) }}--}}
+                                                        {{--                                                        @php--}}
+                                                        {{--                                                            \Illuminate\Support\Facades\Session::put('finalAmount', $final_amount);--}}
+                                                        {{--                                                        @endphp--}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>{{ __('Purpose') }}</strong></td>
+                                                    <td class="text-right">{{ $info->purpose ?? '' }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <form action="{{ route('checkout.payment.view') }}" method="post" class="form"
+                                              enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="form-row">
+                                                <input type="hidden" name="gateway_id" value="{{ $gateway->id }}">
+                                                <input type="hidden" name="request_id" value="{{ $requestData->id }}">
+                                                <input type="hidden" name="user_id" value="{{ $gateways->user_id }}">
+                                                <input type="hidden" name="is_test" value="{{ $requestData->is_test }}">
+                                                <input type="hidden" name="phone_required"
+                                                       value="{{ $gateways->phone_required }}">
+                                                <input type="hidden" name="image_accept"
+                                                       value="{{ $gateway->image_accept }}">
+                                                <input type="hidden" name="phone"
+                                                       value="{{ $info->custome_phone ?? null }}">
+                                                <input type="hidden" name="consumer_id"
+                                                       value="{{$request->consumer_id}}">
+
+                                                {{--@if ($gateways->phone_required == 1)--}}
+
+                                                {{--<table class="table table-checkout">--}}
+                                                {{--<tr>--}}
+                                                {{--<td><strong>{{ __('Phone') }}</strong></td>--}}
+                                                {{--<td class="text-right">--}}
+                                                {{--<input type="text" name="phone"--}}
+                                                {{--class="form-control checkout_control @error('phone') is-invalid @enderror"--}}
+                                                {{--value="{{ $phone ?? old('phone') }}" required>--}}
+                                                {{--@error('phone')--}}
+                                                {{--<span class="invalid-feedback" role="alert">--}}
+                                                {{--<strong class="screenshot-alert">{{ $message }}</strong>--}}
+                                                {{--</span>--}}
+                                                {{--@enderror--}}
+                                                {{--</td>--}}
+                                                {{--</tr>--}}
+                                                {{--</table>--}}
+                                                {{--@endif--}}
+
+                                                @if ($gateway->image_accept == 1)
+                                                    <table class="table table-checkout">
+                                                        <tr>
+                                                            <td><strong>{{ __('Screenshot') }}</strong></td>
+                                                            <td class="">
+                                                                <div class="custom-file">
+                                                                    <input type="file" name="screenshot"
+                                                                           class="form-control @error('screenshot')is-invalid @enderror screenshot"
+                                                                           id="screenshot">
+                                                                    @error('screenshot')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                <strong class="screenshot-alert">{{ $message }}</strong>
+                                                            </span>
+                                                                    @enderror
+                                                                </div>
+
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                @endif
+                                                @if ($gateway->is_auto == 0)
+                                                    <table class="table table-checkout">
+                                                        <tr>
+                                                            <td><strong>{{ __('Comment') }}</strong></td>
+                                                            <td class="">
+                                                                <textarea name="comment"
+                                                                          class="form-control border @error('comment')is-invalid @enderror comment">{{ old('comment') ?? '' }}</textarea>
+
+                                                                @error('comment')
+                                                                <span class="invalid-feedback" role="alert">
+                                                            <strong class="screenshot-alert">{{ $message }}</strong>
+                                                        </span>
+                                                                @enderror
+
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                @endif
+                                                <input type="hidden" name="captcha"
+                                                       value="{{ $plan->captcha == 1 && $requestData->captcha_status == 1 ? 1 : 0 }}">
+
+                                                @if ($plan->captcha == 1 && $requestData->captcha_status == 1 && env('NOCAPTCHA_SITEKEY') && $gateway->is_auto == 0)
+
+                                                    <div class="form-group mb-2 d-flex justify-content-center">
+
+                                                        {!! NoCaptcha::renderJs(Session::get('locale')) !!}
+                                                        {!! NoCaptcha::display() !!}
+                                                    </div>
+
+                                                @endif
+                                                @if ($gateway->is_auto == 0)
+                                                    <tr>
+                                                        <td colspan="2" class="text-left">
+                                                            <strong class="text-danger">
+                                                                @php $info = json_decode($gateways->data) @endphp
+                                                                {{ __('Instruction') }} : {{ $info->instruction }}
+                                                            </strong>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+
+                                            </div>
+
+                                            <div class="login-btn">
+                                                <button type="submit"
+                                                        class="btn btn-primary mt-4 w-100 submitbtn">{{ __('Submit')}}</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="main-container checkout-main-area">
+                        <div class="header-section mb-4 ">
+                            <h5 class="bold">{{ __('How would you like to pay?') }}</h5>
+                        </div>
+
+                        <div class="siderbar">
+                            <div class="totalAmount">
+                                <p>Total Amount</p>
+                                <span id="totalAmounts">Rs. {{ !empty($requestData) ? $requestData->amount : null }}</span>
+                            </div>
+                        </div>
+                        <ul class="nav nav-pills mx-auto payment_method" id="myTab3" role="tablist">
+                            @foreach ($usergetways as $key => $gateways)
+                                @php $gateway =  $gateways->getway @endphp
+                                <li class="nav-item" id="first_id" data-check="{{ $gateway->id }}"
+                                    onclick="changeAmount({{ $gateway->id }})">
+                                    <a class="nav-link {{ $key == 0 ? 'show active' : '' }}"
+                                       id="getway-tab{{ $gateway->id }}" data-toggle="tab" data-bs-toggle="pill"
+                                       href="#getway{{ $gateway->id }}" role="tab" aria-controls="home"
+                                       aria-selected="true">
+                                        <div class="card-body">
+                                            <img src="{{ asset($gateway->logo) }}" alt="{{ $gateway->name }}"
+                                                 width="100">
+                                            <span>{{$gateway->name}}</span>
+                                        </div>
+                                    </a>
+                            @endforeach
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="checkout-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="footerLogo">
+                        <img src="{{asset('uploads/addispay-white.png')}}">
+                        <p>Democratizing payments and providing ease to businesses
+                            to accept payments at multiple channels</p>
+                    </div>
+                    <div class="agent-social-links">
+                        <nav>
+                            <ul>
+                                <li><a href="#"><span class="iconify" data-icon="ri:facebook-fill"
+                                                      data-inline="false"></span></a></li>
+                                <li><a href="#"><span class="iconify" data-icon="ri:twitter-fill"
+                                                      data-inline="false"></span></a></li>
+
+                                <li><a href="#"><span class="iconify" data-icon="ri:instagram-fill"
+                                                      data-inline="false"></span></a></li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="brand-heading">Our Payment Partners</div>
+                    <img height="150" src="{{asset('frontend/assets/img/placeholder-image.jpg')}}">
+                </div>
+                <div class="col-md-4">
+                    <div class="brand-heading">Our Payment Partners</div>
+                    <img height="150" src="{{asset('frontend/assets/img/placeholder-image.jpg')}}">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="copyRight">
+        <div class="bottomLine">
+            <p style="font-size: 16px; font-weight:400; color:#fff;">Copyrights - 2021 www.mytm.com.pk, All Rights
+                Reserved.</p>
+            <p style="font-size: 16px; font-weight:700; color:#fff;">AddisPay POWERED BY MyTM</p>
+        </div>
+    </div>
+
+@endsection
+
+@push('js')
+<script>
+        /*--------------------------------------
+      		Loader
+    	---------------------------------------*/
+
+        var preload = document.getElementById('loading');
+
+        function hideLoader() {
+            preload.style.display = "none";
+        }
+
+        function showLoader() {
+            preload.style.display = "block";
+        }
+
+        /*----------------
+        Form Submit
+      -------------------*/
+        $(document).ready(function () {
+            hideLoader();
         });
 
+        $('.form').on('submit', function () {
+            $('.submitbtn').text('Please wait...');
+            $('.submitbtn').prop('disabled', true);
+            showLoader()
+        });
+    </script>
+    <script>
+        function changeAmount(id) {
+            let total_amount = $("#getAmount" + id).data('value');
+            $("#totalAmounts").html('Rs. ' + total_amount);
+        }
 
-</script>
+        $(document).ready(function () {
+            let id = $("#first_id").data('check');
+            changeAmount(id);
+        })
+    </script>
+@endpush

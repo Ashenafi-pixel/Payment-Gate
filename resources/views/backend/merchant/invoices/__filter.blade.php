@@ -15,7 +15,7 @@
         <span class="material-symbols-outlined">
             add
         </span>
-        {{ __('Add Invoice') }}
+        {{ __('Add I Requests') }}
     </a>
 </div>
 <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="filter">

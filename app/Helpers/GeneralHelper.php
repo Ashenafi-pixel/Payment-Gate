@@ -280,13 +280,13 @@ abstract class GeneralHelper
      */
     public static function RANDOM_NO(int $length = 4): string
     {
-        $randomString = 1234;
-//        $characters = '123456789';
-//        $charactersLength = strlen($characters);
-//        $randomString = '';
-//        for ($i = 0; $i < $length; $i++) {
-//            $randomString .= $characters[rand(0, $charactersLength - 1)];
-//        }
+        
+     $characters = '123456789';
+     $charactersLength = strlen($characters);
+     $randomString = '';
+     for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
         return $randomString;
     }
 
