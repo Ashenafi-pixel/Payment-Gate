@@ -787,6 +787,7 @@ class ComposerStaticInitc0deb89efa997eba053459b4079eb31f
         'App\\Http\\Controllers\\Merchant\\StudentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/StudentController.php',
         'App\\Http\\Controllers\\Merchant\\TransactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/TransactionController.php',
         'App\\Http\\Controllers\\RefundRequestController' => __DIR__ . '/../..' . '/app/Http/Controllers/RefundRequestController.php',
+        'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Controllers\\Web\\InvoiceController' => __DIR__ . '/../..' . '/app/Http/Controllers/Web/InvoiceController.php',
         'App\\Http\\Controllers\\Web\\TransactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Web/TransactionController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',

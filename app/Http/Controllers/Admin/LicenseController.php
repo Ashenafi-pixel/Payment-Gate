@@ -40,7 +40,7 @@ class LicenseController extends Controller
     {
 
         //$encodedData = $request->input('encodedData');
-        $encodedData = urlencode($request->input('encodedData'));
+        $encodedData = urlencode(urlencode($request->input('encodedData')));
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',

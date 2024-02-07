@@ -29,7 +29,7 @@
                 <div class="collapse {{ Request::is('admin/merchant*') ? 'show' : '' }}" id="merchant">
                     <ul class="nav inner-menu">
                         <li>
-                            <a href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.display') }}"
+                            <a href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.merchant.display') }}"
                                 class="{{ Request::is('admin/merchants') ? 'active' : '' }}">{{ __('All Merchant') }}</a>
                         </li>
                         <li>
@@ -124,6 +124,14 @@
                     href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.transactions.index') }}">
                     <img width='18' src="{{ asset('images/icons/ledger.svg') }}" alt="">
                     <span>{{ __('Ledgers') }}</span>
+                </a>
+            </li>
+        @endrole
+        @role(\App\Helpers\IUserRole::MERCHANT_ROLE)
+            <li class="nav-item">
+                <a class="nav-link s-links" href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.display.keys') }}">
+                    <img width='18' src="{{ asset('images/icons/ledger.svg') }}" alt="">
+                    <span>{{ __('Keys') }}</span>
                 </a>
             </li>
         @endrole

@@ -12,7 +12,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Merchant\ProfileController;
 use App\Http\Controllers\Merchant\DashboardController;
 use App\Http\Controllers\Merchant\MerchantController;
+use App\Http\Controllers\Merchant\GenerateKeyController;
+Route::get('/display-keys', [GenerateKeyController::class, 'displayKeys'])->name(IUserRole::MERCHANT_ROLE.'.display.keys');
+Route::post('/generate-new-keys', [GenerateKeyController::class, 'generateNewKeys'])->name(IUserRole::MERCHANT_ROLE.'.generate.new.keys');
 Route::get('/merchant/link-bank', [MerchantController::class, 'showLinkBankForm'])->name(IUserRole::MERCHANT_ROLE.'merchant.showLinkBankForm');
+Route::get('/merchant/generate-key', [MerchantController::class, 'generateKey'])->name(IUserRole::MERCHANT_ROLE.'.merchant.generateKey');
 Route::get('/merchant/show-bank', [MerchantController::class, 'merchantBank'])->name(IUserRole::MERCHANT_ROLE.'merchant.bank');
 Route::post('/merchant/link-bank', [MerchantController::class, 'linkBank'])->name(IUserRole::MERCHANT_ROLE.'merchant.linkBank');
 # Merchant Dashboard Routes
