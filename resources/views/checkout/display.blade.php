@@ -211,15 +211,7 @@
 </head>
 
 <body>
-    <!-- <h1>
-         Received Data:</h1> -->
-    <!-- @if ($latestReceivedData)
-        <p>Name: </p>
-        <p>Amount:</p>
-    @else
-        <p>No data received yet.</p>
-    @endif -->
-
+    
 
 
 
@@ -241,12 +233,12 @@
     <div class="label">Merchant:</div>
     <div class="merchant-info">
         <img src="{{ asset('images/logo3.jpg') }}" alt="Merchant Logo" class="merchant-logo">
-        <p>{{ json_decode($latestReceivedData->data)->name }}</p>
+        <p>{{   $receivedData->name }}</p>
     </div>
 </div>
         <div class="data-row">
             <div class="label">Amount To Pay:</div>
-            <p class="amoutToPay"> ${{ json_decode($latestReceivedData->data)->amount }}</p>
+            <p class="amoutToPay"> ${{ $receivedData->amount }}</p>
         </div>
     </div>
 

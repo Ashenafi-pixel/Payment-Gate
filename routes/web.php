@@ -88,7 +88,9 @@ Route::post('/form', [Controllers\Auth\LockScreenController::class, 'handleForm'
 // Route::get('/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
 
 // Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
-Route::get('/display', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
+// Route::get('/display', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
+Route::get('/display/{tx_ref}', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
+
 
 
 Route::post('userss',[Userss::class,'userLogins']);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\IUserRole;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\BanksController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\DocumentController;
@@ -44,7 +45,7 @@ Route::post('merchant-edit/{merchant_id}', [MerchantController::class, 'updateMe
 Route::get('merchant-delete/{merchant_id}', [MerchantController::class, 'deleteMerchant'])->name('merchant.delete');
 
 
-Route::get('getall', [MerchantController::class, 'display'])->name('display');
+Route::get('admin/getall', [MerchantController::class, 'display'])->name('display');
 # Customer Module
 Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::get('customers/create-customer', [CustomerController::class, 'create'])->name('customers.create');

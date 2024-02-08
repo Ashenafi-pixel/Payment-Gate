@@ -144,7 +144,7 @@
         }
 
         ul#myTab3 li:last-child a {
-            /* border-radius: 0px 0px 12px 12px; */
+            border-radius: 0px 0px 12px 12px;
         }
 
         ul#myTab3 {
