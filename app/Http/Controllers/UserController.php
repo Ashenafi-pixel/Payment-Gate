@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\MerchantDetail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function registerUser(Request $request)
@@ -44,11 +46,14 @@ class UserController extends Controller
             'username' => $userData['username'], // Make sure username is included
             'email' => $userData['email'],
             'mobile_number' => $userData['mobile_number'],
-            'password' => bcrypt($userData['password']),
+            'password' => Hash::make($userData['password']),
 
             // Add other user fields as needed
         ]);
-
+        DB::table('model_has_roles')->insert([
+            'role_id'=>'2',
+            'model_type'=>'App\Models\User',
+            'model_id'=>$user->id]);
         // Create merchant details
         MerchantDetail::create([
             'user_id' => $user->id,

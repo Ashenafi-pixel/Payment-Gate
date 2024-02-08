@@ -37,7 +37,7 @@ class UserService implements IUserServiceContract
     private RoleService $_roleService;
 
     /**
-     * @param UserRepo $_userRepo
+     * @param UserRepo 
      */
     public function __construct(UserRepo $_userRepo,RoleService $_roleService)
     {

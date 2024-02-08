@@ -1,4 +1,15 @@
 <div class="tab-pane animated zoomIn active" id="upload-document">
+    @if (Session::has('success'))
+        <div id="successMessage" class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+
+        <script>
+            setTimeout(function() {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000); // 5000 milliseconds = 5 seconds
+        </script>
+    @endif
     {!! Form::model(null, [
         'url' => route(\App\Helpers\GeneralHelper::WHO_AM_I() . '.store.approval.documents'),
         'class' => 'ajax',

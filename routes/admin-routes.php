@@ -45,7 +45,7 @@ Route::post('merchant-edit/{merchant_id}', [MerchantController::class, 'updateMe
 Route::get('merchant-delete/{merchant_id}', [MerchantController::class, 'deleteMerchant'])->name('merchant.delete');
 
 
-Route::get('admin/getall', [MerchantController::class, 'display'])->name('display');
+Route::get('getall', [MerchantController::class, 'display'])->name('merchant.display');
 # Customer Module
 Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::get('customers/create-customer', [CustomerController::class, 'create'])->name('customers.create');

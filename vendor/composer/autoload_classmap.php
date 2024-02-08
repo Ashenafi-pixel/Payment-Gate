@@ -84,7 +84,6 @@ return array(
     'App\\Http\\Controllers\\Merchant\\TransactionController' => $baseDir . '/app/Http/Controllers/Merchant/TransactionController.php',
     'App\\Http\\Controllers\\RefundRequestController' => $baseDir . '/app/Http/Controllers/RefundRequestController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
-    'App\\Http\\Controllers\\Userss' => $baseDir . '/app/Http/Controllers/Userss.php',
     'App\\Http\\Controllers\\Web\\InvoiceController' => $baseDir . '/app/Http/Controllers/Web/InvoiceController.php',
     'App\\Http\\Controllers\\Web\\TransactionController' => $baseDir . '/app/Http/Controllers/Web/TransactionController.php',
     'App\\Http\\Controllers\\users' => $baseDir . '/app/Http/Controllers/users.php',
