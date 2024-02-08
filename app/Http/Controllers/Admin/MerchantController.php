@@ -66,15 +66,18 @@ class MerchantController extends Controller
         return view(self::CREATE_ADMIN_MERCHANT);
     }
     public function display(){
+
         $users =  User::join('merchant_details', 'users.id', '=', 'merchant_details.user_id')
-        ->select('users.id', 'users.name', 'users.email', 'users.status as user_status', 'merchant_details.company_name', 'merchant_details.company_phone as merchant_phone', 'merchant_details.status as merchant_status', 'merchant_details.passport', 'merchant_details.license', 'merchant_details.license_number')
-        ->get();
-
-return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
+       ->select('users.id', 'users.name', 'users.email', 'users.status as user_status', 'merchant_details.company_name', 'merchant_details.company_phone as merchant_phone', 'merchant_details.status as merchant_status', 'merchant_details.passport', 'merchant_details.license', 'merchant_details.license_number')
+       ->get();
 
 
-       // $records=MerchantDetail::all();
-        //return view(self::ALL_ADMIN_MERCHANTS, compact('records'));
+//return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
+
+
+       //$users=MerchantDetail::all();
+
+        return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
 
     }
 
@@ -89,15 +92,15 @@ return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
         if ($request->hasFile('license')) {
             $license = $request->file('license');
             $licenseName = date('YmdHi') . $license->getClientOriginalName();
-            $license->move(public_path('image'), $licenseName);
-            $merchantData['license'] = 'image/' . $licenseName; // Update the path in the $merchantData array
+            $license->move(public_path('images'), $licenseName);
+            $merchantData['license'] = 'images/' . $licenseName; // Update the path in the $merchantData array
         }
 
         if ($request->hasFile('passport')) {
             $passport = $request->file('passport');
             $passportName = date('YmdHi') . $passport->getClientOriginalName();
-            $passport->move(public_path('image'), $passportName);
-            $merchantData['passport'] = 'image/' . $passportName; // Update the path in the $merchantData array
+            $passport->move(public_path('images'), $passportName);
+            $merchantData['passport'] = 'images/' . $passportName; // Update the path in the $merchantData array
         }
 
         $merchant = $this->_userService->merchantStore($merchantData);

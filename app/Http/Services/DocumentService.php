@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Services;
-
+use Illuminate\Support\Facades\Session;
 use App\Helpers\IUserRole;
 use App\Helpers\IUserStatuses;
 use App\Http\Repositories\MerchantDetailRepo;
@@ -61,26 +61,27 @@ class DocumentService implements IDocumentServiceContract
     if ($request->hasFile('cnic')) {
         $passportFile = $request->file('cnic');
         $passportFileName = date('YmdHis') . '_' . $user_id . '_' . $passportFile->getClientOriginalName();
-        $passportFile->move(public_path('image'), $passportFileName);
+        $passportFile->move(public_path('images'), $passportFileName);
 
         // Update the 'passport' column in the 'merchant_details' table
-        $merchantDetai->passport = 'image/' . $passportFileName;
+        $merchantDetai->passport = 'images/' . $passportFileName;
     }
 
     if ($request->hasFile('license')) {
         $licenseFile = $request->file('license');
         $licenseFileName = date('YmdHis') . '_' . $user_id . '_' . $licenseFile->getClientOriginalName();
-        $licenseFile->move(public_path('image'), $licenseFileName);
+        $licenseFile->move(public_path('images'), $licenseFileName);
 
         // Update the 'license' column in the 'merchant_details' table
-        $merchantDetai->license = 'image/' . $licenseFileName;
+        $merchantDetai->license = 'images/' . $licenseFileName;
         $merchantDetai->license_number=$request->input('license_no');
     }
 
     // Save the updated record
     $merchantDetai->save();
         # unlink document if exist
-        $documents = !empty(json_decode($merchant->merchantDetail->document_details)) ? json_decode($merchant->merchantDetail->document_details) : null;
+
+        /*$documents = !empty(json_decode($merchant->merchantDetail->document_details)) ? json_decode($merchant->merchantDetail->document_details) : null;
         if (!empty($documents)) {
             $oldCnic = $documents->cnic_doc ?? null;
             $unlinkTrueCnic = isset($oldCnic) ?? false;
@@ -114,7 +115,9 @@ class DocumentService implements IDocumentServiceContract
         # update merchant details
         return $merchant->merchantDetail()->update([
             'document_details' => json_encode($merchantDocument),
-        ]);
+        ]);*/
+        Session::flash('success','Document Uploaded successfully! You Can change any time you want!!');
+             return redirect()->back();
     }
 
     /**

@@ -160,6 +160,19 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            {!! Form::label('license_number', __('License Number:'), ['class' => 'form-label input-label']) !!}
+                                            {!! Form::text('license_number', null, [
+                                                'class' => 'form-control form-control-lg',
+                                                'id' => 'company_address',
+                                                'placeholder' => 'Enter License Number',
+                                            ]) !!}
+                                            @error('license_number')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             {!! Form::label('Passport or ID', __('Passport or ID:'), ['class' => 'form-label input-label']) !!}

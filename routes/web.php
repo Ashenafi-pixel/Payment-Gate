@@ -19,7 +19,9 @@ use App\Http\Controllers\Auth\UserVerifyController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Http\Controllers\UserController;
 
+Route::post('/mPOSUser', [UserController::class, 'registerUser']);
 Route::get('/', function () {
     return view('frontend.index');
 })->name('home');
