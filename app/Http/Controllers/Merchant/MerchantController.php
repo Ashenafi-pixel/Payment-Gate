@@ -53,7 +53,7 @@ class MerchantController extends Controller
 
             return view('backend.merchant.banks.bank_list', compact('banks'));
         } catch (\Exception $e) {
-            \Log::error('Unexpected error in merchantBank method: ' . $e->getMessage());
+            Log::error('Unexpected error in merchantBank method: ' . $e->getMessage());
             dd($e); // Dump the exception details for debugging
             return view('backend.merchant.banks.bank_list')->with('error', 'An unexpected error occurred.');
         }

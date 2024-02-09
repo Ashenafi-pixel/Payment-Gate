@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receiver - Display</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -344,8 +346,24 @@
         </div>
     </div>
 </div>
+@php
+    $url = url()->current();
+    $params = explode('/', $url);
+    $ref1 = end($params);
+    @endphp
+    <form id="payment_forms" method="post" action="{{ route('bankstatus.payment') }}">
+    @csrf
+    <input type="hidden" name="ref1" value="{{ $ref1 }}">
 
-        <form action="/process-payment" method="post">
+    <button type="submit" id="pay_buttons" >Pays </button>
+
+    </form>
+
+        <!-- <form action="{{ route('bankstatus.payment') }}" method="post"> -->
+        <form id="payment_form" method="post" action="{{ route('bankstatus.payment') }}">
+
+        <!-- <form id="payment_form" method="post"> -->
+
         @csrf
 
         <div class="phone-number" id="phone_number" style="display: none;">
@@ -396,7 +414,9 @@
 
         
 
-        <button type="submit" id="pay_button" disabled>Pay </button>
+        <!-- <button type="submit" id="pay_button" >Pay </button> -->
+        <button type="button" id="pay_button" onclick="handlePaymentSubmission()">Pay</button>
+
 
         <div class="cancel-transaction" onclick="showConfirmationCard()">
             <i class="fa fa-times">x</i>
@@ -419,6 +439,30 @@
     var selectedBankItem = null;
     var selectedPaymentMethod = null;
 
+    function handlePaymentSubmission() {
+    // Extract the data to be sent
+    const phoneNumber = document.getElementById('phone_number').value;
+
+    // Construct the data object to be sent in the POST request
+    const postData = {
+        phone_number: phoneNumber,
+        selected_bank: selectedBankItem.querySelector('label').innerText,
+        // Add more data as needed
+    };
+
+    // Send the POST request using Axios to your Laravel backend route
+    axios.post('{{ route("bankstatus.payment") }}', postData)
+        .then(response => {
+            // Handle the response here if needed
+            console.log('Response from server:', response.data);
+            // Redirect or perform further actions as needed
+        })
+        .catch(error => {
+            // Handle errors here if the POST request fails
+            console.error('Error sending payment details:', error);
+        });
+}
+
     function toggleSection(sectionId) {
         console.log(sectionId);
     
@@ -426,6 +470,14 @@
     var sectionIcon = document.getElementById(`${sectionId}Icon`);
     
     console.log(sectionIcon);
+    // Attach an event listener to the "Pay" button to handle form submission
+    // document.getElementById('pay_button').addEventListener('click', function(event) {
+    //     // Prevent the default form submission behavior
+    //     event.preventDefault();
+
+    //     // Call the function to handle payment submission
+    //     handlePaymentSubmission();
+    // });
 
     function validateCardInput(input) {
     var cardNumber = document.getElementById('card_number').value;
@@ -636,7 +688,16 @@ function updateValidationIcon(validationIcon, isValid) {
     }
 
     function cancelTransaction() {
-        // Implement cancellation logic or redirect as needed
+        var currentUrl = window.location.href;
+
+// Split the URL by '/' and get the last part
+var urlEnd = currentUrl.split('/').pop();
+
+// Redirect to the data.abort route with the URL end as a parameter
+window.location.href = '{{ route("data.abort") }}' + '?urlEnd=' + urlEnd;
+
+// Hide the confirmation card
+
         hideConfirmationCard();
     }
     function fetchMerchantDetails() {

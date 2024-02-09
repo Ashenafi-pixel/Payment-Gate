@@ -5,14 +5,32 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ReceivedData; // You can remove this import if not used
+use App\Models\User; // You can remove this import if not used
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+
 
 
 class FormDataController extends Controller
 {
      
-    public function display($tx_ref)
+    public function display(Request $request, $tx_ref)
     {
+        if ($request->isMethod('post')) {
+            // Handle POST request logic here
+            $banks = [
+                ['icon'=> 'https://example.com/bank1.png', 'name' => 'Bank A', 'type' => 'credit_card'],
+                ['icon'=> 'https://example.com/bank2.png', 'name' => 'Bank B', 'type' => 'credit_card'],
+                ['icon'=> 'https://example.com/bank3.png', 'name' => 'Bank C', 'type' => 'bank_transfer'],
+                // Add more banks as needed
+            ];
+    
+            // Retrieve the data based on tx_ref
+            $receivedData  = ReceivedData::where('tx_ref', $tx_ref)->first();
+    
+            return view('checkout.display', compact('receivedData','banks'));
+        } else {
+            // Handle GET request logic here
         $banks = [
             ['icon'=> 'https://example.com/bank1.png', 'name' => 'Bank A', 'type' => 'credit_card'],
             ['icon'=> 'https://example.com/bank2.png', 'name' => 'Bank B', 'type' => 'credit_card'],
@@ -24,15 +42,46 @@ class FormDataController extends Controller
         $receivedData  = ReceivedData::where('tx_ref', $tx_ref)->first();
 
         return view('checkout.display', compact('receivedData','banks'));
+    }
+
 
     }
 
     public function receiveData(Request $request)
-{
-    // Retrieve data from the request
-    $data = $request->input('data');
+    {
+        // Retrieve data from the request
+        $data = $request->input('data');
+        $key = $request->input('key');
+    
+        // Check if the key exists
+        $accepted = User::where('api_token', $key)->first();
+    
+        if (!$accepted) {
+            return response()->json(['status' => 'Merchant not found. Please use a valid key.'], 400);
+        }
+    
+        // Validate the data format
+        if (!isset($data['name']) || !isset($data['amount']) || !isset($data['email']) || 
+            !isset($data['tx_ref']) || !isset($data['currency']) || !isset($data['first_name']) || 
+            !isset($data['last_name']) || !isset($data['order_detail'])) {
+            return response()->json(['status' => 'Invalid data format. Please provide all required fields.'], 400);
+        }
+    
+        // Validate amount format and value
+    if (!is_numeric($data['amount']) || $data['amount'] > 10000) {
+        return response()->json(['status' => 'Invalid amount. Amount must be a number not greater than 10000.'], 400);
+    }
 
-    if ($data) {
+    // Validate email format
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        return response()->json(['status' => 'Invalid email format. Please provide a valid email address.'], 400);
+    }
+        // Check for unique tx_ref
+        $existingData = ReceivedData::where('tx_ref', $data['tx_ref'])->first();
+        if ($existingData) {
+            return response()->json(['status' => 'Duplicate tx_ref. Please use a unique reference.'], 400);
+        }
+    
         // Create a new instance of the model and store the data
         $receivedData = ReceivedData::create([
             'name' => $data['name'],
@@ -49,9 +98,76 @@ class FormDataController extends Controller
         // Return a JSON response indicating the result
         return response()->json(['status' => 'Data received successfully', 'data' => $receivedData]);
     }
-    
-    return response()->json(['status' => 'Failed to receive data'], 400);
-}
 
+   
+
+    public function handleStatusUpdateFromBank(Request $request)
+    {
+        $tex_ref = $request->input('ref1');
+        // Log::info('User logged in.', $tex_ref);
+
+
+        // Example: Handle the incoming status update from the bank
+        $statusFromBank = $request->status; // Assuming the status is sent by the bank
+        // $txref = ReceivedData::where('tx_ref', $data['tx_ref'])->first();
+        $finalStatus = [
+            // 'status' => 'successfull 200',
+            "cartId"=> $tex_ref,
+            "respStatus"=>"Done",
+        ];
+        // Process the status and update the payment record in your application
+        // Your logic to update the payment record based on the status
+
+        // Forward the status to the merchant website
+        $merchantApiUrl = 'http://192.168.100.7:8069/payment/AddisPay/return';
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
+        
+        $merchantApiResponse = Http::withHeaders($headers)->post($merchantApiUrl,$finalStatus);
+
+        // Process the response from the merchant website if needed
+        // return $merchantApiResponse;
+
+        // You can process the response if needed
+
+        // return $response;
+    return redirect('http://192.168.100.7:8069/shop/confirmation')->with('response', $merchantApiResponse->json());
+
+    }
+
+
+    public function forwardStatusToMerchant($statusFromBank)
+    {
+        // Example: Forward the status to the merchant website via API
+        // You can use HTTP client or any library to make the API call
+        
+        // Example: Forwarding the status via HTTP client
+        $merchantApiUrl = 'http://192.168.100.7:8069/payment/AddisPay/return';
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
+        
+        $merchantApiResponse = Http::withHeaders($headers)->post($merchantApiUrl, [
+            'status' => $statusFromBank, // Forwarding the status received from the bank
+            // You can forward any other relevant data
+        ]);
+
+        // Process the response from the merchant website if needed
+        // return $merchantApiResponse;
+return redirect('http://192.168.100.7:8069/shop/confirmation')->with('response', $merchantApiResponse->json());
+
+    }
+
+    function abortTransaction(Request $request){
+        $tex_ref = $request->input('urlEnd');
+        ReceivedData::where('tx_ref', $tex_ref)->delete();
+// 
+        
+    return redirect('http://192.168.100.7:8069/shop')->with('response', "transaction aborted");
+
+
+    }
+    
 
 }

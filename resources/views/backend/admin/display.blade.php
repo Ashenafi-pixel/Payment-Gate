@@ -32,9 +32,6 @@
                     No Date Registered available
                 @endif
             </td>
-            <td>{{ $data }}</td>
-            <td>{{ $data }}</td>
-            <td>{{ $data }}</td>
 
             <!-- Access other data array elements in the same way -->
         </tr>

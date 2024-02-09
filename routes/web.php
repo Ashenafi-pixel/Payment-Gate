@@ -89,7 +89,14 @@ Route::post('/form', [Controllers\Auth\LockScreenController::class, 'handleForm'
 
 // Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
 // Route::get('/display', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
-Route::get('/display/{tx_ref}', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
+// Route::post('/abort', [FormDataController::class, 'abortTransaction'])->name('data.abort')->withoutMiddleware(['auth']);
+Route::match(['get', 'post'], '/abort', [FormDataController::class, 'abortTransaction'])->name('data.abort')->withoutMiddleware(['auth']);
+
+Route::match(['get', 'post'], '/display/{tx_ref}', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
+Route::post('/bankstatus', [FormDataController::class, 'handleStatusUpdateFromBank'])->name('bankstatus.payment')->withoutMiddleware(['auth']);
+// Route::post('/merchantstatus', [FormDataController::class, 'forwardStatusToMerchant'])->name('merchantstatus.update');
+
+
 
 
 

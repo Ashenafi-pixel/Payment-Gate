@@ -23,9 +23,10 @@ class GenerateKeyController extends Controller
 {
     // Get the logged-in user's ID (you might have your own way to get the user ID)
     $userId = auth()->id();
+    // //
 
     // Request new keys from Go API
-    $response = Http::get("http://192.168.100.84:8080/generate-keys/{$userId}");
+    $response = Http::get("http://192.168.100.35:4051/generate-keys/{$userId}");
 
     if ($response->successful()) {
         return back()->with('success', 'New keys generated successfully.');
