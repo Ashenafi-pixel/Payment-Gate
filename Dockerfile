@@ -46,6 +46,8 @@ RUN chown -R www-data:www-data /var/www/html/public/uploads/qrcodes   # Add this
 
 # Set the correct permissions for the public directory
 RUN chmod -R 755 /var/www/html/public
+RUN chown -R www-data:www-data /var/www/html/public/public/images
+RUN chmod -R 755 /var/www/html/public/public/images
 RUN php artisan config:clear
 RUN php artisan route:clear
 RUN php artisan view:clear
