@@ -11,7 +11,8 @@ RUN apt-get update && \
     unzip \
     npm \
     nodejs \
-    libpng-dev
+    libpng-dev \
+    git
 
 # Install additional PHP extensions
 RUN docker-php-ext-install zip pdo pdo_mysql gd
