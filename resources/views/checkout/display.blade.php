@@ -7,6 +7,8 @@
     <title>Receiver - Display</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+
     <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -220,27 +222,27 @@
 
     <div class="checkout-container">
         <div class="company-info">
-            <img src="{{ asset('Images/logo2.png') }}" alt="Company Logo" style="max-width: 200px;height:100px; width:200px;  max-height: 200px;">
+            <img src="{{ asset('Images/addispay-logo.png') }}" alt="Company Logo" style="max-width: 200px;height:100px; width:200px;  max-height: 200px;">
             <!-- <img src="{{ asset('images/company_logo.png') }}" alt="Company Logo" style="max-width: 100px; max-height: 100px;"> -->
             
             <!-- <h3>Addis Pay</h3> -->
         </div>
         <h2>Checkout Page</h2>
-        @if (session('response'))
+        <!-- @if (session('response'))
         <h3>Response from Receiver:</h3>
         <pre>{{ json_encode(session('response'), JSON_PRETTY_PRINT) }}</pre>
-    @endif
+    @endif -->
     <div class="container">
     <div class="data-row">
     <div class="label">Merchant:</div>
     <div class="merchant-info">
-        <img src="{{ asset('images/logo3.jpg') }}" alt="Merchant Logo" class="merchant-logo">
-        <p>{{   $receivedData->name }}</p>
+        <img src="{{ asset('Images/logo3.jpg') }}" alt="Merchant Logo" class="merchant-logo">
+        <p>{{$receivedData->merchant_name }}</p>
     </div>
 </div>
         <div class="data-row">
             <div class="label">Amount To Pay:</div>
-            <p class="amoutToPay"> ${{ $receivedData->amount }}</p>
+            <p class="amoutToPay"> {{$receivedData->amount }}</p>
         </div>
     </div>
 
@@ -279,14 +281,12 @@
             </div>
         </div>
 
-        <div class="expandable-section" id="banksSection">
+        <!-- <div class="expandable-section" id="banksSection">
             <div class="expandable-header" onclick="toggleSection('banksContent')">
                 <span>Banks</span>
                 <i id="banksContentIcon" class="fa fa-plus"></i>
             </div>
             <div class="expandable-content" id="banksContent">
-                <!-- Add Banks list similar to existing Banks -->
-                <!-- Example: -->
                 <div class="bank-list">
                 <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="bank">
                     <img style="height: 60px; width:60px; margin-bottom: 5px;" src="bank_icon.png" alt="Bank" class="bank-icon"><br>
@@ -299,7 +299,7 @@
                 </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="expandable-section" id="internationalPaymentsSection">
             <div class="expandable-header" onclick="toggleSection('internationalPaymentsContent')">
@@ -312,15 +312,21 @@
                 <div class="bank-list">
 
                 <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="international">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="paypal_icon.png" alt="PayPal" class="bank-icon"><br>
+                    <!-- <img style="height: 60px; width:60px; margin-bottom: 5px;" src="paypal_icon.png" alt="PayPal" class="bank-icon"><br> -->
+                    <img src="{{ asset('Images/paypal_new_logo.png') }}" alt="Company Logo" style="height: 60px; width:60px; margin-bottom: 5px;">
+
                     <label for="paypal">PayPal</label>
                 </div>
                 <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="international">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="payoneer_icon.png" alt="Payoneer" class="bank-icon"><br>
+                    <!-- <img style="height: 60px; width:60px; margin-bottom: 5px;" src="payoneer_icon.png" alt="Payoneer" class="bank-icon"><br> -->
+                    <img src="{{ asset('Images/Payoneer.png') }}" alt="Company Logo" style="height: 60px; width:60px; margin-bottom: 5px;">
+
                     <label for="payoneer">Payoneer</label>
                 </div>
                 <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="international">
-                    <img style="height: 60px; width:60px; margin-bottom: 5px;" src="wise_icon.png" alt="Wise" class="bank-icon"><br>
+                    <!-- <img style="height: 60px; width:60px; margin-bottom: 5px;" src="wise_icon.png" alt="Wise" class="bank-icon"><br> -->
+                    <img src="{{ asset('Images/wise.webp') }}" alt="Company Logo" style="height: 60px; width:60px; margin-bottom: 5px;">
+
                     <label for="wise">Wise</label>
                 </div>
                 </div>
@@ -336,7 +342,9 @@
         <!-- Example: -->
         <div class="bank-list">
             <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="credit_card">
-                <img style="height: 60px; width:60px; margin-bottom: 5px;" src="credit_card_icon.png" alt="Credit Card" class="bank-icon"><br>
+                <!-- <img style="height: 60px; width:60px; margin-bottom: 5px;" src="credit_card_icon.png" alt="Credit Card" class="bank-icon"><br> -->
+                <img src="{{ asset('Images/visa.png') }}" alt="Company Logo" style="height: 60px; width:60px; margin-bottom: 5px;">
+
                 <label for="credit_card">Credit Card</label>
             </div>
             <div class="bank-item" onclick="handlePaymentSelection(this)" data-method="other_cards">
@@ -355,7 +363,26 @@
     @csrf
     <input type="hidden" name="ref1" value="{{ $ref1 }}">
 
-    <button type="submit" id="pay_buttons" >Pays </button>
+    <button type="submit" id="pay_button" >Pays </button>
+
+
+    </form>
+
+        <!-- <form action="{{ route('bankstatus.payment') }}" method="post"> -->
+        <form id="payment_form" method="post" action="{{ route('bankstatus.payment') }}">
+
+        <!-- <form id="payment_form" method="post"> -->
+
+@php
+    $url = url()->current();
+    $params = explode('/', $url);
+    $ref1 = end($params);
+    @endphp
+    <form id="payment_forms" method="post" action="{{ route('bankstatus.payment') }}">
+    @csrf
+    <input type="hidden" name="ref1" value="{{ $ref1 }}">
+
+    <!-- <button type="submit" id="pay_buttons" >Pays </button> -->
 
     </form>
 
@@ -415,7 +442,7 @@
         
 
         <!-- <button type="submit" id="pay_button" >Pay </button> -->
-        <button type="button" id="pay_button" onclick="handlePaymentSubmission()">Pay</button>
+        <!-- <button type="button" id="pay_buttons" onclick="handlePaymentSubmission()">Pay</button> -->
 
 
         <div class="cancel-transaction" onclick="showConfirmationCard()">
@@ -463,6 +490,30 @@
         });
 }
 
+    function handlePaymentSubmission() {
+    // Extract the data to be sent
+    const phoneNumber = document.getElementById('phone_number').value;
+
+    // Construct the data object to be sent in the POST request
+    const postData = {
+        phone_number: phoneNumber,
+        selected_bank: selectedBankItem.querySelector('label').innerText,
+        // Add more data as needed
+    };
+
+    // Send the POST request using Axios to your Laravel backend route
+    axios.post('{{ route("bankstatus.payment") }}', postData)
+        .then(response => {
+            // Handle the response here if needed
+            console.log('Response from server:', response.data);
+            // Redirect or perform further actions as needed
+        })
+        .catch(error => {
+            // Handle errors here if the POST request fails
+            console.error('Error sending payment details:', error);
+        });
+}
+
     function toggleSection(sectionId) {
         console.log(sectionId);
     
@@ -470,6 +521,14 @@
     var sectionIcon = document.getElementById(`${sectionId}Icon`);
     
     console.log(sectionIcon);
+    // Attach an event listener to the "Pay" button to handle form submission
+    // document.getElementById('pay_button').addEventListener('click', function(event) {
+    //     // Prevent the default form submission behavior
+    //     event.preventDefault();
+
+    //     // Call the function to handle payment submission
+    //     handlePaymentSubmission();
+    // });
     // Attach an event listener to the "Pay" button to handle form submission
     // document.getElementById('pay_button').addEventListener('click', function(event) {
     //     // Prevent the default form submission behavior
@@ -688,6 +747,16 @@ function updateValidationIcon(validationIcon, isValid) {
     }
 
     function cancelTransaction() {
+        var currentUrl = window.location.href;
+
+// Split the URL by '/' and get the last part
+var urlEnd = currentUrl.split('/').pop();
+
+// Redirect to the data.abort route with the URL end as a parameter
+window.location.href = '{{ route("data.abort") }}' + '?urlEnd=' + urlEnd;
+
+// Hide the confirmation card
+
         var currentUrl = window.location.href;
 
 // Split the URL by '/' and get the last part
