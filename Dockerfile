@@ -9,8 +9,10 @@ RUN apt-get update && \
     apt-get install -y \
     libzip-dev \
     unzip \
-    libpng-dev \
-    git
+    npm \
+    git \
+    nodejs \
+    libpng-dev
 
 # Install additional PHP extensions
 RUN docker-php-ext-install zip pdo pdo_mysql gd
@@ -31,7 +33,6 @@ RUN composer install
 # Generate application key and run migrations
 RUN php artisan key:generate
 RUN php artisan optimize
-RUN php artisan migrate
 
 # Install Node.js dependencies
 RUN npm install
