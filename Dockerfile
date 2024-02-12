@@ -9,8 +9,6 @@ RUN apt-get update && \
     apt-get install -y \
     libzip-dev \
     unzip \
-    npm \
-    nodejs \
     libpng-dev \
     git
 
