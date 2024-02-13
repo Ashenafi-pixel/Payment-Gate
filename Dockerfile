@@ -10,6 +10,7 @@ RUN apt-get update && \
     libzip-dev \
     unzip \
     npm \
+    git \
     nodejs \
     libpng-dev
 
@@ -32,7 +33,6 @@ RUN composer install
 # Generate application key and run migrations
 RUN php artisan key:generate
 RUN php artisan optimize
-RUN php artisan migrate
 
 # Install Node.js dependencies
 RUN npm install
