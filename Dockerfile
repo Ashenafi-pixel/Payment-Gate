@@ -12,7 +12,9 @@ RUN apt-get update && \
     npm \
     git \
     nodejs \
-    libpng-dev
+    libpng-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install additional PHP extensions
 RUN docker-php-ext-install zip pdo pdo_mysql gd
@@ -31,32 +33,27 @@ COPY . .
 RUN composer install
 
 # Generate application key and run migrations
-RUN php artisan key:generate
-RUN php artisan optimize
+RUN php artisan key:generate && \
+    php artisan optimize && \
+    php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan cache:clear
 
-# Install Node.js dependencies
-RUN npm install
+# Install Node.js dependencies and build frontend assets for production
+RUN npm install && npm run production
 
-# Build frontend assets for production
-RUN npm run production
-
-# Change ownership of storage and cache directories
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/public/uploads/qrcodes   # Add this line to modify ownership
+# Change ownership and permissions
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html/public && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads/qrcodes && \
+    chmod -R 755 /var/www/html/public/public/images
 
 # Set the correct permissions for the public directory
-RUN chmod -R 755 /var/www/html/public
 RUN chown -R www-data:www-data /var/www/html/public/public/images
-RUN chmod -R 755 /var/www/html/public/public/images
-RUN php artisan config:clear
-RUN php artisan route:clear
-RUN php artisan view:clear
-RUN php artisan cache:clear
 
 # Expose port 80
 EXPOSE 80
-
-RUN sed -i 's/SESSION_SECURE_COOKIE=false/SESSION_SECURE_COOKIE=true/' /var/www/html/config/session.php
 
 # Start Apache
 CMD ["apache2-foreground"]
