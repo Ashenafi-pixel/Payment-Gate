@@ -32,8 +32,6 @@ RUN composer install
 # Generate application key (if not already set)
 RUN php artisan key:generate --show
 
-# Run migrations (make sure to rollback first)
-RUN php artisan migrate:refresh
 RUN php artisan optimize
 
 
