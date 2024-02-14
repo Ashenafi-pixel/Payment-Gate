@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use  App\Models\User;
 use  App\Models\MerchantDetail;
@@ -149,10 +150,34 @@ class MerchantController extends Controller
             $user->status = 'APPROVED';
             $user->save();
         }
+        $apiEndpoint = 'https://sms.qa.addissystems.et/api/send-bulk-sms';
+
+// Replace with your actual phone numbers and message
+$apiKey='30c57d27443e3d76d4b8c257c0a1f4d163344b14a68e312122';
+$data = [
+    'phoneNumbers' => [$request->input('mobile_number')],
+    'message' => 'Dear esteemed merchant, we are pleased to inform you that your application has been approved.',
+];
+$headers=[
+'Content-Type'=>'application/json',
+'x-api-key'=>$apiKey
+];
+
+$response = Http::withHeaders($headers)->post($apiEndpoint, $data);
+$result='';
+// Check the response
+if ($response->successful()) {
+    // Successful request
+    $result = $response->json(); // Get the response as JSON
+    //dd($result);
+} else {
+    // Failed request
+    $error = $response->json(); // Get the error response as JSON
+    //dd($error);
+}
     }
 
-        Session::flash('success','Merchant Updated successfully!');
+        Session::flash('success','Merchant Updated successfully! '.  $result['message']);
         return redirect()->back();
             }
-
 }

@@ -76,6 +76,7 @@ return array(
     'App\\Http\\Controllers\\Merchant\\DashboardController' => $baseDir . '/app/Http/Controllers/Merchant/DashboardController.php',
     'App\\Http\\Controllers\\Merchant\\DocumentController' => $baseDir . '/app/Http/Controllers/Merchant/DocumentController.php',
     'App\\Http\\Controllers\\Merchant\\EposController' => $baseDir . '/app/Http/Controllers/Merchant/EposController.php',
+    'App\\Http\\Controllers\\Merchant\\GenerateKeyController' => $baseDir . '/app/Http/Controllers/Merchant/GenerateKeyController.php',
     'App\\Http\\Controllers\\Merchant\\InvoiceController' => $baseDir . '/app/Http/Controllers/Merchant/InvoiceController.php',
     'App\\Http\\Controllers\\Merchant\\MerchantController' => $baseDir . '/app/Http/Controllers/Merchant/MerchantController.php',
     'App\\Http\\Controllers\\Merchant\\MerchantGatewayController' => $baseDir . '/app/Http/Controllers/Merchant/MerchantGatewayController.php',

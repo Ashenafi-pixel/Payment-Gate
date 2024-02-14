@@ -780,6 +780,7 @@ class ComposerStaticInitc0deb89efa997eba053459b4079eb31f
         'App\\Http\\Controllers\\Merchant\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/DashboardController.php',
         'App\\Http\\Controllers\\Merchant\\DocumentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/DocumentController.php',
         'App\\Http\\Controllers\\Merchant\\EposController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/EposController.php',
+        'App\\Http\\Controllers\\Merchant\\GenerateKeyController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/GenerateKeyController.php',
         'App\\Http\\Controllers\\Merchant\\InvoiceController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/InvoiceController.php',
         'App\\Http\\Controllers\\Merchant\\MerchantController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/MerchantController.php',
         'App\\Http\\Controllers\\Merchant\\MerchantGatewayController' => __DIR__ . '/../..' . '/app/Http/Controllers/Merchant/MerchantGatewayController.php',

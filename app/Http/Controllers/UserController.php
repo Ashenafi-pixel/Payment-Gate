@@ -8,11 +8,13 @@ use App\Models\User;
 use App\Models\MerchantDetail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\QueryException;
 class UserController extends Controller
 {
     public function registerUser(Request $request)
     {
-        Log::info('Received request data: ' . json_encode($request->all()));
+        try{
+            Log::info('Received request data: ' . json_encode($request->all()));
 
         // Extract user and merchant data
         $userData = $request->input('user');
@@ -55,7 +57,7 @@ class UserController extends Controller
             'model_type'=>'App\Models\User',
             'model_id'=>$user->id]);
         // Create merchant details
-        MerchantDetail::create([
+        $merchant =MerchantDetail::create([
             'user_id' => $user->id,
             'company_name' => $merchantData['company_name'],
             'company_phone' => $merchantData['company_phone'],
@@ -68,7 +70,23 @@ class UserController extends Controller
         ]);
         file_put_contents(public_path( $passport ), $decodedPassportImage);
         file_put_contents(public_path( $license  ), $decodedLicenseImage);
-        return response()->json(['success' => true]);
+        return response()->json(['success' => 'Your registration is successfull and your Merchant ID is : ','merchant_id'=>$merchant->id]);
+    }catch (QueryException $exception) {
+        Log::error('Database error during registration: ' . $exception->getMessage());
+        return response()->json(['error' => 'An error occurred during registration. Please try again.'], 500);
+    } catch (\Exception $exception) {
+        Log::error('Unexpected error during registration: ' . $exception->getMessage());
+        return response()->json(['error' => 'An unexpected error occurred. Please contact support.'], 500);
     }
-
+}
+    public function showStatus(Request $request, $merchant_id)
+    {
+        try {
+            $merchant = MerchantDetail::findOrFail($merchant_id);
+            return response()->json(['status' => $merchant->status]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
+            $error = "We cannot find such merchant by this ID";
+            return response()->json(['status' => $error], 404);
+        }
+    }
 }

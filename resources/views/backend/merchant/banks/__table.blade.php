@@ -1,4 +1,27 @@
+<style>
+    /* Remove border */
+    input[type="text"].paragraph-like {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+        outline: none;
+    }
+</style>
+
 <div class="table-responsive table-nowrap d-box p-0 border-radius-0">
+    @if (Session::has('success'))
+        <div id="successMessage" class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+
+        <script>
+            setTimeout(function() {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000); // 5000 milliseconds = 5 seconds
+        </script>
+    @endif
     <table class="table">
         <thead class="sticky-top">
             <tr>

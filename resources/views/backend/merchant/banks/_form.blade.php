@@ -1,3 +1,25 @@
+<style>
+    /* Remove border */
+    input[type="text"].paragraph-like {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+        outline: none;
+    }
+</style>
+@if (Session::has('success'))
+    <div id="successMessage" class="alert alert-success">
+        {{ Session::get('success') }}
+    </div>
+
+    <script>
+        setTimeout(function() {
+            document.getElementById('successMessage').style.display = 'none';
+        }, 5000); // 5000 milliseconds = 5 seconds
+    </script>
+@endif
 <div class="col-12 mt-3">
     <div class="d-box">
         <form action="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . 'merchant.linkBank') }}" method="POST">
