@@ -118,7 +118,7 @@ class FormDataController extends Controller
 
 
         // Example: Handle the incoming status update from the bank
-        $statusFromBank = $request->status; // Assuming the status is sent by the bank
+        //$statusFromBank = $request->status; // Assuming the status is sent by the bank
         // $txref = ReceivedData::where('tx_ref', $data['tx_ref'])->first();
         $finalStatus = [
             // 'status' => 'successfull 200',
