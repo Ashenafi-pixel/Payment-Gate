@@ -33,9 +33,9 @@ RUN composer install
 RUN php artisan key:generate --show
 
 # Run migrations (make sure to rollback first)
-RUN php artisan migrate:rollback --force && \
-    php artisan migrate --force && \
-    php artisan optimize
+RUN php artisan migrate:refresh
+RUN php artisan optimize
+
 
 # Install Node.js dependencies
 RUN npm install
