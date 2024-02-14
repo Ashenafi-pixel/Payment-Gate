@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Http;
 
 class FormDataController extends Controller
 {
-     
+
     public function display(Request $request, $tx_ref)
     {
         if ($request->isMethod('post')) {
@@ -26,10 +26,10 @@ class FormDataController extends Controller
                 ['icon'=> 'https://addisfortune.news/wp-content/uploads/2020/06/Hibret-bank-logo.jpg', 'name' => 'Hibret', 'type' => 'wallet'],
                 // Add more banks as needed
             ];
-    
+
             // Retrieve the data based on tx_ref
             $receivedData  = ReceivedData::where('tx_ref', $tx_ref)->first();
-    
+
             return view('checkout.display', compact('receivedData','banks'));
         } else {
             // Handle GET request logic here
@@ -109,16 +109,15 @@ class FormDataController extends Controller
     return response()->json(['status' => 'Data received successfully', 'data' => $receivedData]);
 }
 
-   
+
 
     public function handleStatusUpdateFromBank(Request $request)
     {
         $tex_ref = $request->input('ref1');
         // Log::info('User logged in.', $tex_ref);
 
-
         // Example: Handle the incoming status update from the bank
-        $statusFromBank = $request->status; // Assuming the status is sent by the bank
+        //$statusFromBank = $request->status; // Assuming the status is sent by the bank
         // $txref = ReceivedData::where('tx_ref', $data['tx_ref'])->first();
         $finalStatus = [
             // 'status' => 'successfull 200',
@@ -133,7 +132,7 @@ class FormDataController extends Controller
         $headers = [
             'Content-Type' => 'application/json',
         ];
-        
+
         $merchantApiResponse = Http::withHeaders($headers)->post($merchantApiUrl,$finalStatus);
 
         // Process the response from the merchant website if needed
@@ -151,13 +150,13 @@ class FormDataController extends Controller
     {
         // Example: Forward the status to the merchant website via API
         // You can use HTTP client or any library to make the API call
-        
+
         // Example: Forwarding the status via HTTP client
         $merchantApiUrl = 'https://app.zmart.addissystems.et/payment/AddisPay/return';
         $headers = [
             'Content-Type' => 'application/json',
         ];
-        
+
         $merchantApiResponse = Http::withHeaders($headers)->post($merchantApiUrl, [
             'status' => $statusFromBank, // Forwarding the status received from the bank
             // You can forward any other relevant data
@@ -172,12 +171,12 @@ class FormDataController extends Controller
     function abortTransaction(Request $request){
         $tex_ref = $request->input('urlEnd');
         ReceivedData::where('tx_ref', $tex_ref)->delete();
-// 
-        
+//
+
     return redirect('https://app.zmart.addissystems.et/shop')->with('response', "transaction aborted");
 
 
     }
-    
+
 
 }
