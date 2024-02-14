@@ -1,9 +1,9 @@
 @extends('backend.layouts.app')
-@section('title', 'All Invoices')
+@section('title', 'All Oddo Requests')
 @section('content')
     <div class="row mt-1 gy-3">
         <div class="col-lg-6 my-auto">
-            <h3 class="page-title">{{ __('Invoice Detail') }}</h3>
+            <h3 class="page-title">{{ __(' All Oddo Requests') }}</h3>
         </div>
         <div class="col-lg-6">
 
@@ -35,7 +35,7 @@
         </div>
         <div class="col-lg-6">
             <div class="d-box position-relative">
-                <h3 class="small-heading">{{ __('Invoice Info') }}</h3>
+                <h3 class="small-heading">{{ __('Request Info') }}</h3>
                 <hr>
                 <div class="flex-mode  justify-content-between">
                     <p class="flex-heading">{{ __('Created Date') }}</p>
@@ -46,7 +46,7 @@
                 @endphp
                 @if(count($invoice->invoiceTransactions) > 0)
                     <div class="flex-mode  justify-content-between">
-                        <p class="flex-heading">{{ __('Invoice Amount') }}</p>
+                        <p class="flex-heading">{{ __('Request Amount') }}</p>
                         <p class="flex-text"><b>ብር.</b>{{ $invoice->amount }}</p>
                     </div>
                     @foreach($invoice->invoiceTransactions as $transaction)
@@ -69,7 +69,7 @@
                     </div>
                 @endif
                 <div class="flex-mode  justify-content-between">
-                    <p class="flex-heading">{{ __('INVOICE STATUS') }}</p>
+                    <p class="flex-heading">{{ __('REQUEST STATUS') }}</p>
                     <p class="flex-text">
                         <span class="badge {{ \App\Helpers\GeneralHelper::INVOICE_STATUS_CLASS($invoice->status) }}">{{ \App\Helpers\GeneralHelper::INVOICE_STATUS($invoice->status) }}</span>
                     </p>

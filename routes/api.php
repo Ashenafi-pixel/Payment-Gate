@@ -17,6 +17,13 @@ use App\Http\Controllers\Api\Customer\RegisterController;
 use App\Http\Controllers\Api\Customer\DocumentController;
 use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\LockScreenController;
+use App\Http\Controllers\FormDataController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,6 +38,9 @@ use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 use App\Http\Controllers\UserController;
 
 Route::post('/mPOSUser', [UserController::class, 'registerUser'])->withoutMiddleware(['auth']);
+Route::post('/receive-data', [FormDataController::class, 'receiveData'])->withoutMiddleware(['auth']);
+// Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
+
 Route::get('/show-status/{merchant_id}', [UserController::class, 'showStatus'])->withoutMiddleware(['auth']);
 Route::group(['middleware' => []], function () {
     Route::post('/your-route', [UserController::class, 'registerUser']);

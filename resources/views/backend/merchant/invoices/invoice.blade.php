@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title','Add Invoice')
+@section('title','Oddo Requests')
 @section('content')
     <div class="row">
         <div class="col-6 my-auto">
@@ -11,7 +11,7 @@
                 <span class="material-symbols-outlined">
                     view_list
                 </span>
-                    {{__(' All Invoices')}}
+                    {{__(' All Oddo Requests')}}
                 </div>
             </a>
         </div>

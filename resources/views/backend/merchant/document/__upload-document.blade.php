@@ -18,12 +18,12 @@
     <div class="row gy-3">
         <div class="col-lg-6">
             @if (!empty($documents) && $documents->cnic_doc_status == \App\Helpers\IStatuses::APPROVED)
-                <label class="form-label input-label">{{ __('CNIC') }}</label>
+                <label class="form-label input-label">{{ __('Passport/ID') }}</label>
                 <div class="position-relative">
                     <label for="cnic_file" class="btn btn-green">{{ __(\App\Helpers\IStatuses::APPROVED) }}</label>
                 </div>
             @else
-                <label class="form-label input-label">{{ __('Choose CNIC') }}</label>
+                <label class="form-label input-label">{{ __('Choose Passport/National ID') }}</label>
                 <div class="position-relative">
                     {!! Form::file('cnic', [
                         'class' => 'form-control form-control-lg this',

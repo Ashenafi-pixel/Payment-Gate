@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\IUserRole;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\BanksController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\DocumentController;
@@ -26,8 +27,6 @@ Route::get('/check-license', function () {
     return view('backend.admin.li');
 });
 
-Route::get('/admin/form', [AdminController::class, 'showForm'])->name('admin.form');
-Route::post('/admin/generate-keys', [AdminController::class, 'generateKeys'])->name('generateKeys');
 # Admin Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
 # Profile Route's
@@ -46,6 +45,7 @@ Route::post('merchant-edit/{merchant_id}', [MerchantController::class, 'updateMe
 Route::get('merchant-delete/{merchant_id}', [MerchantController::class, 'deleteMerchant'])->name('merchant.delete');
 
 
+Route::get('admin/getall', [MerchantController::class, 'display'])->name('display');
 Route::get('getall', [MerchantController::class, 'display'])->name('merchant.display');
 # Customer Module
 Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');

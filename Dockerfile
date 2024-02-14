@@ -1,4 +1,4 @@
-# Use the official PHP Apache image
+#Use the official PHP Apache image
 FROM php:8.2.14-apache
 
 # Set the working directory
@@ -29,9 +29,13 @@ COPY . .
 # Install Laravel dependencies
 RUN composer install
 
-# Generate application key and run migrations
-RUN php artisan key:generate
-RUN php artisan optimize
+# Generate application key (if not already set)
+RUN php artisan key:generate --show
+
+# Run migrations (make sure to rollback first)
+RUN php artisan migrate:rollback --force && \
+    php artisan migrate --force && \
+    php artisan optimize
 
 # Install Node.js dependencies
 RUN npm install
@@ -45,6 +49,8 @@ RUN chown -R www-data:www-data /var/www/html/public/uploads/qrcodes   # Add this
 
 # Set the correct permissions for the public directory
 RUN chmod -R 755 /var/www/html/public
+
+# Clear cached configurations
 RUN php artisan config:clear
 RUN php artisan route:clear
 RUN php artisan view:clear
@@ -52,8 +58,6 @@ RUN php artisan cache:clear
 
 # Expose port 80
 EXPOSE 80
-
-RUN sed -i 's/SESSION_SECURE_COOKIE=false/SESSION_SECURE_COOKIE=true/' /var/www/html/config/session.php
 
 # Start Apache
 CMD ["apache2-foreground"]

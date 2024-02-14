@@ -13,7 +13,7 @@ use App\Http\Repositories\UserRepo;
 use App\Http\Repositories\CustomerDetailRepo;
 use App\Http\Contracts\IDocumentServiceContract;
 use http\Env\Request;
-use App\Models\MerchantDetail;
+
 class DocumentService implements IDocumentServiceContract
 {
     /**
