@@ -32,10 +32,8 @@ RUN composer install
 # Generate application key (if not already set)
 RUN php artisan key:generate --show
 
-# Run migrations (make sure to rollback first)
-RUN php artisan migrate:rollback --force && \
-    php artisan migrate --force && \
-    php artisan optimize
+RUN php artisan optimize
+
 
 # Install Node.js dependencies
 RUN npm install
@@ -49,7 +47,10 @@ RUN chown -R www-data:www-data /var/www/html/public/uploads/qrcodes   # Add this
 
 # Set the correct permissions for the public directory
 RUN chmod -R 755 /var/www/html/public
-
+RUN chmod -R 777 /var/www/html/public/image
+RUN chmod -R 777 /var/www/html/public/images
+RUN chmod -R 777 /var/www/html/public/uploads/qrcodes 
+RUN chmod -R 777 /var/www/html/public/uploads
 # Clear cached configurations
 RUN php artisan config:clear
 RUN php artisan route:clear
