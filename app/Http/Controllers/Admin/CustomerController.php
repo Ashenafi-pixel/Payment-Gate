@@ -68,6 +68,11 @@ class CustomerController extends Controller
         $customer = $this->_userService->customerStore($request->all());
         return GeneralHelper::SEND_RESPONSE($request,$customer,self::CUSTOMER_INDEX_ROUTE,self::CREATE_CUSTOMER_MESSAGE);
     }
+       public function  editCustomer($customer_id){
+        $customer = User::findOrFail($customer_id);
+        //dd($merchant);
+    return view('backend.admin.customer.all-customer._form', compact('customer'));
+    }
      public function updateCustomer(Request $request, $customer_id)
     {
 
