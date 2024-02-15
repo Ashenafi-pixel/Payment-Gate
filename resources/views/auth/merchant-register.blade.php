@@ -149,17 +149,17 @@
                                             !!}
                                         </div>
                                     </div>
-                                   
+
                                     <!-- OTP Section -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             {!! Form::label('otp', __('Phone OTP:'), ['class' => 'form-label input-label', 'id' => 'otpLabel', 'style' => 'display:none;']) !!}
                                             {!! Form::text('otp', null, ['class' => 'form-control form-control-lg', 'id' => 'otpInput', 'placeholder' => 'Enter OTP', 'style' => 'display:none;']) !!}
                                             
-                                            <div class="d-flex justify-content-between">
-                                                {!! Form::button(__('Send OTP'), ['class' => 'btn btn-theme-effect mt-2', 'id' => 'sendOtpBtn', 'onclick' => 'sendOtp()']) !!}
-                                                {!! Form::button(__('Signup'), ['class' => 'btn btn-theme-effect mt-2', 'type' => 'submit', 'id' => 'signupBtn', 'disabled' => 'disabled']) !!}
-                                            </div>
+                                            {!! Form::button(__('Send OTP'), ['class' => 'btn btn-theme-effect mt-2', 'id' => 'sendOtpBtn', 'onclick' => 'sendOtp()']) !!}
+                                            {!! Form::button(__('Signup'), ['class' => 'btn btn-theme-effect mt-2', 'type' => 'submit', 'id' => 'signupBtn', 'disabled' => 'disabled']) !!}
+                                            
+                                            {!! Form::text('code', null, ['class' => 'form-control form-control-lg', 'id' => 'codeInput', 'placeholder' => 'Enter Code', 'style' => 'display:none;']) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -177,6 +177,7 @@
         </div>
     </section>
 @endsection
+
 @push('js')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -204,20 +205,17 @@ function sendOtp() {
     const phoneNumber = document.getElementById('phone').value;
     const apiKey = '30c57d27443e3d76d4b8c257c0a1f4d163344b14a68e312122';
 
-    console.log('phone value:', phoneNumber);
-    console.log('otpLabel element:', document.getElementById('otpLabel'));
-    console.log('otpInput element:', document.getElementById('otpInput'));
-
-    // Make an AJAX request to send OTP
+    // Make an AJAX request to send OTP and save to OtpController
     fetch('https://sms.qa.addissystems.et/api/send-bulk-sms', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'x-api-key':  apiKey,
+            'x-api-key': apiKey,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'), // Include CSRF token
         },
         body: JSON.stringify({
             phoneNumbers: [phoneNumber],
-            message: 'Your Addispay OTP code is: ' + generateRandomOtp(),
+            message: 'This is your Addispay OTP Code' + generateRandomOtp(),
         }),
     })
         .then(response => response.json())
@@ -225,31 +223,17 @@ function sendOtp() {
             console.log('API Response:', data); // Log the response to the console
 
             if (data.message && data.message.includes("SMS sent")) {
-                showOtpInput();
-                // Change button text to "Verify OTP"
-                // Verify if the element exists before trying to access it
-                const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-                if (verifyOtpBtn) {
-                    verifyOtpBtn.innerText = 'Verify OTP';
-                }
+                // Enable the "Signup" button
+                document.getElementById('signupBtn').removeAttribute('disabled');
+                // Hide the "Send OTP" button and OTP input
                 document.getElementById('sendOtpBtn').style.display = 'none';
+                document.getElementById('otpLabel').style.display = 'none';
+                document.getElementById('otpInput').style.display = 'none';
 
+                // Save OTP to OtpController
+                saveOtpToController(phoneNumber, generateRandomOtp());
 
-                function showOtpSuccessModal() {
-        $('#otpSuccessModal').modal('show');
-    }
-
-    // Your existing JavaScript code for sending OTP
-    
-    function sendOtp() {
-        // Your existing sendOtp function code
-        
-        // Call the function to display the OTP success modal
-        showOtpSuccessModal();
-    }
-
-
-
+                alert('OTP sent successfully!');
             } else {
                 alert('Failed to send OTP. Please try again.');
             }
@@ -257,10 +241,6 @@ function sendOtp() {
         .catch(error => {
             console.error('Error sending OTP:', error);
             alert('Failed to send OTP. Please try again.');
-        })
-        .finally(() => {
-            // Enable the "Verify OTP" button
-            document.getElementById('verifyOtpBtn').removeAttribute('disabled');
         });
 }
 
@@ -268,126 +248,27 @@ function generateRandomOtp() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-function showOtpInput() {
-    document.getElementById('otpLabel').style.display = 'block';
-    document.getElementById('otpInput').style.display = 'block';
+function saveOtpToController(phoneNumber, otp) {
+    // Make an AJAX request to save OTP to OtpController
+    fetch('{{ route('save-otp') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'), // Include CSRF token
+        },
+        body: JSON.stringify({
+            phone: phoneNumber,
+            otp: otp,
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('OTP saved to OtpController:', data);
+        })
+        .catch(error => {
+            console.error('Error saving OTP to OtpController:', error);
+        });
+
 }
 </script>
 @endpush
-<script>
-    // Function to display the OTP success modal
-    function showOtpSuccessModal() {
-        $('#otpSuccessModal').modal('show');
-    }
-
-    // Your existing JavaScript code for sending OTP
-    
-    function sendOtp() {
-        // Your existing sendOtp function code
-        
-        // Call the function to display the OTP success modal
-        showOtpSuccessModal();
-    }
-</script>
-@endpush
-
-<!-- Modal HTML for OTP Success -->
-<div id="otpSuccessModal" class="modal fade">
-    <div class="modal-dialog modal-confirm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="icon-box">
-                    <i class="material-icons">&#xE876;</i>
-                </div>                
-                <h4 class="modal-title w-100">Success!</h4>  
-            </div>
-            <div class="modal-body">
-                <p class="text-center">SMS OTP sent successfully!</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-body {
-	font-family: 'Varela Round', sans-serif;
-}
-.modal-confirm {		
-	color: #636363;
-	width: 325px;
-	font-size: 14px;
-}
-.modal-confirm .modal-content {
-	padding: 20px;
-	border-radius: 5px;
-	border: none;
-}
-.modal-confirm .modal-header {
-	border-bottom: none;   
-	position: relative;
-}
-.modal-confirm h4 {
-	text-align: center;
-	font-size: 26px;
-	margin: 30px 0 -15px;
-}
-.modal-confirm .form-control, .modal-confirm .btn {
-	min-height: 40px;
-	border-radius: 3px; 
-}
-.modal-confirm .close {
-	position: absolute;
-	top: -5px;
-	right: -5px;
-}	
-.modal-confirm .modal-footer {
-	border: none;
-	text-align: center;
-	border-radius: 5px;
-	font-size: 13px;
-}	
-.modal-confirm .icon-box {
-	color: #fff;		
-	position: absolute;
-	margin: 0 auto;
-	left: 0;
-	right: 0;
-	top: -70px;
-	width: 95px;
-	height: 95px;
-	border-radius: 50%;
-	z-index: 9;
-	background: #82ce34;
-	padding: 15px;
-	text-align: center;
-	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-}
-.modal-confirm .icon-box i {
-	font-size: 58px;
-	position: relative;
-	top: 3px;
-}
-.modal-confirm.modal-dialog {
-	margin-top: 80px;
-}
-.modal-confirm .btn {
-	color: #fff;
-	border-radius: 4px;
-	background: #82ce34;
-	text-decoration: none;
-	transition: all 0.4s;
-	line-height: normal;
-	border: none;
-}
-.modal-confirm .btn:hover, .modal-confirm .btn:focus {
-	background: #6fb32b;
-	outline: none;
-}
-.trigger-btn {
-	display: inline-block;
-	margin: 100px auto;
-}
-</style>
