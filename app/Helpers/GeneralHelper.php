@@ -278,7 +278,7 @@ abstract class GeneralHelper
      * @param int $length
      * @return string
      */
-    public static function RANDOM_NO(int $length = 8): string
+    public static function RANDOM_NO(int $length = 6): string
     {
         
      $characters = '123456789';
