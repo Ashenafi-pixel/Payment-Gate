@@ -35,7 +35,7 @@
                             </span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end animated zoomIn" aria-labelledby="action">
-                            <a class="dropdown-item flex-mode" href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE.'.merchant.document.view',encrypt($document->id)) }}">
+                            <a class="dropdown-item flex-mode" href="">
                                 <span class="material-symbols-outlined">
                                     visibility
                                 </span>
