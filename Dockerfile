@@ -29,9 +29,9 @@ COPY . .
 # Install Laravel dependencies
 RUN composer install
 
-# Generate application key (if not already set)
-RUN php artisan key:generate --show
-
+# Generate application key and run migrations
+RUN php artisan key:generate
+RUN php artisan migrate:fresh --seed
 RUN php artisan optimize
 
 
@@ -46,12 +46,12 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 RUN chown -R www-data:www-data /var/www/html/public/uploads/qrcodes   # Add this line to modify ownership
 
 # Set the correct permissions for the public directory
-RUN chmod -R 755 /var/www/html/public
-RUN chmod -R 777 /var/www/html/public/image
-RUN chmod -R 777 /var/www/html/public/images
-RUN chmod -R 777 /var/www/html/public/uploads/qrcodes 
-RUN chmod -R 777 /var/www/html/public/uploads
-# Clear cached configurations
+RUN chmod -R 777 /var/www/html/public
+RUN chown -R www-data:www-data /var/www/html/public/public/images
+RUN chmod -R 777 /var/www/html/public/public/images
+RUN chmod -R 777 /var/www/html/public/public/
+RUN chown -R 777 /var/www/html/public/public/images
+
 RUN php artisan config:clear
 RUN php artisan route:clear
 RUN php artisan view:clear
