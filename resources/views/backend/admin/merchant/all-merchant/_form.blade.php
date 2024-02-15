@@ -53,12 +53,10 @@
                                                     ]) !!}
                                                 </div>
                                                 <div class="col-md-6">
-                                                    {!! Form::label('status', __('Status'), ['class' => 'form-label bold']) !!}
-                                                    {!! Form::text('status', $merchant->status ?? null, [
+                                                     {!! Form::label('status', __('Status'), ['class' => 'form-label bold']) !!}
+                                                    {!! Form::select('status', ['ACTIVE' => 'ACTIVE', 'INACTIVE' => 'INACTIVE'], $merchant->status ?? null, [
                                                         'class' => 'form-control',
-                                                        'id' => '',
-                                                        'placeholder' => 'in active',
-                                                        'autofocus' => true,
+                                                        'placeholder' => 'Select status',
                                                     ]) !!}
                                                 </div>
                                                 <div class="col-md-6">
