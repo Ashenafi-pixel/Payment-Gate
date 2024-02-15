@@ -20,6 +20,9 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#set-pin">{{ __('PIN CODE') }}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#set-api">{{ __('API Keys') }}</a>
+                    </li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content mt-4">

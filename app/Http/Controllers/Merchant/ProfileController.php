@@ -82,7 +82,11 @@ class ProfileController extends Controller
         $response = $this->_userService->setPin($request->pin);
         return GeneralHelper::SEND_RESPONSE($request,$response,self::PROFILE_ROUTE,self::PROFILE_PIN_SET);
     }
-
+    public function Apikey(UpdateProfilePinRequest $request)
+    {
+        $response = $this->_userService->setPin($request->pin);
+        return GeneralHelper::SEND_RESPONSE($request,$response,self::PROFILE_ROUTE,self::PROFILE_PIN_SET);
+    }
     /**
      * @param UpdateProfilePinRequest $request
      * @return mixed
