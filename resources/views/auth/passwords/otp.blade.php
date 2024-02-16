@@ -25,21 +25,20 @@
                                         <p class="otp-text mt-2 ">
                                     Please enter the 8-digit code of Your Account.
                                 </p>
-                                <div class="my-4 form-otp">
-                                    <input class="otp" type="tel" name="first" oninput='digitValidate(this)' onkeyup='tabChange(1)'
-                                           maxlength=1 autofocus>
-                                    <input class="otp" type="tel" name="second" oninput='digitValidate(this)' onkeyup='tabChange(2)'
-                                           maxlength=1>
-                                    <input class="otp" type="tel" name="third" oninput='digitValidate(this)' onkeyup='tabChange(3)'
-                                           maxlength=1>
-                                    <input class="otp" type="tel" name="fourth" oninput='digitValidate(this)' onkeyup='tabChange(4)'
-                                           maxlength=1>
-                                    <input class="otp" type="tel" name="fivth" oninput='digitValidate(this)' onkeyup='tabChange(5)'
-                                           maxlength=1>
-                                    <input class="otp" type="tel" name="sixth" oninput='digitValidate(this)' onkeyup='tabChange(6)'
-                                           maxlength=1>
-                                    
-                                </div>
+                              <div class="my-4 form-otp">
+                                <input class="otp" type="tel" name="first" oninput='digitValidate(this)'
+                                    onkeyup='tabChange(1)' maxlength=1 autofocus>
+                                <input class="otp" type="tel" name="second" oninput='digitValidate(this)'
+                                    onkeyup='tabChange(2)' maxlength=1>
+                                <input class="otp" type="tel" name="third" oninput='digitValidate(this)'
+                                    onkeyup='tabChange(3)' maxlength=1>
+                                <input class="otp" type="tel" name="fourth" oninput='digitValidate(this)'
+                                    onkeyup='tabChange(4)' maxlength=1>
+                                <input class="otp" type="tel" name="fifth" oninput='digitValidate(this)'
+                                    onkeyup='tabChange(5)' maxlength=1>
+                                <input class="otp" type="tel" name="sixth" oninput='digitValidate(this)'
+                                    onkeyup='tabChange(6)' maxlength=1>
+                            </div>
                                 <p class="otp-verify">
                                     {!! Form::button( __('Verify OTP') ,['class' => 'btn btn-theme-effect w-100 mt-2','type' =>
                                 'submit']) !!}
