@@ -39,6 +39,9 @@ use App\Http\Controllers\UserController;
 
 Route::post('/mPOSUser', [UserController::class, 'registerUser'])->withoutMiddleware(['auth']);
 Route::post('/receive-data', [FormDataController::class, 'receiveData'])->withoutMiddleware(['auth']);
+Route::post('/consumer-app', [UserController::class, 'registerCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-verify', [UserController::class, 'approveCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-resend', [UserController::class, 'resendOTP'])->withoutMiddleware(['auth']);
 // Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
 
 Route::get('/show-status/{merchant_id}', [UserController::class, 'showStatus'])->withoutMiddleware(['auth']);
