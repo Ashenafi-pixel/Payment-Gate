@@ -23,7 +23,7 @@
                             <div class="container my-5">
                                 {!! Form::open(['url' => route(App\Helpers\IUserRole::CUSTOMER_ROLE.'.profile.verify.otp'), 'class' => 'ajax', 'method' => 'POST']) !!}
                                         <p class="otp-text mt-2 ">
-                                    Please enter the 8-digit code of Your Account.
+                                    Please enter the 6-digit code of Your Account.
                                 </p>
                               <div class="my-4 form-otp">
                                 <input class="otp" type="tel" name="first" oninput='digitValidate(this)'
