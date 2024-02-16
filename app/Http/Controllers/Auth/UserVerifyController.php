@@ -62,14 +62,16 @@ class UserVerifyController extends Controller
      * @return JsonResponse|RedirectResponse|void
      */
     public
-    function verifyCustomerOtp(Request $request)
+   function verifyCustomerOtp(Request $request)
     {
-        $otp = $request->first . $request->second . $request->third . $request->fourth;
-        if ($otp == GeneralHelper::USER('email_otp')) {
+        $otp = $request->first . $request->second . $request->third . $request->fourth . $request->fifth . $request->sixth;
+        $stored_otp = GeneralHelper::USER('email_otp');
+        if ($otp == $stored_otp) {
             $verify_user = $this->_userService->update(GeneralHelper::USER('id'), ['email_otp' => null, 'is_verified' => true]);
-            if ($verify_user)
+            if ($verify_user) {
                 return GeneralHelper::SEND_RESPONSE($request, true, self::CUSTOMER_DASHBOARD_ROUTE, config('constants.generalMessages.otp_match'));
+            }
         }
-        return GeneralHelper::SEND_RESPONSE($request, null, '', '', config('constants.generalMessages.otp_not_matched'));
+                return GeneralHelper::SEND_RESPONSE($request, null, '', '', config('constants.generalMessages.otp_not_matched'));
     }
 }
