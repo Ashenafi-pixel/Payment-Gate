@@ -248,6 +248,27 @@ function generateRandomOtp() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+function saveOtpToController(phoneNumber, otp) {
+    // Make an AJAX request to save OTP to OtpController
+    fetch('{{ route('save-otp') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'), // Include CSRF token
+        },
+        body: JSON.stringify({
+            phone: phoneNumber,
+            otp: otp,
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('OTP saved to OtpController:', data);
+        })
+        .catch(error => {
+            console.error('Error saving OTP to OtpController:', error);
+        });
+
 }
 </script>
 @endpush
