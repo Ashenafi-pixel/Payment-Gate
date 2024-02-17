@@ -49,9 +49,11 @@ Route::get('admin/getall', [MerchantController::class, 'display'])->name('displa
 Route::get('getall', [MerchantController::class, 'display'])->name('merchant.display');
 # Customer Module
 Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
+Route::get('customer-edit/{customer_id}', [CustomerController::class, 'editCustomer'])->name('customer.edit');
+Route::post('customer-edit/{customer_id}', [CustomerController::class, 'updateCustomer'])->name('customer.update');
 Route::get('customers/create-customer', [CustomerController::class, 'create'])->name('customers.create');
 Route::post('store-customer', [CustomerController::class, 'store'])->name('customers.store');
-
+Route::get('customer-delete/{customer_id}', [CustomerController::class, 'deleteCustomer'])->name('customer.delete');
 # Documents Approval routes
 Route::get('pending-merchants', [DocumentController::class, 'pendingMerchants'])->name('merchant.documents.index');
 Route::get('pending-customers', [DocumentController::class, 'pendingCustomers'])->name('customer.documents.index');

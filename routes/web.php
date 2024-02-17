@@ -118,9 +118,14 @@ Route::get('dashboard', function () {
 Route::get('profile',function(){
     return view('backend.admin.profile.edit-profile');
 });
-Route::get('merchant',function(){
-    return view('backend.admin.merchant.all-merchant.index');
-});
+
+Route::get('merchant', function () {
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        return view('backend.admin.merchant.all-merchant.index');
+    } else {
+        abort(404); // Show 404 error for unauthorized users
+    }
+})->middleware('auth'); // Apply authentication middleware
 
 Route::get('add-invoices',function(){
     return view('backend.merchant.invoice.invoice');

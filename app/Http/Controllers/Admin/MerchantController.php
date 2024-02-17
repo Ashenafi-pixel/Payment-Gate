@@ -53,6 +53,7 @@ class MerchantController extends Controller
      */
     public function index()
     {
+
         $merchants = $this->_userService->getAllMerchants();
         $records=MerchantDetail::all();
         return view(self::VIEW_ADMIN_MERCHANTS,compact('merchants'));
@@ -66,18 +67,16 @@ class MerchantController extends Controller
         return view(self::CREATE_ADMIN_MERCHANT);
     }
     public function display(){
-
+       try{
         $users =  User::join('merchant_details', 'users.id', '=', 'merchant_details.user_id')
        ->select('users.id', 'users.name', 'users.email', 'users.status as user_status', 'merchant_details.company_name', 'merchant_details.company_phone as merchant_phone', 'merchant_details.status as merchant_status', 'merchant_details.passport', 'merchant_details.license', 'merchant_details.license_number')
        ->get();
-
-
-//return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
-
-
-       //$users=MerchantDetail::all();
-
         return view(self::ALL_ADMIN_MERCHANTS, compact('users'));
+       }
+       catch (\Exception $e) {
+        Session::flash('success','Database error occurred.');
+        view(self::ALL_ADMIN_MERCHANTS, compact('users'));
+    }
 
     }
 
@@ -87,19 +86,20 @@ class MerchantController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         $merchantData = $request->except(['license', 'passport']);
 
         if ($request->hasFile('license')) {
             $license = $request->file('license');
             $licenseName = date('YmdHi') . $license->getClientOriginalName();
-            $license->move(public_path('images'), $licenseName);
+            $license->move(public_path('images/'), $licenseName);
             $merchantData['license'] = 'images/' . $licenseName; // Update the path in the $merchantData array
         }
 
         if ($request->hasFile('passport')) {
             $passport = $request->file('passport');
             $passportName = date('YmdHi') . $passport->getClientOriginalName();
-            $passport->move(public_path('images'), $passportName);
+            $passport->move(public_path('images/'), $passportName);
             $merchantData['passport'] = 'images/' . $passportName; // Update the path in the $merchantData array
         }
 
@@ -111,6 +111,15 @@ class MerchantController extends Controller
             self::MERCHANT_INDEX_ROUTE,
             self::CREATE_MERCHANT_MESSAGE
         );
+    }
+    catch (\Exception $e) {
+        return GeneralHelper::SEND_RESPONSE(
+            $request,
+            $merchant,
+            self::MERCHANT_INDEX_ROUTE,
+            "Merchant Not Created, Something goes wrong"
+        );
+    }
     }
     public function  editMerchant($merchant_id){
         $merchant = User::findOrFail($merchant_id);
@@ -131,7 +140,9 @@ class MerchantController extends Controller
 
     public function updateMerchant(Request $request, $merchant_id)
     {
-        $merchant = User::findOrFail($merchant_id);
+
+       try{
+         $merchant = User::findOrFail($merchant_id);
 
         // Update the fields
         $merchant->status = $request->input('status');
@@ -178,5 +189,14 @@ if ($response->successful()) {
 
         Session::flash('success','Merchant Updated successfully! '.  $result['message']);
         return redirect()->back();
-            }
+}
+catch (QueryException $e) {
+    Session::flash('success','Database error occurred.');
+    return redirect()->back();
+} catch (\Exception $e) {
+    Session::flash('success','Database error occurred.');
+    return redirect()->back();
+}
+
+    }
 }

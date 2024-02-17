@@ -110,8 +110,12 @@ abstract class GeneralHelper
      * @param object $user
      * @return string
      */
-    public static function GET_ROLE(object $user): string
+    public static function GET_ROLE(?object $user): string
+
     {
+        if ($user === null) {
+            return 'Error: User object cannot be null';
+        }
         if ($user->hasRole(IUserRole::ADMIN_ROLE))
             return IUserRole::ADMIN_ROLE;
 
@@ -280,7 +284,7 @@ abstract class GeneralHelper
      */
     public static function RANDOM_NO(int $length = 4): string
     {
-        
+
      $characters = '123456789';
      $charactersLength = strlen($characters);
      $randomString = '';

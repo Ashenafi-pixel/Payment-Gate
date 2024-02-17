@@ -26,7 +26,8 @@ use App\Http\Contracts\ICustomerServiceContract;
 use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\Merchant\Customer\ImportCustomerRequest;
 use App\Http\Requests\Merchant\Customer\CreateCustomerRequest;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 class MerchantController extends Controller
 {
     public function showLinkBankForm()
@@ -93,4 +94,38 @@ class MerchantController extends Controller
         return redirect()->back()->with('error', 'An error occurred');
     }
 }
+
+public function merchantBankLink(Request $request)
+
+{
+    Log::info('Full Request: ' . json_encode($request->all()));
+    Log::info('Request Headers: ' . json_encode($request->headers->all()));
+
+    try {
+        $userID = $request->input('user_id');
+        $bank_name = $request->input('bank_name');
+        $accountNo = $request->input('account_no');
+
+        // Log the incoming data for debugging
+        Log::info("Incoming data: user_id=$userID, bank_name=$bank_name, account_no=$accountNo");
+
+        // Check if any of the required inputs is empty
+        if (empty($userID) || empty($bank_name) || empty($accountNo)) {
+            return response()->json(['error' => 'Invalid or missing input data'], 400);
+        }
+
+        // Continue with the rest of the code...
+
+    } catch (\Exception $e) {
+        // Log any exceptions for debugging
+        Log::error('Error: ' . $e->getMessage());
+
+        return response()->json(['error' => 'Error saving bank account to database: ' . $e->getMessage()], 500);
+    }
+}
+
+
+
+
+
 }

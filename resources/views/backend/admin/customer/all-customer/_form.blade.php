@@ -27,7 +27,7 @@
                                 <div class="container my-5">
                                     <div class="d-box">
                                         {!! Form::model([
-                                            'url' => route(\App\Helpers\IUserRole::ADMIN_ROLE . '.merchant.update', $merchant->id),
+                                            'url' => route(\App\Helpers\IUserRole::ADMIN_ROLE . '.customer.update', $customer->id),
                                             'method' => 'POST',
                                             'class' => 'ajax',
                                         ]) !!}
@@ -35,7 +35,7 @@
                                             <div class="row gy-3">
                                                 <div class="col-md-6">
                                                     {!! Form::label('name', __('Name'), ['class' => 'form-label bold']) !!}
-                                                    {!! Form::text('name', $merchant->name ?? null, [
+                                                    {!! Form::text('name', $customer->name ?? null, [
                                                         'class' => 'form-control',
                                                         'id' => '',
                                                         'placeholder' => 'your name',
@@ -44,7 +44,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     {!! Form::label('email', __('Email'), ['class' => 'form-label bold']) !!}
-                                                    {!! Form::text('email', $merchant->email ?? null, [
+                                                    {!! Form::text('email', $customer->email ?? null, [
                                                         'class' => 'form-control',
                                                         'id' => '',
                                                         'placeholder' => 'xx@gmail.com',
@@ -53,14 +53,14 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     {!! Form::label('status', __('Status'), ['class' => 'form-label bold']) !!}
-                                                    {!! Form::select('status', ['ACTIVE' => 'ACTIVE', 'INACTIVE' => 'INACTIVE'], $merchant->status ?? null, [
+                                                    {!! Form::select('status', ['ACTIVE' => 'ACTIVE', 'INACTIVE' => 'INACTIVE'], $customer->status ?? null, [
                                                         'class' => 'form-control',
                                                         'placeholder' => 'Select status',
                                                     ]) !!}
                                                 </div>
                                                 <div class="col-md-6">
                                                     {!! Form::label('mobile_number', __('Phone'), ['class' => 'form-label bold']) !!}
-                                                    {!! Form::text('mobile_number', $merchant->mobile_number ?? null, [
+                                                    {!! Form::text('mobile_number', $customer->mobile_number ?? null, [
                                                         'class' => 'form-control',
                                                         'id' => '',
                                                         'placeholder' => '+2519',

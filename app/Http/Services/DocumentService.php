@@ -212,9 +212,7 @@ class DocumentService implements IDocumentServiceContract
      */
     public function getAllPendingCustomers(): mixed
     {
-        return $this->_customerDetailRepo->model()
-               ->where('document_details', '!=', null)
-               ->where('status', IStatuses::PENDING)
+        return $this->_customerDetailRepo->model()->where('status', IStatuses::PENDING)
                ->get();
     }
 
@@ -244,7 +242,7 @@ class DocumentService implements IDocumentServiceContract
      */
     public function getAllPendingMerchant(): mixed
     {
-        return $this->_merchantDetailRepo->model()->where('status', IStatuses::MERCHANT_PENDING)->where('document_details', '!=', null)->get();
+        return $this->_merchantDetailRepo->model()->where('status', IStatuses::MERCHANT_PENDING)->get();
     }
 
     /**

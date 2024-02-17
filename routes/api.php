@@ -36,8 +36,12 @@ use App\Http\Controllers\FormDataController;
 */
 
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\merchant\MerchantController;
+Route::post('/register-bank-account', [MerchantController::class, 'merchantBankLink'])->withoutMiddleware(['auth']);;
 Route::post('/mPOSUser', [UserController::class, 'registerUser'])->withoutMiddleware(['auth']);
+Route::post('/consumer-app', [UserController::class, 'registerCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-verify', [UserController::class, 'approveCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-resend', [UserController::class, 'resendOTP'])->withoutMiddleware(['auth']);
 Route::post('/receive-data', [FormDataController::class, 'receiveData'])->withoutMiddleware(['auth']);
 // Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
 

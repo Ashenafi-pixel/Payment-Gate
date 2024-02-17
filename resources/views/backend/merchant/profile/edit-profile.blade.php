@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title','Profile')
+@section('title', 'Profile')
 @section('content')
     <h3 class="page-title">{{ __('My Profile') }}</h3>
     <div class="row gy-3 mt-1">
@@ -20,12 +20,16 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#set-pin">{{ __('PIN CODE') }}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#api-key">{{ __('API keys') }}</a>
+                    </li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content mt-4">
                     @include('backend.merchant.profile.__profile-update')
                     @include('backend.merchant.profile.__password-update')
                     @include('backend.merchant.profile.__pin-code')
+                    @include('backend.merchant.profile.__api-key')
 
                 </div>
             </div>

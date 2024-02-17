@@ -1,13 +1,38 @@
-<div class="table-responsive table-nowrap d-box p-0 border-radius-0">
+<style>
+    /* Remove border */
+    input[type="text"].paragraph-like {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+        outline: none;
+    }
+</style>
+<div class="table-responsive table-nowrap d-box p-0 border-radius-0 animated zoomIn">
+    @if (Session::has('success'))
+        <div id="successMessage" class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+
+        <script>
+            setTimeout(function() {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000); // 5000 milliseconds = 5 seconds
+        </script>
+    @endif
     <table class="table">
         <thead class="sticky-top">
             <tr>
                 <th>{{ __('ID') }}</th>
-                <th>{{ __('Name') }}</th>
-                <th>{{ __('Created Date') }}</th>
+                <th>{{ __('Merchant Name') }}</th>
+                <th>{{ __('Company Name') }}</th>
                 <th>{{ __('Email') }}</th>
                 <th>{{ __('Phone Number') }}</th>
                 <th>{{ __('Status') }}</th>
+                <th>{{ __('Passport') }}</th>
+                <th>{{ __('License') }}</th>
+                <th>{{ __('License Number') }}</th>
                 <th>{{ __('Action') }}</th>
             </tr>
         </thead>
@@ -15,17 +40,32 @@
             @php
                 $i = 1;
             @endphp
-            @forelse($customers as $customer)
+            @forelse($users   as $merchant)
                 <tr>
                     <td>{{ $i++ }}</td>
-                    <td>{{ $customer->name ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}</td>
-                    <td>{{ \App\Helpers\GeneralHelper::FORMAT_DATE($customer->created_at) ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}
-                    </td>
-                    <td>{{ $customer->email ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}</td>
-                    <td>{{ $customer->mobile_number ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}</td>
+                    <td>{{ $merchant->name }}</td>
+                    <td>{{ $merchant->company_name }}</td>
+                    <td>{{ $merchant->email }}</td>
+                    <td>{{ $merchant->merchant_phone ?? '--------' }}</td>
                     <td>
-                        <span
-                            class="badge {{ \App\Helpers\GeneralHelper::USER_STATUS_CLASS($customer->status) }}">{{ \App\Helpers\GeneralHelper::STATUS_CASING($customer->status) }}</span>
+                        {{ $merchant->user_status }}
+                    </td>
+                    <td>
+                        <img src="{{ url('' . $merchant->passport) }}" style="height: 100px; width: 150px;">
+                    </td>
+                    ` <td>
+
+                        <img src="{{ url('' . $merchant->license) }}" style="height: 100px; width: 150px;">
+                    </td>
+
+                    <td>
+                        <form action="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.checkLicense') }}"
+                            method="post">
+                            @csrf
+                            <input type="text" name="encodedData" value="{{ $merchant->license_number }}" readonly
+                                class="paragraph-like">
+                            <button type="submit">Check</button>
+                        </form>
                     </td>
                     <td>
                         <div class="btn-group">
@@ -43,7 +83,7 @@
                                     <span>{{ __('View') }}</span>
                                 </a>
                                 <a class="dropdown-item flex-mode"
-                                    href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.customer.edit', $customer->id) }}">
+                                    href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.merchant.edit', $merchant->id) }}">
                                     <span class="material-symbols-outlined">
                                         edit_note
                                     </span>
@@ -56,7 +96,7 @@
                                     <span>{{ __('Setting') }}</span>
                                 </a>
                                 <a class="dropdown-item flex-mode"
-                                    href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.customer.delete', $customer->id) }}">
+                                    href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.merchant.delete', $merchant->id) }}">
                                     <span class="material-symbols-outlined">
                                         delete
                                     </span>
