@@ -48,7 +48,30 @@
                     <span>{{ __('E-Pos') }}</span>
                 </a>
             </li>
-       
+        <li class="nav-item position-relative" id="merchant-link">
+                <a class="nav-link s-links collapsed {{ Request::is('merchant/invoices*') ? 'active' : '' }} "
+                    href="#merchant" aria-expanded="true" aria-current="page" data-bs-toggle="collapse"
+                    aria-controls="merchant">
+                    <img width='18' src="{{ asset('images/icons/merchant_icon.svg') }}" alt="">
+                    <span>{{ __('Invoices') }}</span>
+                </a>
+                <div class="collapse {{ Request::is('merchant/invoices*') ? 'show' : '' }}" id="merchant">
+                    <ul class="nav inner-menu">
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.invoices.index') }}"
+                                class="{{ Request::is('merchant/invoices') ? 'active' : '' }}">{{ __('All Invoices') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.invoices.form') }}"
+                                class="{{ Request::is('merchant/invoices-create') ? 'active' : '' }}">{{ __('Create Invoice') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.invoice.refund.request') }}"
+                                class="{{ Request::is('merchant/invoices/refund-request') ? 'active' : '' }}">{{ __('Refund Request') }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
             <li class="nav-item position-relative" id="merchant-link">
                 <a class="nav-link s-links collapsed {{ Request::is('/merchant/*') ? 'active' : '' }} " href="#merchant"
                     aria-expanded="true" aria-current="page" data-bs-toggle="collapse" aria-controls="merchant">
