@@ -19,5 +19,5 @@
 {!! Html::style(asset('frontend/css/app.css')) !!}
 {!! Html::style(asset('app-assets/css/noty-css/main.css')) !!}
 {!! Html::style(asset('app-assets/css/noty-css/metro-theme.css')) !!}
-<title>{!! env('APP_NAME').' | ' !!} @yield('title')</title>
+<title>{!! env('Addispay').' | ' !!} @yield('title')</title>
 @stack('css')
