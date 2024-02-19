@@ -92,7 +92,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return response()->view('errors.custom', ['message' => 'The requested method is not allowed.'], 405);
+            return response()->view('errors.custom', ['message' => 'The Action is not allowed.'], 405);
         }
         
         // Handle the "Attempt to read property on null" error specifically
