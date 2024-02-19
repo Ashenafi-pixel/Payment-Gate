@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
+use ErrorException;
 
 class Handler extends ExceptionHandler
 {
@@ -92,6 +93,15 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof MethodNotAllowedHttpException) {
             return response()->view('errors.custom', ['message' => 'The requested method is not allowed.'], 405);
+        }
+        
+        // Handle the "Attempt to read property on null" error specifically
+        if ($exception instanceof ErrorException && strpos($exception->getMessage(), 'Attempt to read property') !== false) {
+            // Log the error for debugging purposes if needed
+            // Log::error($exception->getMessage(), ['exception' => $exception]);
+
+            // Return a custom error response
+            return response()->view('errors.custom', ['message' => 'An error occurred. Please try again.'], 500);
         }
 
         return parent::render($request, $exception);
