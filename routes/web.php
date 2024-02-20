@@ -27,6 +27,10 @@ use App\Http\Controllers\Userss;
 */
 use App\Http\Controllers\UserController;
 
+
+Route::get('payment-conformation/', function () {
+    return view ('frontend.thankyou');
+});
 Route::post('/mPOSUser', [UserController::class, 'registerUser']);
 Route::get('/', function () {
     return view('frontend.index');
