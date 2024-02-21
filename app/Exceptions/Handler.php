@@ -88,11 +88,11 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof ModelNotFoundException) {
-            return response()->view('errors.custom', ['message' => 'The requested resource was not found.'], 404);
+            return response()->view('errors.401', ['message' => 'The requested resource was not found.'], 404);
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return response()->view('errors.custom', ['message' => 'The Action is not allowed.'], 405);
+            return response()->view('errors.401', ['message' => 'The Action is not allowed.'], 405);
         }
         
         // Handle the "Attempt to read property on null" error specifically
@@ -101,8 +101,12 @@ class Handler extends ExceptionHandler
             // Log::error($exception->getMessage(), ['exception' => $exception]);
 
             // Return a custom error response
-            return response()->view('errors.custom', ['message' => 'An error occurred. Please try again.'], 500);
+            return response()->view('errors.401', ['message' => 'An error occurred. Please try again.'], 500);
         }
+
+        if ($exception instanceof ErrorException && strpos($exception->getMessage(), 'Undefined variable') !== false) {
+        return response()->view('errors.401', ['message' => 'Undefined  error occurred.'], 500);
+    }
 
         return parent::render($request, $exception);
     }
