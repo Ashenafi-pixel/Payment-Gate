@@ -6,11 +6,8 @@ use App\Http\Middleware\InvoiceWithGateway;
 use App\Http\Middleware\IsVerifiedMiddleware;
 use App\Http\Middleware\RoleAuthenticator;
 use App\Http\Middleware\VerifyDocument;
-use App\Http\Middleware\RemovePoweredByHeader;
-
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
-
 class Kernel extends HttpKernel
 {
     /**
@@ -28,7 +25,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        RemovePoweredByHeader::class, // Corrected line
     ];
 
     /**
