@@ -2,6 +2,8 @@ image: docker:latest
 stages:
   - test
   - build
+  - restart
+  - backup
   - deploy
 
 variables:
