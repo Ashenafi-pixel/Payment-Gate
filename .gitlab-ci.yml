@@ -31,3 +31,30 @@ deploy:
   environment:
     name: prod
     url: https://dev.addispay.et/api-docs 
+
+
+addispay-restart-deployment:
+  stage: restart
+  script:
+    - apk add --no-cache curl
+    - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+    - chmod +x kubectl
+    - mv kubectl /usr/local/bin/
+    - export PATH=$PATH:/usr/local/bin/
+    - echo "$QA_KUBECONFIG" > kubeconfig.yml
+    - export KUBECONFIG=$(pwd)/kubeconfig.yml
+    - kubectl --token $QA_SA_TOKEN rollout restart deployment addispay-deployment -n addis
+
+addispay-backup-image:
+  stage: backup
+  tags:
+    - prod
+  variables: 
+    CONTAINER_RELEASE_IMAGE: $BACKUP_REGISTRY/$CI_PROJECT_PATH/addispay:latest
+  script:
+    - docker login -u $BACKUP_REGISTRY_USER -p $BACKUP_REGISTRY_PASSWORD $BACKUP_REGISTRY
+    - docker build -t $CONTAINER_RELEASE_IMAGE .
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - main
+
