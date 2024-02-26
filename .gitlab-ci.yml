@@ -54,7 +54,7 @@ addispay-backup-image:
   tags:
     - prod
   variables: 
-    CONTAINER_RELEASE_IMAGE: $BACKUP_REGISTRY/$CI_PROJECT_PATH/addispay:v1
+    CONTAINER_RELEASE_IMAGE: $BACKUP_REGISTRY/$CI_PROJECT_PATH/addispay:latest
   script:
     - docker login -u $BACKUP_REGISTRY_USER -p $BACKUP_REGISTRY_PASSWORD $BACKUP_REGISTRY
     - docker build -t $CONTAINER_RELEASE_IMAGE .
