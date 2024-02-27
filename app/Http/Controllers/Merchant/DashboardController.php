@@ -63,10 +63,11 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $merchant=auth()->user()->merchantDetail()->first();
-        $transactionCountResponse = Http::get('http://localhost:5000/count-transactions?merchant_id='.$merchant->id);
+        //$transactionCountResponse = Http::get('http://localhost:5000/count-transactions?merchant_id='.$merchant->id);
         //dd($response['count']);
         $customersCount       = $this->_customerService->getAllMerchantCustomersCount();
-        $invoicesCount        = $transactionCountResponse['count'];
+        //$invoicesCount        = $transactionCountResponse['count'];
+        $invoicesCount        = $this->_invoiceService->getMerchantsAllInvoicesCount();
         $pendingInvoicesCount = $this->_invoiceService->getMerchantsAllActiveInvoicesCount();
         $paidInvoicesCount    = $this->_invoiceService->getMerchantsAllInActiveInvoicesCount();
         $pendingBalanceSum    = $this->_invoiceService->getMerchantsPendingBalance();
