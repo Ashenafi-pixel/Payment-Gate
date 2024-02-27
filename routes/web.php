@@ -26,6 +26,8 @@ use App\Http\Controllers\Userss;
 |
 */
 use App\Http\Controllers\UserController;
+
+
 Route::get('payment-conformation/', function () {
     return view ('frontend.thankyou');
 });

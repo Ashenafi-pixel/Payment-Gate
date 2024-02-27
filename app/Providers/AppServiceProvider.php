@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -76,5 +77,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        URL::forceScheme('https');
     }
 }
