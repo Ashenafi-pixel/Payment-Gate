@@ -101,7 +101,7 @@ class MerchantServicesController extends Controller
         $expiryDate = $request->input('expiry_date');
         $merchantId=$merchant->id;
         if($request->input('action')==="generate"){
-            $response = Http::get("http://127.0.0.1:8080//generate-keys/{$merchant->id}");
+            $response = Http::get("http://192.168.100.35:4051//generate-keys/{$merchant->id}");
             if ($response->successful()) {
                 $responseArray = json_decode($response, true);
                 $privateKey = $responseArray['private_key'];
