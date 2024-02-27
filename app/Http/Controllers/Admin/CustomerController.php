@@ -17,6 +17,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 /**
+
+
+/**
  * @var CustomerController
  * @author Asif Munir <asif.munir@xintsolutions.com>
  */
@@ -61,11 +64,7 @@ class CustomerController extends Controller
         return view(self::CREATE_ADMIN_CUSTOMER);
     }
 
-    public function  editCustomer($customer_id){
-        $customer = User::findOrFail($customer_id);
-        //dd($merchant);
-    return view('backend.admin.customer.all-customer._form', compact('customer'));
-    }
+
 
     /**
      * @param Request $request
@@ -76,8 +75,12 @@ class CustomerController extends Controller
         $customer = $this->_userService->customerStore($request->all());
         return GeneralHelper::SEND_RESPONSE($request,$customer,self::CUSTOMER_INDEX_ROUTE,self::CREATE_CUSTOMER_MESSAGE);
     }
-
-    public function updateCustomer(Request $request, $customer_id)
+       public function  editCustomer($customer_id){
+        $customer = User::findOrFail($customer_id);
+        //dd($merchant);
+    return view('backend.admin.customer.all-customer._form', compact('customer'));
+    }
+     public function updateCustomer(Request $request, $customer_id)
     {
 
        try{

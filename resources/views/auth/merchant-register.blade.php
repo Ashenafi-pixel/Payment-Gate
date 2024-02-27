@@ -147,13 +147,39 @@
                                             ]) !!}
                                         </div>
                                     </div>
+
+                                    <!-- OTP Section -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            {!! Form::label('license_number', __('License Number:'), ['class' => 'form-label input-label']) !!}
-                                            {!! Form::text('license_number', null, [
+                                            {!! Form::label('otp', __('Phone OTP:'), [
+                                                'class' => 'form-label input-label',
+                                                'id' => 'otpLabel',
+                                                'style' => 'display:none;',
+                                            ]) !!}
+                                            {!! Form::text('otp', null, [
                                                 'class' => 'form-control form-control-lg',
-                                                'id' => 'license_number',
-                                                'placeholder' => 'Enter License Number',
+                                                'id' => 'otpInput',
+                                                'placeholder' => 'Enter OTP',
+                                                'style' => 'display:none;',
+                                            ]) !!}
+
+                                            {!! Form::button(__('Send OTP'), [
+                                                'class' => 'btn btn-theme-effect mt-2',
+                                                'id' => 'sendOtpBtn',
+                                                'onclick' => 'sendOtp()',
+                                            ]) !!}
+                                            {!! Form::button(__('Signup'), [
+                                                'class' => 'btn btn-theme-effect mt-2',
+                                                'type' => 'submit',
+                                                'id' => 'signupBtn',
+                                                'disabled' => 'disabled',
+                                            ]) !!}
+
+                                            {!! Form::text('code', null, [
+                                                'class' => 'form-control form-control-lg',
+                                                'id' => 'codeInput',
+                                                'placeholder' => 'Enter Code',
+                                                'style' => 'display:none;',
                                             ]) !!}
                                         </div>
                                     </div>
@@ -179,5 +205,76 @@
         </div>
     </section>
 @endsection
+
 @push('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('sendOtpBtn').addEventListener('click', function() {
+                // Check if the button is disabled to prevent multiple clicks
+                if (!this.hasAttribute('disabled')) {
+                    sendOtp();
+                }
+            });
+
+            document.getElementById('signupBtn').addEventListener('click', function(event) {
+                // Prevent form submission if the "Signup" button is disabled
+                if (this.hasAttribute('disabled')) {
+                    event.preventDefault();
+                    alert('Please verify your phone number first.');
+                    // You can add additional logic or UI feedback here
+                }
+            });
+        });
+
+        function sendOtp() {
+            // Disable the "Send OTP" button to prevent multiple clicks
+            document.getElementById('sendOtpBtn').setAttribute('disabled', 'disabled');
+
+            const phoneNumber = document.getElementById('phone').value;
+            const apiKey = '30c57d27443e3d76d4b8c257c0a1f4d163344b14a68e312122';
+
+            // Make an AJAX request to send OTP and save to OtpController
+            fetch('https://sms.qa.addissystems.et/api/send-bulk-sms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey,
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content'), // Include CSRF token
+                    },
+                    body: JSON.stringify({
+                        phoneNumbers: [phoneNumber],
+                        message: 'This is your Addispay OTP Code' + generateRandomOtp(),
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API Response:', data); // Log the response to the console
+
+                    if (data.message && data.message.includes("SMS sent")) {
+                        // Enable the "Signup" button
+                        document.getElementById('signupBtn').removeAttribute('disabled');
+                        // Hide the "Send OTP" button and OTP input
+                        document.getElementById('sendOtpBtn').style.display = 'none';
+                        document.getElementById('otpLabel').style.display = 'none';
+                        document.getElementById('otpInput').style.display = 'none';
+
+                        // Save OTP to OtpController
+                        saveOtpToController(phoneNumber, generateRandomOtp());
+
+                        alert('OTP sent successfully!');
+                    } else {
+                        alert('Failed to send OTP. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending OTP:', error);
+                    alert('Failed to send OTP. Please try again.');
+                });
+        }
+
+        function generateRandomOtp() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+    </script>
 @endpush

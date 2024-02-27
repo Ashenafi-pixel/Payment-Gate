@@ -49,4 +49,7 @@ class MerchantDetail extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+    public function apiKey(){
+        return $this->hasMany(apiKey::class);
+    }
 }

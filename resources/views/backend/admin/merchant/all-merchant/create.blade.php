@@ -28,6 +28,7 @@
                                                 'id' => 'text',
                                                 'placeholder' => 'Enter Full Name',
                                                 'autofocus' => true,
+                                                'style' => 'color: #555',
                                             ]) !!}
                                             @error('name')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -48,17 +49,23 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <div class="mb-3">
-                                            {!! Form::label('password', __('Password:'), ['class' => 'form-label input-label']) !!}
+                                        {!! Form::label('password', __('Password:'), ['class' => 'form-label input-label']) !!}
+                                        <div class="mb-3 input-group">
+
                                             {!! Form::password('password', [
                                                 'class' => 'form-control form-control-lg',
                                                 'id' => 'password',
                                                 'placeholder' => 'Enter your password',
                                             ]) !!}
+                                            <button type="button" id="togglePassword"
+                                                class="btn btn-outline-secondary input-group-text">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>
                                             @error('password')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
+
                                     </div>
 
                                     <div class="col-6">
@@ -209,5 +216,12 @@
 
             </div>
         </div>
+        <script>
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                var passwordInput = document.getElementById('password');
+                var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+            });
+        </script>
     </section>
 @endsection

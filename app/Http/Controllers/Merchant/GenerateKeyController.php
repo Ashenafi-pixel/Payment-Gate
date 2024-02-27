@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Merchant;
 
 use App\Helpers\IUserRole;
+use App\Models\User;
+use App\Models\MerchantDetail;
 use App\Helpers\GeneralHelper;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,9 +25,9 @@ class GenerateKeyController extends Controller
 {
     // Get the logged-in user's ID (you might have your own way to get the user ID)
     $userId = auth()->id();
-
+     $merchant=MerchantDetail::where('user_id', $userId)->first();
     // Request new keys from Go API
-    $response = Http::get("http://192.168.100.35:4051/generate-keys/{$userId}");
+    $response = Http::get("http://127.0.0.1:8080//generate-keys/{$merchant->id}");
 
     if ($response->successful()) {
         return back()->with('success', 'New keys generated successfully.');
@@ -38,21 +40,21 @@ public function displayKeys()
 {
     // Get the logged-in user's ID (you might have your own way to get the user ID)
     $userId = auth()->id();
-
     // Request keys from Go API
-    $response = Http::get("http://192.168.100.35:4051/generate-keys/{$userId}");
-
-    if ($response->successful()) {
-        $apiResponse = $response->json();
+    //$response = Http::get("http://127.0.0.1:8080/generate-keys/{$userId}");
+    $apiResponse=User::find($userId);
+    if (  $apiResponse//$response->successful()
+        ) {
+        //$apiResponse = $response->json();
 
         // Assume you have a User model with private_key, public_key, and api_token fields
-        $user = auth()->user();
+        /*$user = auth()->user();
         $user->private_key = $apiResponse['private_key'];
         $user->public_key = $apiResponse['public_key'];
         $user->api_token = $apiResponse['api_token'];
-        $user->save();
+        $user->save();*/
 
-        return view('backend.merchant.key', $apiResponse);
+        return view('backend.merchant.keys.key', compact('apiResponse'));
     } else {
         return response("Error retrieving keys from Go API", $response->status());
     }

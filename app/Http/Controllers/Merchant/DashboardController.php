@@ -16,6 +16,7 @@ use App\Http\Contracts\ICustomerServiceContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use function PHPUnit\Framework\directoryExists;
 
 class DashboardController extends Controller
@@ -61,8 +62,11 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
+        $merchant=auth()->user()->merchantDetail()->first();
+        $transactionCountResponse = Http::get('http://localhost:5000/count-transactions?merchant_id='.$merchant->id);
+        //dd($response['count']);
         $customersCount       = $this->_customerService->getAllMerchantCustomersCount();
-        $invoicesCount        = $this->_invoiceService->getMerchantsAllInvoicesCount();
+        $invoicesCount        = $transactionCountResponse['count'];
         $pendingInvoicesCount = $this->_invoiceService->getMerchantsAllActiveInvoicesCount();
         $paidInvoicesCount    = $this->_invoiceService->getMerchantsAllInActiveInvoicesCount();
         $pendingBalanceSum    = $this->_invoiceService->getMerchantsPendingBalance();

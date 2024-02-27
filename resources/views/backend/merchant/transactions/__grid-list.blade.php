@@ -12,45 +12,48 @@
                 </div>
                 <div class="flex-mode mt-5 justify-content-between">
                     <p class="flex-heading">{{ __('Name') }}</p>
-                    <p class="flex-text">{{ \App\Helpers\GeneralHelper::IS_SCHOOL() ?
-                        $allTransaction->student->name : $allTransaction->customer->name ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}</p>
+                    <p class="flex-text">
+                        {{ \App\Helpers\GeneralHelper::IS_SCHOOL()
+                            ? $allTransaction->student->name
+                            : $allTransaction->customer->name ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}
+                    </p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Created Date') }}</p>
-                    <p class="flex-text">{{ \App\Helpers\GeneralHelper::FORMAT_DATE($allTransaction->created_at) ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}</p>
+                    <p class="flex-text">
+                        {{ \App\Helpers\GeneralHelper::FORMAT_DATE($allTransaction['date']) ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}
+                    </p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Debit') }}</p>
-                    <p class="flex-text"><b>ብር.</b>{{ $allTransaction->debit }}</p>
+                    <p class="flex-text"><b>ብር.</b>{{ $allTransaction['amount'] }}</p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Credit') }}</p>
-                    <p class="flex-text"><b>ብር.</b>{{ $allTransaction->credit }}</p>
+                    <p class="flex-text"><b>ብር.</b>{{ $allTransaction['amount'] }}</p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Type') }}</p>
-                    <p class="flex-text">{{ $allTransaction->transactionType->name }}</p>
+                    <p class="flex-text">{{ $allTransaction['transaction_type'] }}</p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Commission') }}</p>
-                    <p class="flex-text">{{ $allTransaction->addispay_commission }}</p>
+                    <p class="flex-text">{{ $allTransaction['commission'] }}</p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Trx_id') }}</p>
-                    <p class="flex-text">{{ $allTransaction->trx_id }}</p>
+                    <p class="flex-text">{{ $allTransaction['transaction_id'] }}</p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Date') }}</p>
                     <p class="flex-text"><span class="badge btn-secondary">
-                            {{ \App\Helpers\GeneralHelper::FORMAT_DATE($allTransaction->created_at) }}
+                            {{ \App\Helpers\GeneralHelper::FORMAT_DATE($allTransaction['date']) }}
                         </span></p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Status') }}</p>
                     <p class="flex-text">
-                        <span
-                            class="badge {{ \App\Helpers\GeneralHelper::TRANSACTION_STATUS(strtoupper($allTransaction->status)) }}">
-                        {{ $allTransaction->status }}</span>
+                        <span> {{ $allTransaction['payment_status'] }}</span>
                     </p>
                 </div>
                 <hr>
@@ -59,7 +62,7 @@
                     <p class="flex-text text-end">
                     <div class="btn-group">
                         <button class="btn btn-green-light flex-mode" type="button" id="action"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="material-symbols-outlined">
                                 more_vert
                             </span>
@@ -79,21 +82,21 @@
                             </a>
                             <a class="dropdown-item flex-mode" href="#">
                                 <span class="material-symbols-outlined">
-                                   settings
+                                    settings
                                 </span>
                                 <span> Setting</span>
                             </a>
-{{--                            <a class="dropdown-item flex-mode"--}}
-{{--                               href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE.'.invoices.pay', encrypt($invoice->id)) }}"--}}
-{{--                               target="_blank">--}}
-{{--                                <span class="material-symbols-outlined">--}}
-{{--                                    edit_note--}}
-{{--                                </span>--}}
-{{--                                <span>{{ __('Pay') }}</span>--}}
-{{--                            </a>--}}
+                            {{--                            <a class="dropdown-item flex-mode" --}}
+                            {{--                               href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE.'.invoices.pay', encrypt($invoice->id)) }}" --}}
+                            {{--                               target="_blank"> --}}
+                            {{--                                <span class="material-symbols-outlined"> --}}
+                            {{--                                    edit_note --}}
+                            {{--                                </span> --}}
+                            {{--                                <span>{{ __('Pay') }}</span> --}}
+                            {{--                            </a> --}}
                             <a class="dropdown-item flex-mode" href="#">
                                 <span class="material-symbols-outlined">
-                                  delete
+                                    delete
                                 </span>
                                 <span> Delete</span>
                             </a>

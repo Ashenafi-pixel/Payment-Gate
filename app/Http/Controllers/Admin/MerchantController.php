@@ -86,7 +86,9 @@ class MerchantController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+
+
+
         $merchantData = $request->except(['license', 'passport']);
 
         if ($request->hasFile('license')) {
@@ -111,15 +113,8 @@ class MerchantController extends Controller
             self::MERCHANT_INDEX_ROUTE,
             self::CREATE_MERCHANT_MESSAGE
         );
-    }
-    catch (\Exception $e) {
-        return GeneralHelper::SEND_RESPONSE(
-            $request,
-            $merchant,
-            self::MERCHANT_INDEX_ROUTE,
-            "Merchant Not Created, Something goes wrong"
-        );
-    }
+
+
     }
     public function  editMerchant($merchant_id){
         $merchant = User::findOrFail($merchant_id);
@@ -194,7 +189,7 @@ catch (QueryException $e) {
     Session::flash('success','Database error occurred.');
     return redirect()->back();
 } catch (\Exception $e) {
-    Session::flash('success','Database error occurred.');
+    Session::flash('success','error occurred.');
     return redirect()->back();
 }
 

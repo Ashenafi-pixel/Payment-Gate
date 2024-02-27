@@ -105,7 +105,6 @@ class RegisterController extends Controller
             'company_phone'   => ['required'],
             'company_email'   => ['required', 'string', 'email', 'max:255', 'unique:merchant_details'],
             'company_address' => ['required'],
-            'license_number' => ['required'],
         ]);
     }
 
@@ -141,7 +140,6 @@ class RegisterController extends Controller
             'company_phone'   => $data['company_phone'],
             'company_email'   => $data['company_email'],
             'company_address' => $data['company_address'],
-            'license_number' => $data['license_number'],
         ]);
         // get merchant role and assign to merchant
         $role = $this->_roleService->getMerchantRoleExist();

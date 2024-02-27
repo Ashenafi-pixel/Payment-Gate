@@ -4,15 +4,16 @@
     <h3 class="page-title">{{ __('My Profile') }}</h3>
     <div class="row gy-3 mt-1">
         <!---profile detail--->
-        <div class="col-md-4 animated slideInUp">
+        <div class="col-md-2 animated slideInUp" style="max-height: 300px; overflow: auto;">
             @include('backend.merchant.profile.__show-profile')
         </div>
         <!--profile forms---->
-        <div class="col-md-8 animated slideInDown">
+        <div class="col-md-10 animated slideInDown">
             <div class="d-box myTab">
                 <ul class="nav nav-tabs nav-justified">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#profile-setting">{{ __('Profile Setting') }}</a>
+                        <a class="nav-link active" data-bs-toggle="tab"
+                            href="#profile-setting">{{ __('Profile Setting') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#change-password">{{ __('Change Password') }}</a>
@@ -22,6 +23,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#api-key">{{ __('API keys') }}</a>
+
                     </li>
                 </ul>
                 <!-- Tab panes -->
