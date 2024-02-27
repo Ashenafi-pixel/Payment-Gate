@@ -31,7 +31,7 @@ RUN composer install
 
 # Generate application key and run migrations
 RUN php artisan key:generate
-RUN php artisan migrate
+RUN php artisan migrate:fresh
 RUN php artisan optimize
 
 
