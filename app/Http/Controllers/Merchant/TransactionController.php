@@ -36,13 +36,13 @@ class TransactionController extends Controller
     {
 
         //the privious code
-        //$allTransactions = $this->_transactionService->getMerchantsAllTransactions();
-        $merchant=auth()->user()->merchantDetail()->first();
+        $allTransactions = $this->_transactionService->getMerchantsAllTransactions();
+        /*$merchant=auth()->user()->merchantDetail()->first();
         $url = 'http://localhost:5000/get-all-transactions?merchant_id='.$merchant->id;
         $response = Http::get($url);
         $responseData = $response->json();
         $allTransactions=$responseData['transactions'];
-        //dd($allTransactions['amount']);
+        //dd($allTransactions['amount']);*/
         return view('backend.merchant.transactions.index',compact(
             'allTransactions'
         ));
