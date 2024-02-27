@@ -25,7 +25,7 @@ Route::post('/merchant/link-bank', [MerchantController::class, 'linkBank'])->nam
 Route::get('/services', [MerchantServicesController::class,'index'])->name(IUserRole::MERCHANT_ROLE.'services.index');
 Route::get('user/edit-services', [MerchantServicesController::class, 'editUserServices'])->name(IUserRole::MERCHANT_ROLE.'user.edit-services');
 Route::post('user/update-services', [MerchantServicesController::class, 'updateUserServices'])->name(IUserRole::MERCHANT_ROLE.'user.update-services');
-Route::get('user/{user}/edit-services', [MerchantServicesController::class, 'edit'])->name(IUserRole::MERCHANT_ROLE.'user.edit-services');
+//Route::get('user/{user}/edit-services', [MerchantServicesController::class, 'edit'])->name(IUserRole::MERCHANT_ROLE.'user.edit-services');
 Route::patch('user/{user}/update-services', [MerchantServicesController::class, 'update'])->name(IUserRole::MERCHANT_ROLE.'user.update-services');
 
 # Merchant Dashboard Routes
