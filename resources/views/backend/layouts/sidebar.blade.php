@@ -3,21 +3,8 @@
         <img height="38" class="logo-full" id="logo" src="{{ asset('images/addispay-logo.png') }}" alt="">
         <img class="logo-icon" id="logo" src="{{ asset('images/addispay-logo-icon.png') }}" alt="">
     </div>
-    <div>
-        @if (\App\Helpers\GeneralHelper::WHO_AM_I() == 'merchant')
-            @php
-                $userId = auth()->id();
-                $merchant = \App\Models\MerchantDetail::where('user_id', $userId)->first();
-                echo $merchant->company_name;
-            @endphp
-        @else
-            {{ \App\Helpers\GeneralHelper::WHO_AM_I() }}
-        @endif
-
-    </div>
     <a href="{{ route(\App\Helpers\GeneralHelper::WHO_AM_I() . '.index') }}" class="s-links dashboard" id="dashboard">
         <img width='18' src="{{ asset('images/icons/dashboard.svg') }}" alt="">
-
         <span> {{ __('Dashboard') }} </span>
     </a>
 </div>
@@ -34,9 +21,8 @@
         @endrole
         @role(\App\Helpers\IUserRole::ADMIN_ROLE)
             <li class="nav-item position-relative" id="merchant-link">
-                <a class="nav-link s-links collapsed {{ Request::is('admin/merchant*') ? 'active' : '' }} "
-                    href="#merchant" aria-expanded="true" aria-current="page" data-bs-toggle="collapse"
-                    aria-controls="merchant">
+                <a class="nav-link s-links collapsed {{ Request::is('admin/merchant*') ? 'active' : '' }} " href="#merchant"
+                    aria-expanded="true" aria-current="page" data-bs-toggle="collapse" aria-controls="merchant">
                     <img width='18' src="{{ asset('images/icons/merchant_icon.svg') }}" alt="">
                     <span>{{ __('Merchants') }}</span>
                 </a>
@@ -62,15 +48,30 @@
                     <span>{{ __('E-Pos') }}</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link s-links "
-                    href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . 'user.edit-services', Auth::user()) }}">
-                    <img width='18' src="{{ asset('images/icons/services.svg') }}" alt="">
-                    <span>{{ __('Services') }}</span>
+            <li class="nav-item position-relative" id="merchant-link">
+                <a class="nav-link s-links collapsed {{ Request::is('merchant/invoices*') ? 'active' : '' }} "
+                    href="#merchant" aria-expanded="true" aria-current="page" data-bs-toggle="collapse"
+                    aria-controls="merchant">
+                    <img width='18' src="{{ asset('images/icons/merchant_icon.svg') }}" alt="">
+                    <span>{{ __('Invoices') }}</span>
                 </a>
-
+                <div class="collapse {{ Request::is('merchant/invoices*') ? 'show' : '' }}" id="merchant">
+                    <ul class="nav inner-menu">
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.invoices.index') }}"
+                                class="{{ Request::is('merchant/invoices') ? 'active' : '' }}">{{ __('All Invoices') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.invoices.form') }}"
+                                class="{{ Request::is('merchant/invoices-create') ? 'active' : '' }}">{{ __('Create Invoice') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route(\App\Helpers\IUserRole::MERCHANT_ROLE . '.invoice.refund.request') }}"
+                                class="{{ Request::is('merchant/invoices/refund-request') ? 'active' : '' }}">{{ __('Refund Request') }}</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-
             <li class="nav-item position-relative" id="merchant-link">
                 <a class="nav-link s-links collapsed {{ Request::is('/merchant/*') ? 'active' : '' }} " href="#merchant"
                     aria-expanded="true" aria-current="page" data-bs-toggle="collapse" aria-controls="merchant">
