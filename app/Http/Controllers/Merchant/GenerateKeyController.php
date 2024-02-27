@@ -27,7 +27,7 @@ class GenerateKeyController extends Controller
     $userId = auth()->id();
      $merchant=MerchantDetail::where('user_id', $userId)->first();
     // Request new keys from Go API
-    $response = Http::get("http://127.0.0.1:8080//generate-keys/{$merchant->id}");
+    $response = Http::get("http://192.168.100.35:4051//generate-keys/{$merchant->id}");
 
     if ($response->successful()) {
         return back()->with('success', 'New keys generated successfully.');
