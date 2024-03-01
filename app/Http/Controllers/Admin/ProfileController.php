@@ -66,6 +66,7 @@ class ProfileController extends Controller
         return GeneralHelper::SEND_RESPONSE($request,$response,self::PROFILE_ROUTE,self::PROFILE_UPDATE);
     }
 
+
     public function check($license_number)
     {
 
@@ -76,7 +77,7 @@ class ProfileController extends Controller
 
         $data = $response->json();
 
-        return view('backend.admin.li', ['licenseExists' => $licenseExists]);
+        return view('backend.admin.li', ['licenseExists' => $data]);
     }
 
     /**

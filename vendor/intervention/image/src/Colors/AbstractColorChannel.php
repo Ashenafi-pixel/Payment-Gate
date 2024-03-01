@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Colors;
 
 use Intervention\Image\Exceptions\ColorException;
@@ -14,7 +16,7 @@ abstract class AbstractColorChannel implements ColorChannelInterface
      *
      * @see ColorChannelInterface::__construct()
      */
-    public function __construct(int $value = null, float $normalized = null)
+    public function __construct(?int $value = null, ?float $normalized = null)
     {
         $this->value = $this->validate(
             match (true) {

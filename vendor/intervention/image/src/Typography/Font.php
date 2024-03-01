@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Typography;
 
 use Intervention\Image\Interfaces\FontInterface;
@@ -13,6 +15,7 @@ class Font implements FontInterface
     protected string $alignment = 'left';
     protected string $valignment = 'bottom';
     protected float $lineHeight = 1.25;
+    protected ?int $wrapWidth = null;
 
     public function __construct(?string $filename = null)
     {
@@ -181,5 +184,27 @@ class Font implements FontInterface
     public function lineHeight(): float
     {
         return $this->lineHeight;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see FontInterface::setWrapWidth()
+     */
+    public function setWrapWidth(?int $width): FontInterface
+    {
+        $this->wrapWidth = $width;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see FontInterface::wrapWidth()
+     */
+    public function wrapWidth(): ?int
+    {
+        return $this->wrapWidth;
     }
 }

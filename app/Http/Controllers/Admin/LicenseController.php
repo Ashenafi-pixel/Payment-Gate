@@ -24,7 +24,7 @@ class LicenseController extends Controller
 
     public function check($license_number)
     {
-        
+
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'x-auth-token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZpdHN1bWdldHU4OEBnbWFpbC5jb20iLCJpYXQiOjE2OTU0NjA3MjEsImp0aSI6InVuaXF1ZV90b2tlbl9pZCJ9.mg9kG7SA7QeOoySIE-g0ggzd9KBoWWdlvFwvNnrQmMg',
@@ -32,8 +32,8 @@ class LicenseController extends Controller
 
         $data = $response->json();
 
-        return view('backend.admin.li', ['licenseExists' => $licenseExists]);
-        
+        return view('backend.admin.li', ['licenseExists' => $data]);
+
     }
 
 

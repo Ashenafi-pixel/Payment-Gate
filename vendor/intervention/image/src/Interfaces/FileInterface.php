@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Interfaces;
 
 interface FileInterface
@@ -7,7 +9,7 @@ interface FileInterface
     /**
      * Save data in given path in file system
      *
-     * @param  string $filepath
+     * @param string $filepath
      * @return void
      */
     public function save(string $filepath): void;

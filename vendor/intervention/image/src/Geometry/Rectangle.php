@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Geometry;
 
 use Intervention\Image\Geometry\Tools\RectangleResizer;
-use Intervention\Image\Interfaces\DrawableInterface;
 use Intervention\Image\Interfaces\PointInterface;
 use Intervention\Image\Interfaces\SizeInterface;
 
-class Rectangle extends Polygon implements SizeInterface, DrawableInterface
+class Rectangle extends Polygon implements SizeInterface
 {
     /**
      * Create new rectangle instance

@@ -1,20 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Drivers\Imagick\Decoders;
 
 use Imagick;
 use ImagickException;
-use Intervention\Image\Drivers\AbstractDecoder;
-use Intervention\Image\Drivers\Imagick\Core;
-use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Exceptions\DecoderException;
-use Intervention\Image\Image;
 use Intervention\Image\Interfaces\ColorInterface;
 use Intervention\Image\Interfaces\DecoderInterface;
 use Intervention\Image\Interfaces\ImageInterface;
-use Intervention\Image\Origin;
 
-class BinaryImageDecoder extends AbstractDecoder implements DecoderInterface
+class BinaryImageDecoder extends ImagickImageDecoder implements DecoderInterface
 {
     public function decode(mixed $input): ImageInterface|ColorInterface
     {
@@ -25,39 +22,15 @@ class BinaryImageDecoder extends AbstractDecoder implements DecoderInterface
         try {
             $imagick = new Imagick();
             $imagick->readImageBlob($input);
-        } catch (ImagickException $e) {
+        } catch (ImagickException) {
             throw new DecoderException('Unable to decode input');
         }
 
-        $imagick = $imagick->coalesceImages();
+        // decode image
+        $image = parent::decode($imagick);
 
-        // fix image orientation
-        switch ($imagick->getImageOrientation()) {
-            case Imagick::ORIENTATION_BOTTOMRIGHT:
-                $imagick->rotateimage("#000", 180);
-                break;
-
-            case Imagick::ORIENTATION_RIGHTTOP:
-                $imagick->rotateimage("#000", 90);
-                break;
-
-            case Imagick::ORIENTATION_LEFTBOTTOM:
-                $imagick->rotateimage("#000", -90);
-                break;
-        }
-
-        // set new orientation in image
-        $imagick->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
-
-        $image = new Image(
-            new Driver(),
-            new Core($imagick),
-            $this->extractExifData($input)
-        );
-
-        $image->setOrigin(new Origin(
-            $imagick->getImageMimeType()
-        ));
+        // extract exif data
+        $image->setExif($this->extractExifData($input));
 
         return $image;
     }

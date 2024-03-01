@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Interfaces;
 
 interface ColorspaceInterface
@@ -7,7 +9,7 @@ interface ColorspaceInterface
     /**
      * Convert given color to the format of the current colorspace
      *
-     * @param  ColorInterface $color
+     * @param ColorInterface $color
      * @return ColorInterface
      */
     public function importColor(ColorInterface $color): ColorInterface;

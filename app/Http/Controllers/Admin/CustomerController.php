@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Session;
 /**
 
 
-/**
  * @var CustomerController
  * @author Asif Munir <asif.munir@xintsolutions.com>
  */

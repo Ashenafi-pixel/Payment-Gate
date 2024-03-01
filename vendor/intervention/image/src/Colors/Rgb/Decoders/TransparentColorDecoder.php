@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Colors\Rgb\Decoders;
 
 use Intervention\Image\Exceptions\DecoderException;
@@ -10,7 +12,7 @@ class TransparentColorDecoder extends HexColorDecoder
 {
     public function decode(mixed $input): ImageInterface|ColorInterface
     {
-        if (! is_string($input)) {
+        if (!is_string($input)) {
             throw new DecoderException('Unable to decode input');
         }
 
@@ -18,6 +20,6 @@ class TransparentColorDecoder extends HexColorDecoder
             throw new DecoderException('Unable to decode input');
         }
 
-        return parent::decode('#ff00ff00');
+        return parent::decode('#ffffff00');
     }
 }

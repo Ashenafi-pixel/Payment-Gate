@@ -2,10 +2,12 @@
 
 namespace Larastan\Larastan\Methods;
 
+use Carbon\Carbon;
 use Carbon\Traits\Macro as CarbonMacro;
 use Exception;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Str;
@@ -59,16 +61,18 @@ class MacroMethodsClassReflectionExtension implements MethodsClassReflectionExte
                     $macroTraitProperty = 'macros';
                 }
             }
-        } elseif ($this->hasIndirectTraitUse($classReflection, Macroable::class) || $classReflection->getName() === Builder::class || $classReflection->isSubclassOf(Builder::class)) {
+        } elseif (
+            $this->hasIndirectTraitUse($classReflection, Macroable::class) ||
+            $classReflection->getName() === Builder::class ||
+            $classReflection->isSubclassOf(Builder::class) ||
+            $classReflection->getName() === QueryBuilder::class
+        ) {
             $classNames = [$classReflection->getName()];
             $macroTraitProperty = 'macros';
 
             if ($classReflection->isSubclassOf(Builder::class)) {
                 $classNames[] = Builder::class;
             }
-        } elseif ($this->hasIndirectTraitUse($classReflection, CarbonMacro::class)) {
-            $classNames = [$classReflection->getName()];
-            $macroTraitProperty = 'globalMacros';
         } elseif ($classReflection->isSubclassOf(Facade::class)) {
             $facadeClass = $classReflection->getName();
 
@@ -93,6 +97,16 @@ class MacroMethodsClassReflectionExtension implements MethodsClassReflectionExte
                     }
                 }
             }
+        }
+
+        if ($this->hasIndirectTraitUse($classReflection, CarbonMacro::class) && Carbon::hasMacro($methodName)) {
+            $methodReflection = new Macro(
+                $classReflection, $methodName, $this->closureTypeFactory->fromClosureObject(\Closure::fromCallable(Carbon::getMacro($methodName))) // @phpstan-ignore-line hasMacro guarantees no null return
+            );
+
+            $this->methods[$classReflection->getName().'-'.$methodName] = $methodReflection;
+
+            return true;
         }
 
         if ($classNames !== [] && $macroTraitProperty) {
@@ -125,7 +139,12 @@ class MacroMethodsClassReflectionExtension implements MethodsClassReflectionExte
                                 throw new ShouldNotHappenException('Function '.$macroDefinition.' does not exist');
                             }
                         } elseif (is_array($macroDefinition)) {
-                            $macroClassName = get_class($macroDefinition[0]);
+                            if (is_string($macroDefinition[0])) {
+                                $macroClassName = $macroDefinition[0];
+                            } else {
+                                $macroClassName = get_class($macroDefinition[0]);
+                            }
+
                             if ($macroClassName === false || ! $this->reflectionProvider->hasClass($macroClassName) || ! $this->reflectionProvider->getClass($macroClassName)->hasNativeMethod($macroDefinition[1])) {
                                 throw new ShouldNotHappenException('Class '.$macroClassName.' does not exist');
                             }

@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Interfaces;
 
 interface ColorInterface
 {
     /**
-     * Static color factory method that passed input to color decoding input handler
+     * Static color factory method that takes any supported color format
+     * and returns a corresponding color object
      *
      * @param mixed $input
      * @return ColorInterface
      * @throws \Intervention\Image\Exceptions\DecoderException
      */
-    public static function create(mixed $input): ColorInterface;
+    public static function create(mixed $input): self;
 
     /**
      * Return colorspace of current color
@@ -58,7 +61,7 @@ interface ColorInterface
     /**
      * Retrieve the color channel by its classname
      *
-     * @param  string $classname
+     * @param string $classname
      * @return ColorChannelInterface
      */
     public function channel(string $classname): ColorChannelInterface;
@@ -68,7 +71,7 @@ interface ColorInterface
      *
      * @return ColorInterface
      */
-    public function convertTo(string|ColorspaceInterface $colorspace): ColorInterface;
+    public function convertTo(string|ColorspaceInterface $colorspace): self;
 
     /**
      * Determine if the current color is gray

@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Interfaces;
 
-use Traversable;
-
-interface CoreInterface extends Traversable
+interface CoreInterface extends CollectionInterface
 {
     /**
      * return driver's representation of the image core.
@@ -19,7 +19,7 @@ interface CoreInterface extends Traversable
      * @param mixed $native
      * @return CoreInterface
      */
-    public function setNative(mixed $native): CoreInterface;
+    public function setNative(mixed $native): self;
 
     /**
      * Count number of frames of animated image core
@@ -42,7 +42,7 @@ interface CoreInterface extends Traversable
      * @param FrameInterface $frame
      * @return CoreInterface
      */
-    public function add(FrameInterface $frame): CoreInterface;
+    public function add(FrameInterface $frame): self;
 
     /**
      * Return number of repetitions of an animated image
@@ -58,7 +58,12 @@ interface CoreInterface extends Traversable
      * @param int $loops
      * @return CoreInterface
      */
-    public function setLoops(int $loops): CoreInterface;
+    public function setLoops(int $loops): self;
 
+    /**
+     * Get first frame in core
+     *
+     * @return FrameInterface
+     */
     public function first(): FrameInterface;
 }

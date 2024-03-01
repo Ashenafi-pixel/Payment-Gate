@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Geometry\Tools;
 
 use Intervention\Image\Exceptions\GeometryException;
@@ -12,7 +14,17 @@ class RectangleResizer
         protected ?int $width = null,
         protected ?int $height = null,
     ) {
-        //
+        if (is_int($width) && $width < 1) {
+            throw new GeometryException(
+                'The width you specify must be greater than or equal to 1.'
+            );
+        }
+
+        if (is_int($height) && $height < 1) {
+            throw new GeometryException(
+                'The height you specify must be greater than or equal to 1.'
+            );
+        }
     }
 
     public static function to(...$arguments): self
@@ -77,7 +89,7 @@ class RectangleResizer
             return $size->width();
         }
 
-        return (int) round($this->height * $size->aspectRatio());
+        return max([1, (int) round($this->height * $size->aspectRatio())]);
     }
 
     protected function getProportionalHeight(SizeInterface $size): int
@@ -86,7 +98,7 @@ class RectangleResizer
             return $size->height();
         }
 
-        return (int) round($this->width / $size->aspectRatio());
+        return max([1, (int) round($this->width / $size->aspectRatio())]);
     }
 
     public function resize(SizeInterface $size): SizeInterface
@@ -188,7 +200,7 @@ class RectangleResizer
     /**
      * Scale given size to cover target size
      *
-     * @param  SizeInterface $size Size to be resized
+     * @param SizeInterface $size Size to be resized
      * @return SizeInterface
      */
     public function cover(SizeInterface $size): SizeInterface
@@ -211,7 +223,7 @@ class RectangleResizer
     /**
      * Scale given size to contain target size
      *
-     * @param  SizeInterface $size Size to be resized
+     * @param SizeInterface $size Size to be resized
      * @return SizeInterface
      */
     public function contain(SizeInterface $size): SizeInterface
@@ -234,7 +246,7 @@ class RectangleResizer
     /**
      * Scale given size to contain target size but prevent upsizing
      *
-     * @param  SizeInterface $size Size to be resized
+     * @param SizeInterface $size Size to be resized
      * @return SizeInterface
      */
     public function containDown(SizeInterface $size): SizeInterface
@@ -266,8 +278,8 @@ class RectangleResizer
     /**
      * Crop target size out of given size at given position (i.e. move the pivot point)
      *
-     * @param  SizeInterface $size
-     * @param  string        $position
+     * @param SizeInterface $size
+     * @param string $position
      * @return SizeInterface
      */
     public function crop(SizeInterface $size, string $position = 'top-left'): SizeInterface

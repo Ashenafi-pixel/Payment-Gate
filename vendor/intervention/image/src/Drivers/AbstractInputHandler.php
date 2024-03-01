@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Drivers;
 
-use Intervention\Image\Drivers\AbstractDecoder;
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Interfaces\ColorInterface;
 use Intervention\Image\Interfaces\ImageInterface;
@@ -35,7 +36,7 @@ abstract class AbstractInputHandler implements InputHandlerInterface
     protected function chain(): AbstractDecoder
     {
         if (count($this->decoders) == 0) {
-            throw new DecoderException('No decoders found in ' . get_class($this));
+            throw new DecoderException('No decoders found in ' . $this::class);
         }
 
         // get instance of last decoder in stack

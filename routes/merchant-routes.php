@@ -1,5 +1,7 @@
 <?php
 
+
+namespace App\Http\Controllers\Auth;
 use App\Helpers\IUserRole;
 use App\Http\Controllers\Merchant\CustomerController;
 use App\Http\Controllers\Merchant\ImportCustomerController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\Merchant\ProfileController;
 use App\Http\Controllers\Merchant\DashboardController;
 use App\Http\Controllers\Merchant\MerchantServicesController;
 use App\Http\Controllers\Merchant\ApiKeyController;
+use App\Http\Controllers\Auth\Http;
 use App\Http\Controllers\Merchant\MerchantBanksController;
 
 

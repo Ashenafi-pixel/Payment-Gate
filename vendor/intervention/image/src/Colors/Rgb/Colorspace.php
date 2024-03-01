@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Colors\Rgb;
 
 use Intervention\Image\Colors\Hsv\Color as HsvColor;
@@ -38,7 +40,7 @@ class Colorspace implements ColorspaceInterface
      */
     public function importColor(ColorInterface $color): ColorInterface
     {
-        return match (get_class($color)) {
+        return match ($color::class) {
             CmykColor::class => $this->importCmykColor($color),
             HsvColor::class => $this->importHsvColor($color),
             HslColor::class => $this->importHslColor($color),
@@ -73,7 +75,7 @@ class Colorspace implements ColorspaceInterface
 
         // add to each value
         $values = array_map(function ($value) use ($color, $chroma) {
-            return $value + ($color->value()->normalize() - $chroma);
+            return $value + $color->value()->normalize() - $chroma;
         }, $values);
 
         array_push($values, 1); // append alpha channel value

@@ -1,16 +1,16 @@
 # Intervention Image
-## PHP Image Manipulation
+## PHP Image Processing
 
 [![Latest Version](https://img.shields.io/packagist/v/intervention/image.svg)](https://packagist.org/packages/intervention/image)
 [![Build Status](https://github.com/Intervention/image/actions/workflows/run-tests.yml/badge.svg)](https://github.com/Intervention/image/actions)
 [![Monthly Downloads](https://img.shields.io/packagist/dm/intervention/image.svg)](https://packagist.org/packages/intervention/image/stats)
 
-Intervention Image is a **image handling and manipulation library written in
-PHP** providing an easy and expressive way to create, edit, and compose
-images. GD library or Imagick can be selected as the base layer for all
-operations.
+Intervention Image is a **PHP image processing library** that provides a simple
+and expressive way to create, edit, and compose images. It features a unified
+API for the two most popular image manipulation extensions. You can choose
+between the GD library or Imagick as the base layer for all operations.
 
-- Simple interface for common image manipulation tasks
+- Simple interface for common image editing tasks
 - Interchangable driver architecture
 - Support for animated images
 - Framework-agnostic
@@ -18,7 +18,8 @@ operations.
 
 ## Installation
 
-You can install this package easily with [Composer](https://getcomposer.org/). Just require the package with the following command:
+You can easily install this library using [Composer](https://getcomposer.org).
+Just request the package with the following command:
 
 ```bash
 composer require intervention/image
@@ -67,9 +68,9 @@ $encoded->save('images/example.jpg');
 
 ## Development & Testing
 
-With this package comes a Docker image to build a test suite and analysis
-container. To build this container you have to have Docker installed on your
-system. You can run all tests with this command.
+This package contains a Docker image for building a test suite and an analysis
+container. You must have Docker installed on your system to run all tests using
+the following command.
 
 ```bash
 docker-compose run --rm --build tests

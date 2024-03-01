@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Interfaces;
 
 interface FontInterface
@@ -115,4 +117,19 @@ interface FontInterface
      * @return float
      */
     public function lineHeight(): float;
+
+    /**
+     *  Set the wrap width with which the text is rendered
+     *
+     * @param int $width
+     * @return FontInterface
+     */
+    public function setWrapWidth(?int $width): self;
+
+    /**
+     * Get wrap width with which the text is rendered
+     *
+     * @return null|int
+     */
+    public function wrapWidth(): ?int;
 }

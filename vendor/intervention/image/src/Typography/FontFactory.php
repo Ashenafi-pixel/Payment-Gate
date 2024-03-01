@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Typography;
 
 use Intervention\Image\Interfaces\FontInterface;
@@ -27,6 +29,11 @@ class FontFactory
         $this->font->setFilename($value);
 
         return $this;
+    }
+
+    public function file(string $value): self
+    {
+        return $this->filename($value);
     }
 
     public function color(mixed $value): self
@@ -67,6 +74,13 @@ class FontFactory
     public function angle(float $value): self
     {
         $this->font->setAngle($value);
+
+        return $this;
+    }
+
+    public function wrap(int $width): self
+    {
+        $this->font->setWrapWidth($width);
 
         return $this;
     }

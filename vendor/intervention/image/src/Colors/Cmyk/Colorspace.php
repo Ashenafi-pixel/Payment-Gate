@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Colors\Cmyk;
 
 use Intervention\Image\Colors\Rgb\Color as RgbColor;
@@ -40,7 +42,7 @@ class Colorspace implements ColorspaceInterface
      */
     public function importColor(ColorInterface $color): ColorInterface
     {
-        return match (get_class($color)) {
+        return match ($color::class) {
             RgbColor::class => $this->importRgbColor($color),
             HsvColor::class => $this->importRgbColor($color->convertTo(RgbColorspace::class)),
             HslColor::class => $this->importRgbColor($color->convertTo(RgbColorspace::class)),

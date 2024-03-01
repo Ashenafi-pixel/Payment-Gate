@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Drivers;
 
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Interfaces\ColorInterface;
 use Intervention\Image\Interfaces\DrawableInterface;
+use Intervention\Image\Interfaces\ModifierInterface;
 use Intervention\Image\Interfaces\PointInterface;
 
 /**
  * @property DrawableInterface $drawable
  */
-abstract class AbstractDrawModifier extends DriverSpecializedModifier
+abstract class AbstractDrawModifier extends DriverSpecialized implements ModifierInterface
 {
     public function position(): PointInterface
     {
@@ -21,7 +24,7 @@ abstract class AbstractDrawModifier extends DriverSpecializedModifier
     {
         try {
             $color = $this->driver()->handleInput($this->drawable->backgroundColor());
-        } catch (DecoderException $e) {
+        } catch (DecoderException) {
             return $this->driver()->handleInput('transparent');
         }
 
@@ -32,7 +35,7 @@ abstract class AbstractDrawModifier extends DriverSpecializedModifier
     {
         try {
             $color = $this->driver()->handleInput($this->drawable->borderColor());
-        } catch (DecoderException $e) {
+        } catch (DecoderException) {
             return $this->driver()->handleInput('transparent');
         }
 

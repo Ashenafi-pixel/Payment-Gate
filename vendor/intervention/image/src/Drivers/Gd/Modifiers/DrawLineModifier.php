@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Drivers\Gd\Modifiers;
 
 use Intervention\Image\Drivers\AbstractDrawModifier;
@@ -18,6 +20,7 @@ class DrawLineModifier extends AbstractDrawModifier
         foreach ($image as $frame) {
             imagealphablending($frame->native(), true);
             imageantialias($frame->native(), true);
+            imagesetthickness($frame->native(), $this->drawable->width());
             imageline(
                 $frame->native(),
                 $this->drawable->start()->x(),

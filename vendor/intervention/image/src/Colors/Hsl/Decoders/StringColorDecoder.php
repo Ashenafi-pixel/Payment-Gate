@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Colors\Hsl\Decoders;
 
 use Intervention\Image\Colors\Hsl\Color;
@@ -14,12 +16,12 @@ class StringColorDecoder extends AbstractDecoder implements DecoderInterface
     /**
      * Decode hsl color strings
      *
-     * @param  mixed $input
+     * @param mixed $input
      * @return ImageInterface|ColorInterface
      */
     public function decode(mixed $input): ImageInterface|ColorInterface
     {
-        if (! is_string($input)) {
+        if (!is_string($input)) {
             throw new DecoderException('Unable to decode input');
         }
 

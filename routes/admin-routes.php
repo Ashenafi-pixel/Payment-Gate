@@ -1,5 +1,7 @@
 <?php
 
+
+namespace App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\BanksController;
 use App\Http\Controllers\Admin\CurrencyController;

@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers;
 use App\Helpers\IUserRole;
@@ -7,7 +8,10 @@ use App\Http\Controllers\Merchant\DashboardController;
 use App\Http\Controllers\Merchant\DocumentController as MerchantDocumentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\Http;
 use App\Http\Controllers\Auth\UserVerifyController;
+use App\Http\Controllers\Auth\RegisterController;
+
 
 use App\Http\Controllers\Auth\LockScreenController;
 
@@ -61,8 +65,8 @@ Route::post('create-invoice-qr', [Controllers\Merchant\EposController::class,'st
 
 Auth::routes();
 # Merchant signup flow
-Route::get('merchant-register', [Controllers\Auth\RegisterController::class,'merchantCreate'])->name(IUserRole::MERCHANT_ROLE.'.register.form');
-Route::post('merchant-register', [Controllers\Auth\RegisterController::class,'merchantRegister'])->name(IUserRole::MERCHANT_ROLE.'.register');
+Route::get('merchant-register', [RegisterController::class,'merchantCreate'])->name(IUserRole::MERCHANT_ROLE.'.register.form');
+Route::post('merchant-register', [RegisterController::class,'merchantRegister'])->name(IUserRole::MERCHANT_ROLE.'.register');
 Route::get('verify-merchant', [UserVerifyController::class, 'showMerchantVerifyForm'])->name(IUserRole::MERCHANT_ROLE . '.profile.verify.otp.form');
 Route::post('verify-merchant-otp', [UserVerifyController::class, 'verifyMerchantOtp'])->name(IUserRole::MERCHANT_ROLE . '.profile.verify.otp');
 
