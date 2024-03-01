@@ -1,6 +1,6 @@
 <?php
 
-use App\Helpers\IUserRole;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\BanksController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\DocumentController;
@@ -8,17 +8,19 @@ use App\Http\Controllers\Admin\GatewayController;
 use App\Http\Controllers\Admin\TransactionsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LogsController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\MerchantController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Api\Customer\BankController;
 use App\Http\Controllers\BankServiceController;
-use App\Http\Controllers\Customer\LedgerController;
 use Symfony\Component\VarDumper\VarDumper;
 
+use App\Http\Controllers\Admin\LicenseController;
+
+Route::post('/check-license', [LicenseController::class, 'checkLicense'])->name('checkLicense');
+Route::get('/check-license', function () {
+    return view('backend.admin.li');
+});
 
 # Admin Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name('index');
@@ -38,12 +40,16 @@ Route::post('merchant-edit/{merchant_id}', [MerchantController::class, 'updateMe
 Route::get('merchant-delete/{merchant_id}', [MerchantController::class, 'deleteMerchant'])->name('merchant.delete');
 
 
-Route::get('getall', [MerchantController::class, 'display'])->name('display');
+Route::get('admin/getall', [MerchantController::class, 'display'])->name('display');
+Route::get('getall', [MerchantController::class, 'display'])->name('merchant.display');
 # Customer Module
 Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
+Route::get('customer-edit/{customer_id}', [CustomerController::class, 'editCustomer'])->name('customer.edit');
+Route::post('customer-edit/{customer_id}', [CustomerController::class, 'updateCustomer'])->name('customer.update');
 Route::get('customers/create-customer', [CustomerController::class, 'create'])->name('customers.create');
 Route::post('store-customer', [CustomerController::class, 'store'])->name('customers.store');
-
+Route::get('customer-delete/{customer_id}', [CustomerController::class, 'deleteCustomer'])->name('customer.delete');
+Route::get('customer-delete/{customer_id}', [CustomerController::class, 'deleteCustomer'])->name('customer.delete');
 # Documents Approval routes
 Route::get('pending-merchants', [DocumentController::class, 'pendingMerchants'])->name('merchant.documents.index');
 Route::get('pending-customers', [DocumentController::class, 'pendingCustomers'])->name('customer.documents.index');

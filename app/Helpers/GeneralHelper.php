@@ -110,8 +110,12 @@ abstract class GeneralHelper
      * @param object $user
      * @return string
      */
-    public static function GET_ROLE(object $user): string
+    public static function GET_ROLE(?object $user): string
+
     {
+        if ($user === null) {
+            return 'Error: User object cannot be null';
+        }
         if ($user->hasRole(IUserRole::ADMIN_ROLE))
             return IUserRole::ADMIN_ROLE;
 
@@ -135,8 +139,15 @@ abstract class GeneralHelper
     public static function REDIRECT_TO(): ?string
     {
         $route = null;
-        if (self::IS_AUTHENTICATED())
+        if (self::IS_AUTHENTICATED()){
+            /*$user = auth()->user();
+            $is_verfied = $user->is_verified;
+            //dd( $is_verfied);
+            if($is_verfied==0)
+            return view('auth.verify');*/
+
             return sprintf("%s.index", self::WHO_AM_I());
+        }
 
         return back();
     }
@@ -278,9 +289,9 @@ abstract class GeneralHelper
      * @param int $length
      * @return string
      */
-    public static function RANDOM_NO(int $length = 4): string
+    public static function RANDOM_NO(int $length = 6): string
     {
-        
+
      $characters = '123456789';
      $charactersLength = strlen($characters);
      $randomString = '';

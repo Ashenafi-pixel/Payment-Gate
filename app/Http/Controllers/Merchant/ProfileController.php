@@ -82,6 +82,29 @@ class ProfileController extends Controller
         $response = $this->_userService->setPin($request->pin);
         return GeneralHelper::SEND_RESPONSE($request,$response,self::PROFILE_ROUTE,self::PROFILE_PIN_SET);
     }
+    public function Apikey(UpdateProfilePinRequest $request)
+    {
+        $response = $this->_userService->setPin($request->pin);
+        return GeneralHelper::SEND_RESPONSE($request,$response,self::PROFILE_ROUTE,self::PROFILE_PIN_SET);
+    }
+    public function displayKeys()
+    {
+        $userId = auth()->id();
+        $merchant = MerchantDetail::where('user_id', $userId)->first();
+
+        if ($merchant) {
+            // Assuming there is a relationship between MerchantDetail and ApiKey
+            $apiResponse = $merchant->apiKey;
+
+            if ($apiResponse) {
+                return view('backend.merchant.profile.__api-key', compact('apiResponse'));
+            } else {
+                return response("Error retrieving keys from Go API", $response->status());
+            }
+        } else {
+            return response("Merchant not found for the user", 404);
+        }
+    }
 
     /**
      * @param UpdateProfilePinRequest $request

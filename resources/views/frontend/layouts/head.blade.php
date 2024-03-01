@@ -1,6 +1,5 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -19,5 +18,5 @@
 {!! Html::style(asset('frontend/css/app.css')) !!}
 {!! Html::style(asset('app-assets/css/noty-css/main.css')) !!}
 {!! Html::style(asset('app-assets/css/noty-css/metro-theme.css')) !!}
-<title>{!! env('APP_NAME').' | ' !!} @yield('title')</title>
+<title>{!! env('Addispay').' | ' !!} @yield('title')</title>
 @stack('css')

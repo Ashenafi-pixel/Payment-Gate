@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\GeneralHelper;
 use App\Helpers\IUserRole;
+use App\Models\User;
+use App\Models\CustomerDetail;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
@@ -12,6 +14,9 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
+/**
 
 
 /**
@@ -59,6 +64,8 @@ class CustomerController extends Controller
         return view(self::CREATE_ADMIN_CUSTOMER);
     }
 
+
+
     /**
      * @param Request $request
      * @return JsonResponse|RedirectResponse
@@ -68,4 +75,82 @@ class CustomerController extends Controller
         $customer = $this->_userService->customerStore($request->all());
         return GeneralHelper::SEND_RESPONSE($request,$customer,self::CUSTOMER_INDEX_ROUTE,self::CREATE_CUSTOMER_MESSAGE);
     }
+       public function  editCustomer($customer_id){
+        $customer = User::findOrFail($customer_id);
+        //dd($merchant);
+    return view('backend.admin.customer.all-customer._form', compact('customer'));
+    }
+     public function updateCustomer(Request $request, $customer_id)
+    {
+
+       try{
+         $merchant = User::findOrFail($customer_id);
+
+        // Update the fields
+        $merchant->status = $request->input('status');
+        $merchant->name = $request->input('name');
+        $merchant->email = $request->input('email');
+        $merchant->mobile_number = $request->input('mobile_number');
+
+        // Save the changes to the database
+        $merchant->save();
+         // Check if the merchant status is APPROVED, and update the users table
+       $s=$request->input('status');
+         if ( $s === 'ACTIVE') {
+        $user = CustomerDetail::where('user_id', $merchant->id)->first();
+        if ($user) {
+            $user->status = 'APPROVED';
+            $user->save();
+        }
+        $apiEndpoint = 'https://sms.qa.addissystems.et/api/send-bulk-sms';
+
+// Replace with your actual phone numbers and message
+$apiKey='30c57d27443e3d76d4b8c257c0a1f4d163344b14a68e312122';
+$data = [
+    'phoneNumbers' => [$request->input('mobile_number')],
+    'message' => 'Dear esteemed merchant, we are pleased to inform you that your application has been approved.',
+];
+$headers=[
+'Content-Type'=>'application/json',
+'x-api-key'=>$apiKey
+];
+
+$response = Http::withHeaders($headers)->post($apiEndpoint, $data);
+$result='';
+// Check the response
+if ($response->successful()) {
+    // Successful request
+    $result = $response->json(); // Get the response as JSON
+    //dd($result);
+} else {
+    // Failed request
+    $error = $response->json(); // Get the error response as JSON
+    //dd($error);
+}
+    }
+
+        Session::flash('success','Customer Updated successfully! ');
+        return redirect()->back();
+}
+catch (QueryException $e) {
+    Session::flash('success','Database error occurred.');
+    return redirect()->back();
+} catch (\Exception $e) {
+    Session::flash('success','Database error occurred.');
+    return redirect()->back();
+}
+
+    }
+
+    public function  deleteCustomer($merchant_id){
+        $merchant = User::findOrFail($merchant_id);
+        if ($merchant) {
+
+            $merchant->delete();
+
+             }
+             Session::flash('success','Customer deleted successfully!');
+             return redirect()->back();
+    }
+
 }

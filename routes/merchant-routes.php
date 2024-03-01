@@ -11,18 +11,45 @@ use App\Http\Controllers\Merchant\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Merchant\ProfileController;
 use App\Http\Controllers\Merchant\DashboardController;
-use App\Http\Controllers\MerchantBanksController;
+use App\Http\Controllers\Merchant\MerchantServicesController;
+use App\Http\Controllers\Merchant\ApiKeyController;
+use App\Http\Controllers\Merchant\MerchantBanksController;
+
+
+
+use App\Http\Controllers\Merchant\MerchantController;
+use App\Http\Controllers\Merchant\GenerateKeyController;
+Route::get('/display-keys', [GenerateKeyController::class, 'displayKeys'])->name(IUserRole::MERCHANT_ROLE.'.display.keys');
+Route::post('/generate-new-keys', [GenerateKeyController::class, 'generateNewKeys'])->name(IUserRole::MERCHANT_ROLE.'.generate.new.keys');
+Route::get('/merchant/link-bank', [MerchantController::class, 'showLinkBankForm'])->name(IUserRole::MERCHANT_ROLE.'merchant.showLinkBankForm');
+Route::get('/merchant/generate-key', [MerchantController::class, 'generateKey'])->name(IUserRole::MERCHANT_ROLE.'.merchant.generateKey');
+Route::get('/merchant/show-bank', [MerchantController::class, 'merchantBank'])->name(IUserRole::MERCHANT_ROLE.'merchant.bank');
+Route::post('/merchant/link-bank', [MerchantController::class, 'linkBank'])->name(IUserRole::MERCHANT_ROLE.'merchant.linkBank');
+Route::get('/services', [MerchantServicesController::class,'index'])->name(IUserRole::MERCHANT_ROLE.'services.index');
+//Route::get('user/edit-services', [MerchantServicesController::class, 'editUserServices'])->name(IUserRole::MERCHANT_ROLE.'user.edit-services');
+//Route::post('user/update-services', [MerchantServicesController::class, 'updateUserServices'])->name(IUserRole::MERCHANT_ROLE.'user.update-services');
+//Route::get('user/{user}/edit-services', [MerchantServicesController::class, 'edit'])->name(IUserRole::MERCHANT_ROLE.'user.edit-services');
+//Route::patch('user/{user}/update-services', [MerchantServicesController::class, 'update'])->name(IUserRole::MERCHANT_ROLE.'user.update-services');
 
 # Merchant Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])->name(IUserRole::MERCHANT_ROLE.'.index');
-
+Route::post('merchan/key/service', [MerchantServicesController::class, 'apiKeyService'])->name(IUserRole::MERCHANT_ROLE.'.merchant.key.service');
 Route::get('epos', [DashboardController::class,'ePos'])->name(IUserRole::MERCHANT_ROLE.'.epos');
+Route::get('/merchant/transactions', [MerchantServicesController::class,'getTransaction'])->name(IUserRole::MERCHANT_ROLE. '.merchant.transactions');
 # Merchant Profile Route
 Route::get('profile', [ProfileController::class,'index'])->name(IUserRole::MERCHANT_ROLE. '.profile.view');
 Route::post('update-profile', [ProfileController::class,'updateProfile'])->name(IUserRole::MERCHANT_ROLE. '.profile.update');
 Route::post('update-password', [ProfileController::class,'updatePassword'])->name(IUserRole::MERCHANT_ROLE. '.profile.change.password');
 Route::post('set-pin',[ProfileController::class,'setPin'])->name(IUserRole::MERCHANT_ROLE.'.profile.set.pin');
 Route::post('reset-pin',[ProfileController::class,'resetPin'])->name(IUserRole::MERCHANT_ROLE.'.profile.reset.pin');
+Route::get('profile/{api-key}',[ProfileController::class,'displayKeys'])->name(IUserRole::MERCHANT_ROLE.'.keys');
+// Replace 'your-controller' with the actual name of your controller
+Route::put('merchant/enable-key/{id}', [ApiKeyController::class,'activateKey'])
+    ->name(IUserRole::MERCHANT_ROLE.'enable.api-key');
+
+Route::put('merchant/desable-key/{id}', [ApiKeyController::class,'deactivateKey'])
+    ->name(IUserRole::MERCHANT_ROLE.'desable.api-key');
+
 # Merchant Invoice Route
 Route::get('invoices',[InvoiceController::class,'index'])->name(IUserRole::MERCHANT_ROLE.'.invoices.index');
 Route::get('invoices-create',[InvoiceController::class,'createInvoiceForm'])->middleware('check_gateways_status')->name(IUserRole::MERCHANT_ROLE.'.invoices.form');
@@ -53,6 +80,7 @@ Route::post('import-customers',[CustomerController::class,'importCustomers'])->n
 
 # Merchant Gateway Controller
 Route::get('gateways',[MerchantGatewayController::class,'index'])->name(IUserRole::MERCHANT_ROLE.'.gateway.index');
+Route::get('banks',[MerchantController::class,'showLinkBankForm'])->name(IUserRole::MERCHANT_ROLE.'.banks.index');
 Route::get('gateway-install/{id}',[MerchantGatewayController::class,'installGatewayForm'])->name(IUserRole::MERCHANT_ROLE.'.gateway.install.form');
 Route::post('gateway-install/{id}',[MerchantGatewayController::class,'installGateway'])->name(IUserRole::MERCHANT_ROLE.'.gateway.install');
 

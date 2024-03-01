@@ -44,19 +44,19 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $validate = Validator::make($request->all(), [
+        $validate = Validator::make($request->all(),[
             'name'     => 'required|string|max:255|regex:/^[A-Za-z][A-Za-z\s]*$/',
             'username' => 'required|string|unique:users',
-            'mobile_no' => 'required|digits:10',
+            'mobile_no' =>'required|digits:10',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
         if ($validate->fails())
-            return GeneralHelper::VALIDATION_ERROR_RESPONSE($request, $validate->errors());
-        else {
+                return GeneralHelper::VALIDATION_ERROR_RESPONSE($request,$validate->errors());
+        else{
             $user = $this->_filterRegisterRequest($request->all());
             $create_user = $this->_userService->store($user);
-            if ($create_user) {
+            if ($create_user){
                 # Customer Details add
                 //will create the object of customer details here
                 $create_user->assignRole(IUserRole::CUSTOMER_ROLE);
@@ -66,10 +66,12 @@ class RegisterController extends Controller
                 # send otp mail code
                 $this->_sendVerificationCode($create_user);
                 $create_user->access_token = $create_user->createToken('addisPay')->accessToken;
-                return GeneralHelper::SEND_RESPONSE_API($request, $this->__userData($create_user), config('constants.generalMessages.register_success'));
-            } else
-                return GeneralHelper::SEND_RESPONSE_API($request, null, false, config('constants.generalMessages.register_error'));
+                return GeneralHelper::SEND_RESPONSE_API($request,$this->__userData($create_user),config('constants.generalMessages.register_success'));
+            }
+            else
+                return GeneralHelper::SEND_RESPONSE_API($request,null,false,config('constants.generalMessages.register_error'));
         }
+
     }
 
     /**
@@ -95,13 +97,12 @@ class RegisterController extends Controller
      *
      * @return array
      */
-    private function __userData($user)
-    {
+    private function __userData($user){
         return [
             'id'            => $user->id,
             'name'          => $user->name,
             'email'         => $user->email,
-            'status'        => strtoupper(str_replace(' ', '_', $user->status)),
+            'status'        => strtoupper(str_replace(' ','_',$user->status)),
             'username'      => $user->username,
             'mobile_number' => $user->mobile_number,
             'role'          => GeneralHelper::WHO_AM_I($user),
@@ -139,29 +140,5 @@ class RegisterController extends Controller
             'type'  =>  IMediaType::IMAGE,
         ]);
     }
-
-
-    /**
-     * @param Request $request
-     * @return JsonResponse|RedirectResponse
-     */
-    public function storeOtp(Request $request)
-    {
-        $request->validate([
-            'mobile_number' => 'required',
-            'phone_otp' => 'required'
-        ]);
-
-            if (Auth::check()) {
-                $user = User::where('mobile_number', $request->input('mobile_number'))->first();
-                $user->update(['phone_otp' => $request->input('phone_otp')]);
-                return response()->json(['data' => [
-                    'message' => 'Otp Saved'
-                ]]);
-            } else {
-            return response()->json(['data' => [
-                'message' => 'User not authorized!'
-            ]]);
-            }
-    }
 }
+

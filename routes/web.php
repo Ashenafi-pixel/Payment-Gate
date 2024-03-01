@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserVerifyController;
 
+use App\Http\Controllers\Auth\LockScreenController;
+
+use App\Http\Controllers\FormDataController;
+
+use App\Http\Controllers\Userss;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,7 +26,13 @@ use App\Http\Controllers\Auth\UserVerifyController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Http\Controllers\UserController;
 
+
+Route::get('payment-conformation/', function () {
+    return view ('frontend.thankyou');
+});
+Route::post('/mPOSUser', [UserController::class, 'registerUser']);
 Route::get('/', function () {
     return view('frontend.index');
 })->name('home');
@@ -28,7 +41,6 @@ Route::get('/', function () {
 Route::get('customer-support', function () {
     return view('frontend.customer-support');
 })->name('customer.support');
-
 Route::post('save/refund-request',[Controllers\RefundRequestController::class,'saveRefundRequest'])->name('save.refund.request');
 Route::get('otp/refund-request',[Controllers\RefundRequestController::class,'otpView'])->name('refund.request.otp.view');
 Route::post('verify-otp/refund-request',[Controllers\RefundRequestController::class,'verifyOtp'])->name('verify.refund.request.otp');
@@ -72,10 +84,33 @@ Route::post('verify-user-otp', [UserVerifyController::class,'verifyCustomerOtp']
 Route::get('lock-screen', [Controllers\Auth\LockScreenController::class, 'lockScreen'])->middleware('auth')->name('user.lock.screen');
 Route::post('unlock-screen', [Controllers\Auth\LockScreenController::class, 'unLockScreen'])->name('user.unlock.screen');
 Route::get('login-unlock', [Controllers\Auth\LockScreenController::class, 'loginInsteadUnlock'])->name('user.login-instead-unlock');
-Route::get('/checkout', [Controllers\Auth\LockScreenController::class, 'showCheckout'])->name('showCheckout');
-Route::post('/process-payment', [Controllers\Auth\LockScreenController::class, 'processPayment'])->name('processPayment');
+// Route::get('/checkout', [Controllers\Auth\LockScreenController::class, 'showCheckout'])->name('showCheckout');
+// Route::get('/submit-form', [Controllers\Auth\LockScreenController::class, 'showForm'])->name('showSubmitForm');
+// Route::post('/process-payment', [Controllers\Auth\LockScreenController::class, 'processPayment'])->name('processPayment');
+
+Route::get('/form', [Controllers\Auth\LockScreenController::class, 'showForms'])->name('form.show');
+Route::post('/form', [Controllers\Auth\LockScreenController::class, 'handleForm'])->name('form.handle');
+
+// reciver
+// Route::post('/receive-data', [Controllers\Auth\LockScreenController::class, 'receiveData'])->name('data.receive');
+// Route::match(['post', 'get'], '/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
+// Route::get('/display', [Controllers\Auth\LockScreenController::class, 'display'])->name('data.display');
+
+// Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
+// Route::get('/display', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
+// Route::post('/abort', [FormDataController::class, 'abortTransaction'])->name('data.abort')->withoutMiddleware(['auth']);
+Route::match(['get', 'post'], '/abort', [FormDataController::class, 'abortTransaction'])->name('data.abort')->withoutMiddleware(['auth']);
+
+Route::match(['get', 'post'], '/display/{tx_ref}', [FormDataController::class, 'display'])->name('data.display')->withoutMiddleware(['auth']);
+Route::post('/bankstatus', [FormDataController::class, 'handleStatusUpdateFromBank'])->name('bankstatus.payment')->withoutMiddleware(['auth']);
+// Route::post('/merchantstatus', [FormDataController::class, 'forwardStatusToMerchant'])->name('merchantstatus.update');
 
 
+
+
+
+Route::post('userss',[Userss::class,'userLogins']);
+Route::view('logins', 'checkout.logins');
 
 
 
@@ -92,9 +127,14 @@ Route::get('dashboard', function () {
 Route::get('profile',function(){
     return view('backend.admin.profile.edit-profile');
 });
-Route::get('merchant',function(){
-    return view('backend.admin.merchant.all-merchant.index');
-});
+
+Route::get('merchant', function () {
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        return view('backend.admin.merchant.all-merchant.index');
+    } else {
+        abort(404); // Show 404 error for unauthorized users
+    }
+})->middleware('auth'); // Apply authentication middleware
 
 Route::get('add-invoices',function(){
     return view('backend.merchant.invoice.invoice');

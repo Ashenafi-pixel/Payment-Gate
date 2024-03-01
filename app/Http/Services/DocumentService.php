@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Services;
-
+use Illuminate\Support\Facades\Session;
 use App\Helpers\IUserRole;
 use App\Helpers\IUserStatuses;
 use App\Http\Repositories\MerchantDetailRepo;
@@ -54,9 +54,34 @@ class DocumentService implements IDocumentServiceContract
     {
         # get merchant detail
         $merchant = GeneralHelper::USER();
+        $user_id = auth()->id();
+         // Retrieve the existing MerchantDetail record for the user
+    $merchantDetai = MerchantDetail::where('user_id', $user_id)->first();
+    // Handle the uploaded files
+    if ($request->hasFile('cnic')) {
+        $passportFile = $request->file('cnic');
+        $passportFileName = date('YmdHis') . '_' . $user_id . '_' . $passportFile->getClientOriginalName();
+        $passportFile->move(public_path('images'), $passportFileName);
 
+        // Update the 'passport' column in the 'merchant_details' table
+        $merchantDetai->passport = 'images/' . $passportFileName;
+    }
+
+    if ($request->hasFile('license')) {
+        $licenseFile = $request->file('license');
+        $licenseFileName = date('YmdHis') . '_' . $user_id . '_' . $licenseFile->getClientOriginalName();
+        $licenseFile->move(public_path('images'), $licenseFileName);
+
+        // Update the 'license' column in the 'merchant_details' table
+        $merchantDetai->license = 'images/' . $licenseFileName;
+        $merchantDetai->license_number=$request->input('license_no');
+    }
+
+    // Save the updated record
+    $merchantDetai->save();
         # unlink document if exist
-        $documents = !empty(json_decode($merchant->merchantDetail->document_details)) ? json_decode($merchant->merchantDetail->document_details) : null;
+
+        /*$documents = !empty(json_decode($merchant->merchantDetail->document_details)) ? json_decode($merchant->merchantDetail->document_details) : null;
         if (!empty($documents)) {
             $oldCnic = $documents->cnic_doc ?? null;
             $unlinkTrueCnic = isset($oldCnic) ?? false;
@@ -90,7 +115,9 @@ class DocumentService implements IDocumentServiceContract
         # update merchant details
         return $merchant->merchantDetail()->update([
             'document_details' => json_encode($merchantDocument),
-        ]);
+        ]);*/
+        Session::flash('success','Document Uploaded successfully! You Can change any time you want!!');
+             return redirect()->back();
     }
 
     /**
@@ -185,9 +212,7 @@ class DocumentService implements IDocumentServiceContract
      */
     public function getAllPendingCustomers(): mixed
     {
-        return $this->_customerDetailRepo->model()
-               ->where('document_details', '!=', null)
-               ->where('status', IStatuses::PENDING)
+        return $this->_customerDetailRepo->model()->where('status', IStatuses::PENDING)
                ->get();
     }
 
@@ -217,7 +242,7 @@ class DocumentService implements IDocumentServiceContract
      */
     public function getAllPendingMerchant(): mixed
     {
-        return $this->_merchantDetailRepo->model()->where('status', IStatuses::MERCHANT_PENDING)->where('document_details', '!=', null)->get();
+        return $this->_merchantDetailRepo->model()->where('status', IStatuses::MERCHANT_PENDING)->get();
     }
 
     /**

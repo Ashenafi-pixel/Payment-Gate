@@ -17,6 +17,13 @@ use App\Http\Controllers\Api\Customer\RegisterController;
 use App\Http\Controllers\Api\Customer\DocumentController;
 use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\LockScreenController;
+use App\Http\Controllers\FormDataController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,12 +35,26 @@ use App\Http\Controllers\Api\Customer\UtilityPaymentController;
 |
 */
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\merchant\MerchantController;
+Route::post('/register-bank-account', [MerchantController::class, 'merchantBankLink'])->withoutMiddleware(['auth']);
+Route::post('/mPOSUser', [UserController::class, 'registerUser'])->withoutMiddleware(['auth']);
+Route::post('/consumer-app', [UserController::class, 'registerCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-verify', [UserController::class, 'approveCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-resend', [UserController::class, 'resendOTP'])->withoutMiddleware(['auth']);
+Route::post('/receive-data', [FormDataController::class, 'receiveData'])->withoutMiddleware(['auth']);
+Route::post('/consumer-app', [UserController::class, 'registerCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-verify', [UserController::class, 'approveCustomer'])->withoutMiddleware(['auth']);
+Route::post('/consumer-resend', [UserController::class, 'resendOTP'])->withoutMiddleware(['auth']);
+// Route::post('receive-data', [FormDataController::class, 'receiveData'])->name('data.receive');
 
-    Route::group(['prefix' => 'customer'],function (){
+Route::get('/show-status/{merchant_id}', [UserController::class, 'showStatus'])->withoutMiddleware(['auth']);
+Route::group(['middleware' => []], function () {
+    Route::post('/your-route', [UserController::class, 'registerUser']);
+});
+Route::group(['prefix' => 'customer'],function (){
     # Customer Register Route
     Route::post('register',[RegisterController::class,'register']);
-
-    Route::post('save-otp',[RegisterController::class, 'storeOtp']);
     # Customer Login Route
     Route::post('login',[LoginController::class,'login']);
 

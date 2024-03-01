@@ -66,6 +66,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(MerchantDetail::class, 'user_id');
     }
+    public function keys()
+    {
+        return $this->hasMany(Key::class);
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'user_services');
+    }
 
     /**
      * @return HasOne

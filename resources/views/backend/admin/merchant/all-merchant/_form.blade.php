@@ -26,7 +26,6 @@
                             <div class="col-12">
                                 <div class="container my-5">
                                     <div class="d-box">
-                                        {{ $merchant->id }}
                                         {!! Form::model([
                                             'url' => route(\App\Helpers\IUserRole::ADMIN_ROLE . '.merchant.update', $merchant->id),
                                             'method' => 'POST',
@@ -54,11 +53,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     {!! Form::label('status', __('Status'), ['class' => 'form-label bold']) !!}
-                                                    {!! Form::text('status', $merchant->status ?? null, [
+                                                    {!! Form::select('status', ['ACTIVE' => 'ACTIVE', 'INACTIVE' => 'INACTIVE'], $merchant->status ?? null, [
                                                         'class' => 'form-control',
-                                                        'id' => '',
-                                                        'placeholder' => 'in active',
-                                                        'autofocus' => true,
+                                                        'placeholder' => 'Select status',
                                                     ]) !!}
                                                 </div>
                                                 <div class="col-md-6">

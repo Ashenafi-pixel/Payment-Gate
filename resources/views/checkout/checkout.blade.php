@@ -144,7 +144,7 @@
         }
 
         ul#myTab3 li:last-child a {
-            /* border-radius: 0px 0px 12px 12px; */
+            border-radius: 0px 0px 12px 12px;
         }
 
         ul#myTab3 {
@@ -449,7 +449,7 @@
 @endsection
 
 @section('content')
-   
+
 @section('content')
     <div class="dashboard-area pt-150 pb-150">
 
@@ -488,7 +488,7 @@
                                 </div>
                             </div>
                             <div class="tab-content" id="myTabContent2">
-                            
+
                                     <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}"
                                          id="getway{{ $gateway->id }}" role="tabpanel"
                                          aria-labelledby="getway-tab{{ $gateway->id }}">
@@ -651,8 +651,7 @@
                         <ul class="nav nav-pills mx-auto payment_method" id="myTab3" role="tablist">
                             @foreach ($usergetways as $key => $gateways)
                                 @php $gateway =  $gateways->getway @endphp
-                                <li class="nav-item" id="first_id" data-check="{{ $gateway->id }}"
-                                    onclick="changeAmount({{ $gateway->id }})">
+                                <li class="nav-item" id="first_id" data-check="{{ $gateway->id }}">
                                     <a class="nav-link {{ $key == 0 ? 'show active' : '' }}"
                                        id="getway-tab{{ $gateway->id }}" data-toggle="tab" data-bs-toggle="pill"
                                        href="#getway{{ $gateway->id }}" role="tab" aria-controls="home"

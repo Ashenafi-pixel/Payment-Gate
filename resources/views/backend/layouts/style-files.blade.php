@@ -21,5 +21,5 @@
 {!! Html::style(asset('backend/css/app.css')) !!}
 {!! Html::style(asset('app-assets/css/noty-css/main.css')) !!}
 {!! Html::style(asset('app-assets/css/noty-css/metro-theme.css')) !!}
-<title>{!! env('APP_NAME').' | ' !!} @yield('title')</title>
+<title>{!! env('APP_NAME').' | ' !!}</title>
 @stack('css')

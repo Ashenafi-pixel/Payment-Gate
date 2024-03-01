@@ -20,7 +20,7 @@
                                     'enctype' => 'multipart/form-data',
                                 ]) !!}
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-6">
                                         <div class="mb-3">
                                             {!! Form::label('name', __('FullName:'), ['class' => 'form-label input-label']) !!}
                                             {!! Form::text('name', null, [
@@ -28,13 +28,14 @@
                                                 'id' => 'text',
                                                 'placeholder' => 'Enter Full Name',
                                                 'autofocus' => true,
+                                                'style' => 'color: #555',
                                             ]) !!}
                                             @error('name')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-6">
                                         <div class="mb-3">
                                             {!! Form::label('username', __('Username:'), ['class' => 'form-label input-label']) !!}
                                             {!! Form::text('username', null, [
@@ -43,6 +44,39 @@
                                                 'placeholder' => 'Enter your username',
                                             ]) !!}
                                             @error('username')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        {!! Form::label('password', __('Password:'), ['class' => 'form-label input-label']) !!}
+                                        <div class="mb-3 input-group">
+
+                                            {!! Form::password('password', [
+                                                'class' => 'form-control form-control-lg',
+                                                'id' => 'password',
+                                                'placeholder' => 'Enter your password',
+                                            ]) !!}
+                                            <button type="button" id="togglePassword"
+                                                class="btn btn-outline-secondary input-group-text">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>
+                                            @error('password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            {!! Form::label('password_confirmation', __('Confirm Password:'), ['class' => 'form-label input-label']) !!}
+                                            {!! Form::password('password_confirmation', [
+                                                'class' => 'form-control form-control-lg',
+                                                'id' => 'password_confirmation',
+                                                'placeholder' => 'Confirm your password',
+                                            ]) !!}
+                                            @error('password_confirmation')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -133,6 +167,19 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            {!! Form::label('license_number', __('License Number:'), ['class' => 'form-label input-label']) !!}
+                                            {!! Form::text('license_number', null, [
+                                                'class' => 'form-control form-control-lg',
+                                                'id' => 'company_address',
+                                                'placeholder' => 'Enter License Number',
+                                            ]) !!}
+                                            @error('license_number')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             {!! Form::label('Passport or ID', __('Passport or ID:'), ['class' => 'form-label input-label']) !!}
@@ -169,5 +216,12 @@
 
             </div>
         </div>
+        <script>
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                var passwordInput = document.getElementById('password');
+                var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+            });
+        </script>
     </section>
 @endsection

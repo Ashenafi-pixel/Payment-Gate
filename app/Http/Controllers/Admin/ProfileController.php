@@ -66,6 +66,19 @@ class ProfileController extends Controller
         return GeneralHelper::SEND_RESPONSE($request,$response,self::PROFILE_ROUTE,self::PROFILE_UPDATE);
     }
 
+    public function check($license_number)
+    {
+
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'x-auth-token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZpdHN1bWdldHU4OEBnbWFpbC5jb20iLCJpYXQiOjE2OTU0NjA3MjEsImp0aSI6InVuaXF1ZV90b2tlbl9pZCJ9.mg9kG7SA7QeOoySIE-g0ggzd9KBoWWdlvFwvNnrQmMg',
+        ])->post("https://party.qa.addissystems.et/CheckLicenseNotExist/{$license_number}");
+
+        $data = $response->json();
+
+        return view('backend.admin.li', ['licenseExists' => $licenseExists]);
+    }
+
     /**
      * @param UpdatePasswordRequest $request
      * @return JsonResponse|RedirectResponse

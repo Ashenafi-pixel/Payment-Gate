@@ -26,7 +26,8 @@ class MerchantDetail extends Model
         'status',
         'deleted_at',
         'passport',
-        'license'
+        'license',
+        'license_number'
     ];
 
     /**
@@ -47,5 +48,8 @@ class MerchantDetail extends Model
     public function merchant(): BelongsTo
     {
         return $this->belongsTo(User::class,'user_id');
+    }
+    public function apiKey(){
+        return $this->hasMany(apiKey::class);
     }
 }

@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title', 'Dashboard')
+@section('Addispay', 'Dashboard')
 @section('content')
     <h1 class="page-title mb-3">Overview</h1>
     <form action="{{ route(\App\Helpers\GeneralHelper::WHO_AM_I() . '.index') }}" method="get" id="payment_filter">

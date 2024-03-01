@@ -15,13 +15,14 @@
         <span class="material-symbols-outlined">
             tune
         </span>
-        {{__('Filter')}}
+        {{ __('Filter') }}
     </button>
     <button class="btn btn-theme flex-mode gap-2">
         <span class="material-symbols-outlined">
             add
         </span>
-        {{ __('Add Customer') }}
+        <a href="{{ route(\App\Helpers\IUserRole::ADMIN_ROLE . '.customers.create') }}">
+            {{ __('Add Customer') }}</a>
     </button>
 </div>
 <!---Filter---->
@@ -87,10 +88,12 @@
                                 <input type="file" class="form-control hidden" name="" id="customer-file">
                                 <label for="customer-file" class="form-label d-block mb-0">
                                     <div class="file-dropzone flex-mode content-center">
-                                            <div class="text-center">
-                                                <img height="90" src="{{asset('images/icons/file-upload.svg')}}" alt="">
-                                                <p class="sub-title mt-2">Drag n drop your files here, or click to select files</p>
-                                            </div>
+                                        <div class="text-center">
+                                            <img height="90" src="{{ asset('images/icons/file-upload.svg') }}"
+                                                alt="">
+                                            <p class="sub-title mt-2">Drag n drop your files here, or click to select
+                                                files</p>
+                                        </div>
                                     </div>
                                 </label>
                             </div>

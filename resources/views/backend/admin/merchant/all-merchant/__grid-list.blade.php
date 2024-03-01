@@ -17,7 +17,9 @@
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Created Date') }}</p>
-                    <p class="flex-text">{{ \App\Helpers\GeneralHelper::FORMAT_DATE($merchant->created_at) ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}</p>
+                    <p class="flex-text">
+                        {{ \App\Helpers\GeneralHelper::FORMAT_DATE($merchant->created_at) ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}
+                    </p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Email') }}</p>
@@ -25,7 +27,8 @@
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Phone') }}</p>
-                    <p class="flex-text">{{ $merchant->mobile_number ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}</p>
+                    <p class="flex-text">{{ $merchant->mobile_number ?? \App\Helpers\GeneralHelper::EMPTY_DASHES() }}
+                    </p>
                 </div>
                 <div class="flex-mode justify-content-between">
                     <p class="flex-heading">{{ __('Status') }}</p>
@@ -40,7 +43,7 @@
                     <p class="flex-text text-end">
                     <div class="btn-group">
                         <button class="btn btn-green-light flex-mode" type="button" id="action"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="material-symbols-outlined">
                                 more_vert
                             </span>
@@ -60,13 +63,13 @@
                             </a>
                             <a class="dropdown-item flex-mode" href="#">
                                 <span class="material-symbols-outlined">
-                                   settings
+                                    settings
                                 </span>
                                 <span> Setting</span>
                             </a>
                             <a class="dropdown-item flex-mode" href="#">
                                 <span class="material-symbols-outlined">
-                                  delete
+                                    delete
                                 </span>
                                 <span> Delete</span>
                             </a>
