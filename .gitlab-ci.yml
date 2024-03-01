@@ -1,0 +1,32 @@
+image: docker:latest
+stages:
+  - build
+  - deploy
+
+variables:
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+  
+addispay_dev:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CONTAINER_RELEASE_IMAGE .
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - main
+deploy:
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CONTAINER_RELEASE_IMAGE
+    - docker container rm -f addispay_dev || true
+    - docker run -d -p 4050:80 --name addispay_dev --restart unless-stopped $CONTAINER_RELEASE_IMAGE
+    - docker exec addispay_dev sh -c "composer install --optimize-autoloader --no-dev"  
+    - docker exec addispay_dev sh -c "php artisan config:cache"  
+    - docker exec addispay_dev sh -c "php artisan route:cache"  
+    - docker exec addispay_dev sh -c "php artisan view:cache"  
+    - docker exec addispay_dev sh -c "npm install"  
+    - docker exec addispay_dev sh -c "npm run production"
+  environment:
+    name: prod
+    url: https://dev.addispay.et/api-docs 
